@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require('./node_modules/express');
 const app = express();
-var bodyParser = require("body-parser");
-const axios = require('axios').default;
-const sha256 = require("js-sha256");
+var bodyParser = require("./node_modules/body-parser");
+const axios = require('./node_modules/axios').default;
+const sha256 = require("./node_modules/js-sha256");
 const port = 3000;
 
 var key = "2dadbed20e3367139efb39ccc110d335b1497f36f3bbbebc822ff90b9d637b85";
