@@ -1,0 +1,325 @@
+/* Common styles for Evothings examples and client. */
+
+@import '../fonts/Gotham.css';
+
+:root {
+	--redorange: #DB5A4A;
+}
+
+.redorange {
+	color: var(--redorange) !important;
+}
+
+*{
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+
+	font-family: 'Gotham Medium', sans-serif;
+	font-weight: normal;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body {
+	margin: 0 0.9em 0 0.9em;
+	font-size: 150%;
+	font-size: 7.5vw;
+	background-color: #000;
+}
+
+/* Add a top margin to the content corresponding to the height of the header. */
+body::before,
+section::before {
+	display: block;
+	width: 100%;
+	height: 1.1em;
+	/* Should correspond to header's height. */
+	margin-bottom: 0.4em;
+
+	content: '\0000a0';
+	/* Non-breaking space (&nbsp;) */
+	font-size: 180%;
+	/* Same as the header's font size. */
+	line-height: 200%;
+	/* Slighly more than the header's line-height. */
+}
+
+/* Add a bottom margin. */
+body::after,
+section::after {
+	display: block;
+	content: '';
+	height: 1em;
+}
+
+/*  ----------------------------------------------------------
+								GENERAL
+	---------------------------------------------------------- */
+
+.hidden {
+	display: none;
+}
+
+/*  ----------------------------------------------------------
+								HEADER
+	---------------------------------------------------------- */
+
+/* The header's height is determined by the contained text's font size. */
+header {
+	box-sizing: border-box;
+	/* Width & height includes padding & border. */
+
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+
+	width: 100%;
+	height: 1.1em;
+
+	/* Left and right margins should correspond to body margins. */
+	margin: 0 0 3.45% 0;
+	/* Left padding should correspond to the back button's width. */
+	padding: 1% 2% 1% 2%;
+
+	font-size: 180%;
+	line-height: 100%;
+	text-align: center;
+	vertical-align: middle;
+	z-index: 1000;
+	background-image: url('/ui/images/Kmska_Jean_Auguste_Dominique_Ingres_\(1780-1867\)_-_Zelfportret_\(1864\)_-_28-02-2010_13-37-05.jpg');
+	background-size: cover;
+}
+
+header button {
+	display: block;
+	position: absolute;
+	top: 50%;
+	max-height: 70%;
+
+	margin: 0;
+
+	font-size: 30%;
+
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+header button.back {
+	position: absolute;
+	left: 0;
+
+	height: 100%;
+	margin: 0;
+	padding: 0 0.9em;
+
+	/* Font size is percentage of the header's font size. */
+	font-size: 50%;
+	color: #fff;
+
+	text-align: left;
+
+	background: none;
+
+	border-radius: 0;
+	border: none;
+
+	box-shadow: none;
+}
+
+header button.back img {
+	height: 0.5em;
+}
+
+header img.logotype {
+	position: absolute;
+	top: 50%;
+	left: 0;
+
+	height: 60%;
+
+	margin-left: 5%;
+
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+header img#inf-icon {
+	right: 0;
+	left: 80%;
+}
+
+
+/*  ----------------------------------------------------------
+								MENU
+	---------------------------------------------------------- */
+
+header button#menu-button {
+	position: absolute;
+	right: 0;
+
+	width: 3em;
+	height: 100%;
+	max-height: 100%;
+	margin: 0;
+	padding: 0 0.9em;
+
+	/* Font size is percentage of the header's font size. */
+	font-size: 50%;
+	color: #fff;
+
+	text-align: right;
+
+	background: none;
+
+	border-radius: 0;
+	border: none;
+
+	box-shadow: none;
+}
+
+header button#menu-button img {
+	height: 34%;
+}
+
+header button#menu-button:focus {
+	pointer-events: none;
+	outline: none;
+}
+
+header button#menu-button:focus::-moz-focus-inner {
+	border: 0;
+}
+
+header button#menu-button:focus+menu {
+	opacity: 1;
+	visibility: visible;
+}
+
+header menu {
+	display: block;
+	position: absolute;
+	top: 100%;
+	right: 0;
+
+	margin: 0;
+	padding: 0;
+
+	background: #f3f3f3;
+
+	opacity: 0;
+	visibility: hidden;
+	transition: visibility 0.5s;
+}
+
+header menu>* {
+	display: block;
+
+	padding: 0 1em 0 1em;
+
+	font-family: 'Gotham Bold';
+	font-size: 35%;
+	text-align: right;
+}
+
+header menu a {
+	color: #fff;
+	text-decoration: none;
+}
+
+header h1 {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+
+	font-size: inherit;
+	line-height: inherit;
+	font-weight: normal;
+	text-align: center;
+	vertical-align: middle;
+	color: #eee;
+
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+#bg {
+	width: 100%;
+	position: absolute;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	opacity: 0.5;
+}
+
+/*  ----------------------------------------------------------
+								SECTIONS
+	---------------------------------------------------------- */
+
+
+h1 {
+	text-align: right;
+	font-size: 20px;
+	color: #fff;
+	margin-bottom: 15px;
+}
+
+.carousel {
+	width: 100%;
+	display: flex;
+	overflow-y: scroll;
+}
+
+.carousel figure {
+	width: 25%;
+	height: 200px;
+}
+
+.carousel figure img {
+	width: 100%;
+}
+
+#generate-route img{
+	width: 80%;
+	padding: 15%;
+}
+
+#generate-route-opt{
+	background-color: #fff;
+	border-radius: 20px;
+	text-align: center;
+}
+
+#generate-route-opt :nth-child(2){
+	border-top: 3px dashed #000;
+}
+
+#generate-route-opt{
+	font-size: 14px;
+}
+
+#generate-route-opt div p{
+	padding-bottom: 5%;
+}
+
+#generate-route-opt div h2{
+	text-transform: uppercase;
+	padding-top: 5%;
+}
