@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("./node_modules/body-parser");
 const axios = require('./node_modules/axios').default;
 const sha256 = require("./node_modules/js-sha256");
+const pf = require('pathfinding');
 const port = 3000;
 
 let key = "2dadbed20e3367139efb39ccc110d335b1497f36f3bbbebc822ff90b9d637b85";
@@ -171,3 +172,45 @@ app.post('/saveGroup', (req, res) => (saveGroup(req.body)));
 
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
+
+
+
+
+//++++++++++++++++++++++find path++++++++++++++++++++++++++++++
+
+
+var createWallX = function(x, length, start){
+  for(var i = start; i<length; i++){
+    grid.setWalkableAt(i, x, false); 
+  }
+}
+,
+var createWallY = function(y, length, start){
+  for(var i = start; i<length; i++){
+    grid.setWalkableAt(y, i, false); 
+  }
+}
+
+var createDoorX = function(x, length, start){
+  for(var i = start; i<length; i++){
+    grid.setWalkableAt(i, x, true); 
+  }
+}
+
+var createDoorY = function(y, length, start){
+  for(var i = start; i<length; i++){
+    grid.setWalkableAt(y, i, true); 
+  }
+}
+
+//mini KMSKA floorplan matrix
+
+var grid = new pf.Grid(11, 11); 
+createWallX(5, 5, 0);
+createWallY(5, 11, 0);
+createDoorX(5, 1, 3);
+createDoorY(5, 1, 3);
+createDoorY(5, 1, 7);
+
+
+
