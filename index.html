@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no,
+		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+	<title>Basic Template App</title>
+
+	<style>
+		@import 'ui/css/evothings-app.css';
+	</style>
+
+	<script>
+		// Redirect console.log to Evothings Workbench.
+		if (window.hyper && window.hyper.log) {
+			console.log = hyper.log
+		}
+	</script>
+
+</head>
+
+<body ontouchstart="">
+	<!-- ontouchstart="" enables low-delay CSS transitions. -->
+	<img src="ui/images/Kmska_Jean_Auguste_Dominique_Ingres_(1780-1867)_-_Zelfportret_(1864)_-_28-02-2010_13-37-05.jpg"
+		alt="" id="bg">
+	<header>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/arrow-left.svg" />
+		</button>
+
+		<img class="logotype" src="ui/images/logo-white.png" alt="logo kmska" />
+		<img id="inf-icon" class="logotype" src="ui/images/inf-white.png" alt="info" />
+
+		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+	</header>
+	<main>
+		<section id="guided-tours">
+			<h1><span class="redorange">Guided</span> tours</h1>
+			<div class="carousel">
+				<figure>
+					<img src="ui/images/Heilige_Barbara_van_Nicomedië,_Jan_van_Eyck,_1437,_Koninklijk_Museum_voor_Schone_Kunsten_Antwerpen,_410.jpg"
+						alt="">
+					<figcaption>
+						<h2>Common route</h2>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut magna lorem, luctus non feugiat tristique, viverra id ante. Sed nulla justo, malesuada eu nisl at, commodo tempor purus</p>
+						<button>Read more</button>
+					</figcaption>
+				</figure>
+				<figure>
+					<img src="ui/images/Kmska_Titiaan_-_Jacopo_Pesaro_bisschop_van_Paphos_voorgesteld_door_paus_Alexander_VI_Borgia_aan_de_heilige_Petrus_-_28-02-2010_13-56-55.jpg"
+						alt="">
+					<figcaption>
+						<h2></h2>
+						<p></p>
+					</figcaption>
+				</figure>
+				<figure>
+					<img src="ui/images/De_verloren_zoon,_Peter_Paul_Rubens,_(1618),_Koninklijk_Museum_voor_Schone_Kunsten_Antwerpen,_781.jpg"
+						alt="">
+					<figcaption>
+						<h2></h2>
+						<p></p>
+					</figcaption>
+				</figure>
+				<figure>
+					<img src="ui/images/zestien-september-rene-magritte-kmska.jpg" alt="">
+					<figcaption>
+						<h2></h2>
+						<p></p>
+					</figcaption>
+				</figure>
+				<figure>
+					<img src="ui/images/Kmska_Jean_Auguste_Dominique_Ingres_(1780-1867)_-_Zelfportret_(1864)_-_28-02-2010_13-37-05.jpg"
+						alt="">
+					<figcaption>
+						<h2></h2>
+						<p></p>
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+		<section id="generate-route">
+			<h1>Generate <span class="redorange">route</span></h1>
+			<div id="generate-route-opt">
+				<div><img src="ui/images/individual.png">
+					<h2>Individual</h2>
+					<p>Try out the generator to create your personalized route</p>
+				</div>
+				<div><img src="ui/images/qrcode.png">
+					<h2>Group</h2>
+					<p>Scan the QR code after taking de generator test</p>
+				</div>
+			</div>
+		</section>
+	</main>
+	</div>
+	<script src="cordova.js"></script>
+	<script src="libs/evothings/evothings.js"></script>
+	<script src="libs/evothings/ui/ui.js"></script>
+	<!-- TODO: Add libraries that you need -->
+
+</body>
+
+</html>
