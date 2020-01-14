@@ -318,7 +318,7 @@ var createWallX = function(x, length, start){
     grid.setWalkableAt(i, x, false); 
   }
 }
-,
+
 var createWallY = function(y, length, start){
   for(var i = start; i<length; i++){
     grid.setWalkableAt(y, i, false); 
