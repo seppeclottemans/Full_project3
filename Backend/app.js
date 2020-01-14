@@ -3,50 +3,59 @@ const app = express();
 const bodyParser = require("./node_modules/body-parser");
 const axios = require('./node_modules/axios').default;
 const sha256 = require("./node_modules/js-sha256");
+const request = require('request');
+const fs = require('fs');
 const port = 3000;
-
 let key = "2dadbed20e3367139efb39ccc110d335b1497f36f3bbbebc822ff90b9d637b85";
 let user = "admin";
-
-// get all user collections
-get_user_collections();
-function get_user_collections(){
-  let query = `user=${user}&function=get_user_collections`;
-  let signedRequestString = sha256(key + query);
-  axios.get( `http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`
-).then(function (response) {
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.log("dit is een ERROR !!!!")
-    console.log(error);
-  });
+let paintingsIDs = [];
+let painting = {
+  id: 0,
+  title: "",
+  artist: "",
+  year: 0,
+  image: "",
+  info: [],
+  tags: []
 };
 
-// get all public collections
-function get_collections(){
-  let query = `user=${user}&function=search_public_collections`;
+// get paintings by a search word
+// KMSKA for all paintings || room_A to get all paintings of the room
+get_all_paintings("KMSKA");
+function get_all_paintings(search){
+  let query = `user=${user}&function=do_search&param1=${search}`;
   let signedRequestString = sha256(key + query);
   axios.get( `http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`
-).then(function (response) {
-    console.log(response);
+).then(function (res) {
+  res.data.forEach(responsePainting => {
+    paintingsIDs.push(responsePainting.ref);
+  });
+    paintingsIDs.forEach(currentPaintingID => {
+      get_painting(currentPaintingID);
+      console.log(currentPaintingID);
+    });
   })
   .catch(function (error) {
-    console.log("dit is een ERROR !!!!")
+    console.log("ERROR")
     console.log(error);
   });
 };
 
 // get all data of a specific painting
 function get_painting(resourceID){
-  let query = `user=${user}&function=get_resource_data&param1=${resourceID}`;
+  let query = `user=${user}&function=get_resource_field_data&param1=${resourceID}`;
   let signedRequestString = sha256(key + query);
   axios.get( `http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`
-).then(function (response) {
-    console.log(response);
+).then(function (res) {
+    painting.year = parseInt((res.data).filter(field => field.title = "Expiration date")[0].value.substr(0,4));
+    painting.title = (res.data).filter(field => field.name == "title")[0].value;
+    painting.artist = (res.data).filter(field => field.name == "creator")[0].value;
+    painting.info = (res.data).filter(field => field.name == "heritage")[0].value;
+    painting.id = resourceID;
+    get_image(resourceID);
   })
   .catch(function (error) {
-    console.log("dit is een ERROR !!!!")
+    console.log("ERROR")
     console.log(error);
   });
 };
@@ -56,12 +65,89 @@ function get_image(resourceID){
   let query = `user=${user}&function=get_resource_path&param1=${resourceID}&param2=false`;
   let signedRequestString = sha256(key + query);
   axios.get( `http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`
-).then(function (response) {
-    console.log(response);
+).then(function (res) {
+    painting.image = res.data;
+    // get_tags(res.data);
+    write_json();
   })
   .catch(function (error) {
-    console.log("dit is een ERROR !!!!")
+    console.log("ERROR")
     console.log(error);
   });
 };
 
+// request is being used because this is required to use for the imagga api
+function get_tags(imageUrl){
+  request.get('https://api.imagga.com/v2/tags?image_url='+encodeURIComponent(imageUrl), function (error, response, body) {
+  console.log('Status:', response.statusCode);
+  console.log('Headers:', JSON.stringify(response.headers));
+  console.log('Response:', body);
+  }).auth('acc_43eee0e58e1c3e2', '68b590d5d60e210d6e44eb2287617ff4', true);
+}
+
+function write_json(){
+  fs.readFile('json/paintings.json', function (err, data) {
+    let json = JSON.parse(data);
+    json.paintings.push(painting);
+    fs.writeFile("json/paintings.json", JSON.stringify(json), function(err, result) {
+      if(err) console.log('error', err);
+    });
+})
+console.log(painting);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // get all user collections
+// function get_user_collections(){
+//   let query = `user=${user}&function=get_user_collections`;
+//   let signedRequestString = sha256(key + query);
+//   axios.get( `http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`
+// ).then(function (res) {
+//     console.log(res);
+//   })
+//   .catch(function (error) {
+//     console.log("ERROR")
+//     console.log(error);
+//   });
+// };
+
+// // get all public collections
+// function get_collections(){
+//   let query = `user=${user}&function=search_public_collections`;
+//   let signedRequestString = sha256(key + query);
+//   axios.get( `http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`
+// ).then(function (res) {
+//     console.log(res);
+//   })
+//   .catch(function (error) {
+//     console.log("ERROR")
+//     console.log(error);
+//   });
+// };
