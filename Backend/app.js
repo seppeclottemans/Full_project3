@@ -144,7 +144,7 @@ function get_user_collections() {
       //console.log(response);
     })
     .catch(function (error) {
-      console.log("dit is een ERROR !!!!")
+      console.log("Try Again...")
       console.log(error);
     });
 };
@@ -157,7 +157,7 @@ function get_collections() {
       //console.log(response);
     })
     .catch(function (error) {
-      console.log("dit is een ERROR !!!!")
+      console.log("better luck next time :-) ")
       console.log(error);
     });
 };
