@@ -129,7 +129,7 @@ function get_painting(resourceID, resolve, reject) {
       get_image(resourceID, resolve, reject, thisPainting);
     })
     .catch(function (error) {
-      console.log("ERROR")
+      console.log("Maybe you should try to take a nap")
       console.log(error);
     });
 };
