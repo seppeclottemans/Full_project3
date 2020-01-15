@@ -2,7 +2,7 @@ $(function () {
 
     var group = {};
     var answers = {
-        "practical": 0,
+        "practical": [],
         "images": []
     };
     var count = 0;
@@ -58,7 +58,7 @@ $(function () {
 
     $("body").on("click", ".answer", function () {
         if (currentQuestionType == "practical") {
-            answers.practical = $(this).val();
+            answers.practical.push($(this).val());
         } else {
             answers.images.push($(this).val());
         }
@@ -118,9 +118,7 @@ $(function () {
             if (question.type == "practical") {
                 answer = q;
             } else {
-                q.tags.forEach(function (tag) {
-                    answer += " " + tag;
-                });
+                answer = q.id;
             }
             $("#answers").append(
                 $("<input>", {
