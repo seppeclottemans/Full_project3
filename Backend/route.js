@@ -1,5 +1,23 @@
 const pf = require('./node_modules/pathfinding');
 
+/*
+interesting functions:
+
+ 1. route.calculatePath(loc1, loc2)
+ loc = [x, y]
+
+ 2. route.closestArt: function(currentLocation, artLocations)
+ currentLocation = [x,y]
+ artLocations = {
+    locations: [[x , y], [x , y], [x,y],[x,y]],
+    id: [id, id, id, id]
+    // they need to be in the same order !!!!
+ }
+
+
+
+*/
+
 const route = {
     grid: new pf.Grid(11, 11),
     createWallX: function (x, length, start) {
