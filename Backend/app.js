@@ -302,70 +302,10 @@ app.listen(port, () => console.log(`Listening on port ${port}!`));
 
 
 
-// // get all user collections
-// function get_user_collections(){
-//   let query = `user=${user}&function=get_user_collections`;
-//   let signedRequestString = sha256(key + query);
-//   axios.get( `http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`
-// ).then(function (res) {
-//     console.log(res);
-//   })
-//   .catch(function (error) {
-//     console.log("ERROR")
-//     console.log(error);
-//   });
-// };
-
-// // get all public collections
-// function get_collections(){
-//   let query = `user=${user}&function=search_public_collections`;
-//   let signedRequestString = sha256(key + query);
-//   axios.get( `http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`
-// ).then(function (res) {
-//     console.log(res);
-//   })
-//   .catch(function (error) {
-//     console.log("ERROR")
-//     console.log(error);
-//   });
-// };
-//++++++++++++++++++++++find path++++++++++++++++++++++++++++++
 
 
-var createWallX = function (x, length, start) {
-  for (var i = start; i < length; i++) {
-    grid.setWalkableAt(i, x, false);
-  }
-}
 
-var createWallY = function (y, length, start) {
-  for (var i = start; i < length; i++) {
-    grid.setWalkableAt(y, i, false);
-  }
-}
 
-var createDoorX = function (x, length, start) {
-  for (var i = start; i < length; i++) {
-    grid.setWalkableAt(i, x, true);
-  }
-}
-
-var createDoorY = function (y, length, start) {
-  for (var i = start; i < length; i++) {
-    grid.setWalkableAt(y, i, true);
-  }
-}
-
-//mini KMSKA floorplan matrix
-
-var grid = new pf.Grid(11, 11);
-createWallX(5, 5, 0);
-createWallY(5, 11, 0);
-createDoorX(5, 1, 3);
-createDoorY(5, 1, 3);
-createDoorY(5, 1, 7);
-
-//
 
 
 
