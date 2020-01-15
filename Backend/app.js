@@ -25,6 +25,11 @@ let paintingList = [];
 // KMSKA for all paintings || room_A to get all paintings of the room
 get_all_paintings("KMSKA");
 
+//this function saves the tags into the database
+function setup(){
+
+}
+
 function get_all_paintings(search) {
   let query = `user=${user}&function=do_search&param1=${search}`;
   let signedRequestString = sha256(key + query);
@@ -37,9 +42,9 @@ function get_all_paintings(search) {
       let promiseList = [];
 
       paintingsIDs.forEach(currentPaintingID => {
-        let paintingPromise = new Promise(function (resolve) {
+        let paintingPromise = new Promise(function (resolve, reject) {
           //console.log(currentPaintingID);
-          get_painting(currentPaintingID, resolve);
+          get_painting(currentPaintingID, resolve, reject);
         });
         promiseList.push(paintingPromise);
       });
@@ -47,7 +52,7 @@ function get_all_paintings(search) {
       //console.log(promiseList);
       Promise.all(promiseList).then(function (result) {
         paintingList = result;
-        // console.log(paintingList);
+        console.log(result);
       });
 
     })
@@ -58,7 +63,8 @@ function get_all_paintings(search) {
 };
 
 // get all data of a specific painting
-function get_painting(resourceID, resolve) {
+function get_painting(resourceID, resolve, reject) {
+  painting = {};
   let query = `user=${user}&function=get_resource_field_data&param1=${resourceID}`;
   let signedRequestString = sha256(key + query);
   axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
@@ -67,10 +73,10 @@ function get_painting(resourceID, resolve) {
       painting.artist = (res.data).filter(field => field.name == "creator")[0].value;
       painting.info = (res.data).filter(field => field.name == "heritage")[0].value;
       painting.id = resourceID;
-      var thisPainting = JSON.parse(JSON.stringify(painting));
-      //console.log(painting);
-      resolve(thisPainting);
-      //get_image(resourceID, resolve);
+      painting.tags = (res.data).filter(field => field.name == "notes")[0].value;
+      //console.log(res);
+      let thisPainting = JSON.parse(JSON.stringify(painting));
+      get_image(resourceID, resolve, reject, thisPainting);
     })
     .catch(function (error) {
       console.log("ERROR")
@@ -79,7 +85,7 @@ function get_painting(resourceID, resolve) {
 };
 
 // get all user collections
-get_user_collections();
+//get_user_collections();
 
 function get_user_collections() {
   let query = `user=${user}&function=get_user_collections`;
@@ -106,17 +112,18 @@ function get_collections() {
     });
 };
 
-get_image(1003, "");
 // get painting image
-function get_image(resourceID, resolve) {
+function get_image(resourceID, resolve, reject, currentPainting) {
   let query = `user=${user}&function=get_resource_path&param1=${resourceID}&param2=false`;
   let signedRequestString = sha256(key + query);
   axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
-    // console.log(painting);
-      painting.image = res.data;
-      get_tags(res.data, resourceID);
-      // console.log(res.data);
-      // resolve(resourceID);
+      //console.log(currentPainting);
+      currentPainting.image = res.data;
+      let thisPainting = JSON.parse(JSON.stringify(currentPainting));
+      //resolve();
+      resolve(thisPainting);
+
+      //get_tags(res.data, resourceID, resolve, reject);
     })
     .catch(function (error) {
       console.log("ERROR")
@@ -125,20 +132,36 @@ function get_image(resourceID, resolve) {
 };
 
 // request is being used because this is required to use for the imagga api
-function get_tags(imageUrl, resourceID) {
+function get_tags(imageUrl, resourceID, resolve, reject) {
   request.get('https://api.imagga.com/v2/tags?image_url=' + encodeURIComponent(imageUrl), function (error, response, body) {
     //console.log('Status:', response.statusCode);
-    //console.log('Headers:', JSON.stringify(response.headers));
-    //console.log(body);
-    set_tags(resourceID, JSON.stringify(body));
+    var count = 1;
+    if(response.statusCode == "200" && count == 1){
+      count++;
+      var result = JSON.parse(body).result;
+      var tagList = [];
+      for(var i = 0; i < 5; i++){
+        tagList.push(result.tags[i].tag.en);
+      }
+      console.log(tagList);
+      painting.tags = tagList;
+      set_tags(resourceID, tagList, resolve);
+    } else {
+      reject();
+    }
   }).auth('acc_43eee0e58e1c3e2', '68b590d5d60e210d6e44eb2287617ff4', true);
 };
 
-function set_tags(resourceID, tags){
+function set_tags(resourceID, tags, resolve){
   let query = `user=${user}&function=update_field&param1=${resourceID}&param2=25&param3=${tags}`;
   let signedRequestString = sha256(key + query);
   axios.post(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
-      console.log(res);
+      //console.log(res);
+      painting.tags = tags;
+      console.log(painting);
+      var thisPainting = JSON.parse(JSON.stringify(painting));
+      //resolve();
+      resolve(thisPainting);
     })
     .catch(function (error) {
       console.log("ERROR")
