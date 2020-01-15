@@ -19,46 +19,62 @@ let painting = {
   info: [],
   tags: []
 };
+let paintingList = [];
 
 // get paintings by a search word
 // KMSKA for all paintings || room_A to get all paintings of the room
 get_all_paintings("KMSKA");
-function get_all_paintings(search){
+
+function get_all_paintings(search) {
   let query = `user=${user}&function=do_search&param1=${search}`;
   let signedRequestString = sha256(key + query);
-  axios.get( `http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`
-).then(function (res) {
-  res.data.forEach(responsePainting => {
-    paintingsIDs.push(responsePainting.ref);
-  });
-    paintingsIDs.forEach(currentPaintingID => {
-      get_painting(currentPaintingID);
-      console.log(currentPaintingID);
+  axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
+      res.data.forEach(responsePainting => {
+        paintingsIDs.push(responsePainting.ref);
+      });
+
+      //console.log(paintingsIDs);
+      let promiseList = [];
+
+      paintingsIDs.forEach(currentPaintingID => {
+        let paintingPromise = new Promise(function (resolve) {
+          console.log(currentPaintingID);
+          get_painting(currentPaintingID, resolve);
+        });
+        promiseList.push(paintingPromise);
+      });
+
+      //console.log(promiseList);
+      Promise.all(promiseList).then(function (result) {
+        paintingList = result;
+        console.log(paintingList);
+      });
+
+    })
+    .catch(function (error) {
+      console.log("ERROR")
+      console.log(error);
     });
-  })
-  .catch(function (error) {
-    console.log("ERROR")
-    console.log(error);
-  });
 };
 
 // get all data of a specific painting
-function get_painting(resourceID){
+function get_painting(resourceID, resolve) {
   let query = `user=${user}&function=get_resource_field_data&param1=${resourceID}`;
   let signedRequestString = sha256(key + query);
-  axios.get( `http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`
-).then(function (res) {
-    painting.year = parseInt((res.data).filter(field => field.title = "Expiration date")[0].value.substr(0,4));
-    painting.title = (res.data).filter(field => field.name == "title")[0].value;
-    painting.artist = (res.data).filter(field => field.name == "creator")[0].value;
-    painting.info = (res.data).filter(field => field.name == "heritage")[0].value;
-    painting.id = resourceID;
-    get_image(resourceID);
-  })
-  .catch(function (error) {
-    console.log("ERROR")
-    console.log(error);
-  });
+  axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
+      painting.year = parseInt((res.data).filter(field => field.title = "Expiration date")[0].value.substr(0, 4));
+      painting.title = (res.data).filter(field => field.name == "title")[0].value;
+      painting.artist = (res.data).filter(field => field.name == "creator")[0].value;
+      painting.info = (res.data).filter(field => field.name == "heritage")[0].value;
+      painting.id = resourceID;
+      resolve(painting);
+      //get_image(resourceID, resolve);
+    })
+    .catch(function (error) {
+      console.log("ERROR")
+      console.log(error);
+    });
+};
 
 // get all user collections
 get_user_collections();
@@ -67,7 +83,7 @@ function get_user_collections() {
   let query = `user=${user}&function=get_user_collections`;
   let signedRequestString = sha256(key + query);
   axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (response) {
-      console.log(response);
+      //console.log(response);
     })
     .catch(function (error) {
       console.log("dit is een ERROR !!!!")
@@ -80,20 +96,7 @@ function get_collections() {
   let query = `user=${user}&function=search_public_collections`;
   let signedRequestString = sha256(key + query);
   axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log("dit is een ERROR !!!!")
-      console.log(error);
-    });
-};
-
-// get all data of a specific painting
-function get_painting(resourceID) {
-  let query = `user=${user}&function=get_resource_data&param1=${resourceID}`;
-  let signedRequestString = sha256(key + query);
-  axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (response) {
-      console.log(response);
+      //console.log(response);
     })
     .catch(function (error) {
       console.log("dit is een ERROR !!!!")
@@ -102,66 +105,41 @@ function get_painting(resourceID) {
 };
 
 // get painting image
-function get_image(resourceID) {
+function get_image(resourceID, resolve) {
   let query = `user=${user}&function=get_resource_path&param1=${resourceID}&param2=false`;
   let signedRequestString = sha256(key + query);
-  axios.get( `http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`
-).then(function (res) {
-    painting.image = res.data;
-    // get_tags(res.data);
-    write_json();
-  })
-  .catch(function (error) {
-    console.log("ERROR")
-    console.log(error);
-  });
-};
-
-// request is being used because this is required to use for the imagga api
-function get_tags(imageUrl){
-  request.get('https://api.imagga.com/v2/tags?image_url='+encodeURIComponent(imageUrl), function (error, response, body) {
-  console.log('Status:', response.statusCode);
-  console.log('Headers:', JSON.stringify(response.headers));
-  console.log('Response:', body);
-  }).auth('acc_43eee0e58e1c3e2', '68b590d5d60e210d6e44eb2287617ff4', true);
-}
-
-function write_json(){
-  fs.readFile('json/paintings.json', function (err, data) {
-    let json = JSON.parse(data);
-    json.paintings.push(painting);
-    fs.writeFile("json/paintings.json", JSON.stringify(json), function(err, result) {
-      if(err) console.log('error', err);
-    });
-})
-console.log(painting);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (response) {
-      console.log(response);
+  axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
+    console.log(painting);
+      painting.image = res.data;
+      // get_tags(res.data);
+      console.log(res.data);
+      resolve(resourceID);
     })
     .catch(function (error) {
-      console.log("dit is een ERROR !!!!")
+      console.log("ERROR")
       console.log(error);
     });
 };
 
+// request is being used because this is required to use for the imagga api
+function get_tags(imageUrl) {
+  request.get('https://api.imagga.com/v2/tags?image_url=' + encodeURIComponent(imageUrl), function (error, response, body) {
+    //console.log('Status:', response.statusCode);
+    //console.log('Headers:', JSON.stringify(response.headers));
+    //console.log('Response:', body);
+  }).auth('acc_43eee0e58e1c3e2', '68b590d5d60e210d6e44eb2287617ff4', true);
+};
+
+function write_json(newData) {
+  fs.readFile('json/paintings.json', function (err, data) {
+    let json = JSON.parse(data);
+    json.paintings.push(painting);
+    fs.writeFile("json/paintings.json", JSON.stringify(json), function (err, result) {
+      if (err) console.log('error', err);
+    });
+  })
+  //console.log(painting);
+};
 
 
 //CHOOSE IMAGES FOR QUIZ
@@ -197,7 +175,7 @@ function get_imageQuestion() {
   }
 
   var question = {
-    "type":"image",
+    "type": "image",
     "questionString": "Choose an image",
     "answers": images
   }
@@ -242,13 +220,13 @@ var dummyImages = [{
   }
 ]
 
-function resetQuiz(){
+function resetQuiz() {
   questionTypes = ["imageChooser", "practical"];
 }
 
 var group;
 
-function saveGroup(data){
+function saveGroup(data) {
   group = data;
   console.log(group);
 }
@@ -259,7 +237,9 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 // parse application/json
 app.use(bodyParser.json());
 
@@ -313,38 +293,35 @@ app.listen(port, () => console.log(`Listening on port ${port}!`));
 //++++++++++++++++++++++find path++++++++++++++++++++++++++++++
 
 
-var createWallX = function(x, length, start){
-  for(var i = start; i<length; i++){
-    grid.setWalkableAt(i, x, false); 
+var createWallX = function (x, length, start) {
+  for (var i = start; i < length; i++) {
+    grid.setWalkableAt(i, x, false);
   }
 }
 
-var createWallY = function(y, length, start){
-  for(var i = start; i<length; i++){
-    grid.setWalkableAt(y, i, false); 
+var createWallY = function (y, length, start) {
+  for (var i = start; i < length; i++) {
+    grid.setWalkableAt(y, i, false);
   }
 }
 
-var createDoorX = function(x, length, start){
-  for(var i = start; i<length; i++){
-    grid.setWalkableAt(i, x, true); 
+var createDoorX = function (x, length, start) {
+  for (var i = start; i < length; i++) {
+    grid.setWalkableAt(i, x, true);
   }
 }
 
-var createDoorY = function(y, length, start){
-  for(var i = start; i<length; i++){
-    grid.setWalkableAt(y, i, true); 
+var createDoorY = function (y, length, start) {
+  for (var i = start; i < length; i++) {
+    grid.setWalkableAt(y, i, true);
   }
 }
 
 //mini KMSKA floorplan matrix
 
-var grid = new pf.Grid(11, 11); 
+var grid = new pf.Grid(11, 11);
 createWallX(5, 5, 0);
 createWallY(5, 11, 0);
 createDoorX(5, 1, 3);
 createDoorY(5, 1, 3);
 createDoorY(5, 1, 7);
-
-
-
