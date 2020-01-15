@@ -38,7 +38,7 @@ function get_all_paintings(search) {
 
       paintingsIDs.forEach(currentPaintingID => {
         let paintingPromise = new Promise(function (resolve) {
-          console.log(currentPaintingID);
+          //console.log(currentPaintingID);
           get_painting(currentPaintingID, resolve);
         });
         promiseList.push(paintingPromise);
@@ -67,7 +67,9 @@ function get_painting(resourceID, resolve) {
       painting.artist = (res.data).filter(field => field.name == "creator")[0].value;
       painting.info = (res.data).filter(field => field.name == "heritage")[0].value;
       painting.id = resourceID;
-      resolve(painting);
+      var thisPainting = JSON.parse(JSON.stringify(painting));
+      //console.log(painting);
+      resolve(thisPainting);
       //get_image(resourceID, resolve);
     })
     .catch(function (error) {
