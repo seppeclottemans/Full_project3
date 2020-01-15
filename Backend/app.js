@@ -23,10 +23,60 @@ let paintingList = [];
 
 // get paintings by a search word
 // KMSKA for all paintings || room_A to get all paintings of the room
-get_all_paintings("KMSKA");
+//get_all_paintings("KMSKA");
 
-//this function saves the tags into the database
-function setup(){
+fullSetup();
+
+function fullSetup(){
+  
+  let promise1 = new Promise(function(resolve, reject){
+    setup(["1004"], resolve);
+  });
+  let promise2 = new Promise(function(resolve, reject){
+    setup(["1010"], resolve);
+  });
+  let promise3 = new Promise(function(resolve, reject){
+    setup(["1011"], resolve);
+  });
+  let promise4 = new Promise(function(resolve, reject){
+    setup(["1012"], resolve);
+  });
+
+  let promises = [promise1, promise2, promise3, promise4];
+
+  Promise.all(promises).then(function(result){
+    console.log(result);
+  })
+
+}
+
+
+//this function saves the tags into the database: doesn't have to be done everytime, only when new paintings were added
+function setup(idList, resolveSetup){ //=> needs an array of the new id's 
+  let imagePromises = [];
+  let imagePromise;
+  let imagesList = [];
+  idList.forEach(function(id){
+    imagePromise = new Promise(function(resolve, reject){
+      get_image(id, resolve, reject, painting);
+    });
+    imagePromises.push(imagePromise);
+  });
+
+Promise.all(imagePromises).then(function(result){
+  result.forEach(function(p){
+    let paintingObject = {image: p.image, id: p.id}
+    imagesList.push(paintingObject);
+  });
+
+  //console.log(imagesList);
+
+  imagesList.forEach(function(object){
+    get_tags(object.image, object.id, resolveSetup); 
+  });
+
+
+});
 
 }
 
@@ -119,8 +169,8 @@ function get_image(resourceID, resolve, reject, currentPainting) {
   axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
       //console.log(currentPainting);
       currentPainting.image = res.data;
+      currentPainting.id = resourceID;
       let thisPainting = JSON.parse(JSON.stringify(currentPainting));
-      //resolve();
       resolve(thisPainting);
 
       //get_tags(res.data, resourceID, resolve, reject);
@@ -132,24 +182,23 @@ function get_image(resourceID, resolve, reject, currentPainting) {
 };
 
 // request is being used because this is required to use for the imagga api
-function get_tags(imageUrl, resourceID, resolve, reject) {
-  request.get('https://api.imagga.com/v2/tags?image_url=' + encodeURIComponent(imageUrl), function (error, response, body) {
-    //console.log('Status:', response.statusCode);
-    var count = 1;
-    if(response.statusCode == "200" && count == 1){
-      count++;
-      var result = JSON.parse(body).result;
-      var tagList = [];
-      for(var i = 0; i < 5; i++){
-        tagList.push(result.tags[i].tag.en);
+function get_tags(imageUrl, resourceID, resolve) {
+  setTimeout(function(){
+    request.get('https://api.imagga.com/v2/tags?image_url=' + encodeURIComponent(imageUrl), function (error, response, body) {
+      //console.log(body);
+    console.log(response.statusCode);
+      if(response.statusCode == "200"){
+        let result = JSON.parse(body).result;
+        let tagList = [];
+        for(let i = 0; i < 5; i++){
+          tagList.push(result.tags[i].tag.en);
+        }
+        //console.log(tagList);
+        resolve(tagList);
+        //set_tags(resourceID, tagList, resolve);
       }
-      console.log(tagList);
-      painting.tags = tagList;
-      set_tags(resourceID, tagList, resolve);
-    } else {
-      reject();
-    }
-  }).auth('acc_43eee0e58e1c3e2', '68b590d5d60e210d6e44eb2287617ff4', true);
+    }).auth('acc_43eee0e58e1c3e2', '68b590d5d60e210d6e44eb2287617ff4', true);
+  }, 1000);
 };
 
 function set_tags(resourceID, tags, resolve){
