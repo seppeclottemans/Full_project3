@@ -107,7 +107,7 @@ function get_all_paintings(search) {
 
     })
     .catch(function (error) {
-      console.log("ERROR")
+      console.log("Thinking of unicorns?")
       console.log(error);
     });
 };
@@ -176,7 +176,7 @@ function get_image(resourceID, resolve, reject, currentPainting) {
       //get_tags(res.data, resourceID, resolve, reject);
     })
     .catch(function (error) {
-      console.log("ERROR")
+      console.log("Try Again...")
       console.log(error);
     });
 };
@@ -213,7 +213,7 @@ function set_tags(resourceID, tags, resolve){
       resolve(thisPainting);
     })
     .catch(function (error) {
-      console.log("ERROR")
+      console.log("Well, maybe you should try something else...")
       console.log(error);
     });
 }
