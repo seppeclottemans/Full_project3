@@ -47,7 +47,7 @@ function get_all_paintings(search) {
       //console.log(promiseList);
       Promise.all(promiseList).then(function (result) {
         paintingList = result;
-        console.log(paintingList);
+        // console.log(paintingList);
       });
 
     })
@@ -106,16 +106,17 @@ function get_collections() {
     });
 };
 
+get_image(1003, "");
 // get painting image
 function get_image(resourceID, resolve) {
   let query = `user=${user}&function=get_resource_path&param1=${resourceID}&param2=false`;
   let signedRequestString = sha256(key + query);
   axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
-    console.log(painting);
+    // console.log(painting);
       painting.image = res.data;
-      // get_tags(res.data);
-      console.log(res.data);
-      resolve(resourceID);
+      get_tags(res.data, resourceID);
+      // console.log(res.data);
+      // resolve(resourceID);
     })
     .catch(function (error) {
       console.log("ERROR")
@@ -124,13 +125,26 @@ function get_image(resourceID, resolve) {
 };
 
 // request is being used because this is required to use for the imagga api
-function get_tags(imageUrl) {
+function get_tags(imageUrl, resourceID) {
   request.get('https://api.imagga.com/v2/tags?image_url=' + encodeURIComponent(imageUrl), function (error, response, body) {
     //console.log('Status:', response.statusCode);
     //console.log('Headers:', JSON.stringify(response.headers));
-    //console.log('Response:', body);
+    //console.log(body);
+    set_tags(resourceID, JSON.stringify(body));
   }).auth('acc_43eee0e58e1c3e2', '68b590d5d60e210d6e44eb2287617ff4', true);
 };
+
+function set_tags(resourceID, tags){
+  let query = `user=${user}&function=update_field&param1=${resourceID}&param2=25&param3=${tags}`;
+  let signedRequestString = sha256(key + query);
+  axios.post(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
+      console.log(res);
+    })
+    .catch(function (error) {
+      console.log("ERROR")
+      console.log(error);
+    });
+}
 
 function write_json(newData) {
   fs.readFile('json/paintings.json', function (err, data) {
