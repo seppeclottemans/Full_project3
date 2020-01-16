@@ -1,8 +1,15 @@
 .question input {
-    background-color: #000;
+    background-color: #fff;
     font-family: 'Gotham Medium', sans-serif;
     font-weight: normal;
     padding: 10px;
+    border: none;
+    color: #000;
+}
+
+.question h2{
+    font-size: 0.6em;
+    margin-bottom: 10px;
 }
 
 .question .btn {
@@ -11,13 +18,20 @@
 
 #answers{
     margin-top: 10px;
-}
-
-#answer{
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 30px;
 }
 
-.imganswer{
+.imganswer, .answer{
     width: 45%;
+    height: 100px;
+    overflow: hidden;
+    text-align: center;
+    font-size: 0.6em;
+}
+
+.imganswer img{
+    width: 100%;
 }
