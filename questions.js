@@ -74,26 +74,42 @@ $(function () {
                 "method": "POST",
                 "data": group
             }).done(function (recomms) {
-                console.log(recomms);
 
-                getRoute(recomms);
+                console.log(recomms);
+                let data = [];
+                recomms.forEach(function(recomm){
+                    data.push(recomm.id);
+                });
+
+                console.log(data);
+
+                $.ajax({
+                    "url": "http://localhost:3000/getRoute",
+                    "method": "POST",
+                    "data": data, 
+                    "type": "JSON"
+                }).done(function(route){
+                    console.log(route);
+        
+                    $(".generator").empty();
+                    $(".generator").append(
+                        $("<div>", {
+                            "class": "recommended"
+                        })
+                    );
+        
+                    route.forEach(function(rout){
+                        $(".recommended").append(
+                            $("<img>", {"src": rout})
+                        )
+                    });
+        
+                })
 
             })
-
-
         }
 
     });
-
-    function getRoute(recomms){
-        $.ajax({
-            "url": "http://localhost:3000/getRoute",
-            "method": "POST",
-            "data": recomms
-        }).done(function(route){
-            console.log(route);
-        })
-    }
 
     var currentQuestionType;
 
