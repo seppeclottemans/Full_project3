@@ -74,38 +74,26 @@ $(function () {
                 "method": "POST",
                 "data": group
             }).done(function (recomms) {
-                //console.log(recomms);
+                console.log(recomms);
 
-                let recomPromises = [];
+                getRoute(recomms);
 
-                $.ajax({
-                    'url': 'http://localhost:3000/getPainting',
-                    'method': 'POST',
-                    'data': recomms[0]
-                }).done(function(data){
-                    console.log(data);
-                });
-
-                // recomms.forEach(function(recom){
-                //     let recomPromise = new Promise(function(resolve, reject){
-                //         $.ajax({
-                //             'url': 'http://localhost:3000/getPainting',
-                //             'method': 'POST',
-                //             'data': recom
-                //         });
-                //     });
-                //     recomPromises.push(recomPromise);
-                // });
-
-                // Promise.all(recomPromises).then(function(result){
-                //     console.log(result);
-                // })
             })
 
 
         }
 
     });
+
+    function getRoute(recomms){
+        $.ajax({
+            "url": "http://localhost:3000/getRoute",
+            "method": "POST",
+            "data": recomms
+        }).done(function(route){
+            console.log(route);
+        })
+    }
 
     var currentQuestionType;
 
@@ -157,7 +145,6 @@ $(function () {
                 }).append(
                     $("<img>", {
                         "src": q.image,
-                        "style": "width: 500px;"
                     })
                 );
             }

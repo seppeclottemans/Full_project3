@@ -1,5 +1,5 @@
 class Painting {
-    constructor(id, title, artist, year, image, info, tags) {
+    constructor(id, title, artist, year, image, info, tags, coordinates) {
         this.id = id;
         this.title = title;
         this.artist = artist;
@@ -7,6 +7,7 @@ class Painting {
         this.image = image;
         this.info = info;
         this.tags = tags;
+        this.coordinates = coordinates;
     }
 }
 

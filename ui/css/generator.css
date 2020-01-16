@@ -1,0 +1,10 @@
+.question input{
+    background-color: #000;
+    font-family: 'Gotham Medium', sans-serif;
+    font-weight: normal;
+    padding: 10px;
+}
+
+.question .btn{
+margin-top: 5%;
+}
