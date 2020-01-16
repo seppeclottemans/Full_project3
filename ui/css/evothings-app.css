@@ -311,7 +311,9 @@ h1 span {
 	font-weight: 1000;
 	font-size: 1.2em;
 }
+.route-instructions {
 
+}
 .light-upper {
 	font-family: 'Gotham Light';
 	font-size: 0.8em;
@@ -504,4 +506,17 @@ button {
 
 ul li {
 	list-style: none;
+}
+#klein {
+	font-size: 0.6em;
+}
+#groot {
+	font-size: 0.9em;
+}
+#route-instructions img {
+	width: 100%;
+	border-radius: 0%;
+	max-height: 100px;
+	object-fit: cover;
+	margin-top: 10%;
 }
