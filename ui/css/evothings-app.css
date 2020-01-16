@@ -2,6 +2,7 @@
 
 @import '../fonts/Gotham.css';
 @import '../fonts/Roboto.css';
+@import '../css/feedback.css';
 
 :root {
 	--redorange: #DB5A4A;
@@ -473,50 +474,6 @@ button {
 
 .xl {
 	font-size: 2.5em !important;
-}
-
-/*  ----------------------------------------------------------
-								FEEDBACK PAGE
-	---------------------------------------------------------- */
-
-#feedback p,
-#feedback div p {
-	font-family: 'Gotham Medium', sans-serif;
-	width: 100%;
-	text-align: center;
-	text-transform: none;
-}
-
-#feedback :nth-child(2) {
-	text-transform: uppercase;
-}
-
-#feedback p,
-#feedback div p,
-#feedback h1 {
-	color: #000;
-}
-
-#feedback div {
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	flex-wrap: wrap;
-}
-
-#feedback div #like,
-#feedback div #dislike {
-	padding: 5%;
-	width: 30%;
-}
-
-#feedback div #like img,
-#feedback div #dislike img {
-	width: 100%;
-}
-
-#feedback :nth-child(8) img {
-	width: 20%;
 }
 
 /*  ----------------------------------------------------------
