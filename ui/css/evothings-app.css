@@ -441,6 +441,9 @@ button {
 	text-align: center;
 	float:left;
 }
+.route-inf-extra p + p{
+	color: #DB5A4A !important;
+}
 
 #route-gallery {
 	width: 100%;
