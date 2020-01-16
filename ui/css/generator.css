@@ -2,6 +2,10 @@
     background-color: #fff !important;
 }
 
+.black-bg{
+    background-color: #000 !important;
+}
+
 .generator .bold-upper, .generator .light-upper, .generator h2{
     color: #000;
 }
