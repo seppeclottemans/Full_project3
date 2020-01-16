@@ -149,7 +149,7 @@ $(function () {
             var answer;
             if (question.type == "practical") {
                 answer = $("<div>", {
-                    "class": "answer",
+                    "class": "answer textanswer",
                     "id": q
                 }).append(
                     q
