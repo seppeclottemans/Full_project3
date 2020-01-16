@@ -25,62 +25,24 @@ let paintingList = [];
 // KMSKA for all paintings || room_A to get all paintings of the room
 //get_all_paintings("KMSKA");
 
-fullSetup();
-
-function fullSetup(){
-  
-  let promise1 = new Promise(function(resolve, reject){
-    setup(["1004"], resolve);
-  });
-  let promise2 = new Promise(function(resolve, reject){
-    setup(["1010"], resolve);
-  });
-  let promise3 = new Promise(function(resolve, reject){
-    setup(["1011"], resolve);
-  });
-  let promise4 = new Promise(function(resolve, reject){
-    setup(["1012"], resolve);
-  });
-
-  let promises = [promise1, promise2, promise3, promise4];
-
-  Promise.all(promises).then(function(result){
-    console.log(result);
-  })
-
-}
-
+//setup("1004");
 
 //this function saves the tags into the database: doesn't have to be done everytime, only when new paintings were added
-function setup(idList, resolveSetup){ //=> needs an array of the new id's 
-  let imagePromises = [];
-  let imagePromise;
-  let imagesList = [];
-  idList.forEach(function(id){
-    imagePromise = new Promise(function(resolve, reject){
+function setup(id){ //=> you just run the function once per added painting
+
+    new Promise(function(resolve, reject){
       get_image(id, resolve, reject, painting);
+    }).then(function(result){
+      let paintingObject = {image: result.image, id: result.id}
+      console.log(paintingObject)
+
+      let tags = get_tags(paintingObject.image, paintingObject.id);
+      console.log(tags);
     });
-    imagePromises.push(imagePromise);
-  });
 
-Promise.all(imagePromises).then(function(result){
-  result.forEach(function(p){
-    let paintingObject = {image: p.image, id: p.id}
-    imagesList.push(paintingObject);
-  });
+};
 
-  //console.log(imagesList);
-
-  imagesList.forEach(function(object){
-    get_tags(object.image, object.id, resolveSetup); 
-  });
-
-
-});
-
-}
-
-function get_all_paintings(search) {
+function get_all_paintings(search, resolveAll) {
   let query = `user=${user}&function=do_search&param1=${search}`;
   let signedRequestString = sha256(key + query);
   axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
@@ -102,7 +64,7 @@ function get_all_paintings(search) {
       //console.log(promiseList);
       Promise.all(promiseList).then(function (result) {
         paintingList = result;
-        console.log(result);
+        resolveAll(paintingList);
       });
 
     })
@@ -110,6 +72,7 @@ function get_all_paintings(search) {
       console.log("Thinking of unicorns?")
       console.log(error);
     });
+
 };
 
 // get all data of a specific painting
@@ -182,7 +145,7 @@ function get_image(resourceID, resolve, reject, currentPainting) {
 };
 
 // request is being used because this is required to use for the imagga api
-function get_tags(imageUrl, resourceID, resolve) {
+function get_tags(imageUrl, resourceID) {
   setTimeout(function(){
     request.get('https://api.imagga.com/v2/tags?image_url=' + encodeURIComponent(imageUrl), function (error, response, body) {
       //console.log(body);
@@ -193,24 +156,18 @@ function get_tags(imageUrl, resourceID, resolve) {
         for(let i = 0; i < 5; i++){
           tagList.push(result.tags[i].tag.en);
         }
-        //console.log(tagList);
-        resolve(tagList);
-        //set_tags(resourceID, tagList, resolve);
+        console.log(tagList);
+        return tagList;
       }
     }).auth('acc_43eee0e58e1c3e2', '68b590d5d60e210d6e44eb2287617ff4', true);
   }, 1000);
 };
 
-function set_tags(resourceID, tags, resolve){
+function set_tags(resourceID, tags){
   let query = `user=${user}&function=update_field&param1=${resourceID}&param2=25&param3=${tags}`;
   let signedRequestString = sha256(key + query);
   axios.post(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
-      //console.log(res);
-      painting.tags = tags;
-      console.log(painting);
-      var thisPainting = JSON.parse(JSON.stringify(painting));
-      //resolve();
-      resolve(thisPainting);
+  console.log("added" + resourceID);
     })
     .catch(function (error) {
       console.log("Well, maybe you should try something else...")
@@ -256,63 +213,43 @@ function get_Question() {
 }
 
 function get_imageQuestion() {
+  var promise = new Promise(function(resolve){get_all_paintings("KMSKA", resolve)}).then(function(paintings){
+
+  
+    //console.log(paintings);
   //get an image question
-  var images = [];
-  for (var i = 0; i < 4; i++) {
-    images[i] = chooseOneFromList(dummyImages);
+  let images = [];
+  for (let i = 0; i < 4; i++) {
+    images[i] = chooseOneFromList(paintingList);
   }
 
-  var question = {
+  let question = {
     "type": "image",
     "questionString": "Choose an image",
     "answers": images
   }
 
+  console.log(question);
   return question;
+});
+
 }
 
 
 
-var questionTypes = ["imageChooser", "practical"];
+let questionTypes = ["imageChooser", "practical"];
 
-var practicalQuestions = [{
+let practicalQuestions = [{
   "type": "practical",
   "questionString": "How long do you want to stay in the museum?",
   "answers": ["30 minutes or less", "30 minutes - 1 hour", "1 hour - 2 hours", "2+ hours"]
 }]
 
-var dummyImages = [{
-    "id": 1,
-    "url": "https://via.placeholder.com/350x150",
-    "tags": ["impressionism", "sea", "blue"]
-  },
-  {
-    "id": 2,
-    "url": "https://via.placeholder.com/350x150",
-    "tags": ["Vlaamse Primitieven", "woman", "red"]
-  },
-  {
-    "id": 3,
-    "url": "https://via.placeholder.com/350x150",
-    "tags": ["surrealism", "man", "child"]
-  },
-  {
-    "id": 4,
-    "url": "https://via.placeholder.com/350x150",
-    "tags": ["impressionism", "bridge", "green"]
-  },
-  {
-    "id": 5,
-    "url": "https://via.placeholder.com/350x150",
-    "tags": ["Vlaamse Primitieven", "child", "wings"]
-  }
-]
-
 function resetQuiz() {
   questionTypes = ["imageChooser", "practical"];
 }
 
-var group;
+let group;
 
 function saveGroup(data) {
   group = data;

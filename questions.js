@@ -113,21 +113,31 @@ $(function () {
             })
         );
 
+        console.log(question);
+
         question.answers.forEach(function (q) {
-            var answer = "";
+            console.log(q);
+            var answer;
             if (question.type == "practical") {
-                answer = q;
-            } else {
-                answer = q.id;
-            }
-            $("#answers").append(
-                $("<input>", {
+                answer = $("<input>", {
                     "type": "radio",
                     "name": "answer",
-                    "value": answer,
+                    "value": q,
                     "class": "answer"
-                })
-            ).append(
+                }).append(
+                    q
+                );
+            } else {
+                answer = $("<input>", {
+                    "type": "radio",
+                    "name": "answer",
+                    "value": q.id,
+                    "class": "answer"
+                }).append(
+                    $("<img>", {"src": q.image})
+                );
+            }
+            $("#answers").append(
                 answer
             ).append($("<br>"));
         });
