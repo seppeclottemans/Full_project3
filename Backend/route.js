@@ -73,12 +73,9 @@ const route = {
        closestArt: function(currentLocation, artLocations){
             let distances = [];
           artLocations.locations.forEach(function(e){
-
-              console.log(e)
               let path = route.calculatePath(currentLocation, e);
               distances.push(path.distance);
           });
-          console.log(distances);
           let smallestDistance =  Math.min(...distances);
         //this.calculatePath(locItem1,locItem2);
         let indexSmallestDistance = distances.findIndex(function(e){
@@ -103,6 +100,6 @@ const currentLocation = [0,0];
 
 
 
-console.log(route.closestArt(currentLocation, artLocations));
+// console.log(route.closestArt(currentLocation, artLocations));
 
 export default route;
