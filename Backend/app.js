@@ -1,4 +1,4 @@
-//import route from './route.js';
+import route from './route.js';
 import Painting from './painting.js';
 const express = require('./node_modules/express');
 const app = express();
@@ -16,8 +16,13 @@ const port = 3000;
 let key = "2dadbed20e3367139efb39ccc110d335b1497f36f3bbbebc822ff90b9d637b85";
 let user = "admin";
 let paintingsIDs = [];
-let painting = new Painting(0, "", "", 0, "", [], []);
+let painting = new Painting(0, "", "", 0, "", [], [], []);
 let paintingList = [];
+
+const artLocations = {
+  locations: [[2,1], [4,1], [4,4],[2,4], [2,2], [7,1], [9,1],[10,2], [10,4], [8,4], [7,7],[7,9], [5,10], [3,10],[3,7]],
+  id: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1012, 1013, 1014, 1015, 1016]
+};
 
 // get paintings by a search word
 // KMSKA for all paintings || room_A to get all paintings of the room
@@ -46,12 +51,17 @@ function setup(id) { //=> you just run the function once per added painting
 function get_next_location(id){ //=> returns the information of the next painting
 
   new Promise(function(resolve, reject){
-    
+    get_painting(id, resolve, reject);
+
   }).then(function(result){
+    let currentPainting = painting;
+    console.log(route.closestArt(currentPainting.coordinates, artLocations));
     
   });
 
 };
+
+
 
 function get_all_paintings(search, resolveAll) {
   let query = `user=${user}&function=do_search&param1=${search}`;
@@ -98,6 +108,7 @@ function get_painting(resourceID, resolve, reject) {
       painting.info = (res.data).filter(field => field.name == "heritage")[0].value;
       painting.id = resourceID;
       painting.tags = (res.data).filter(field => field.name == "notes")[0].value;
+      painting.coordinates = (res.data).filter(field => field.name == "source")[0].value.split(",");
       //console.log(res);
       let thisPainting = JSON.parse(JSON.stringify(painting));
       get_image(resourceID, resolve, reject, thisPainting);
