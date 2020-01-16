@@ -44,9 +44,6 @@ body {
 	background-color: #000;
 }
 
-.white-bg{
-	background-color: #fff;
-}
 
 /* Add a top margin to the content corresponding to the height of the header. */
 body::before {
@@ -88,6 +85,7 @@ section::after {
 	text-align: center;
 	border-radius: 20px;
 	padding: 5px;
+	font-weight: 800;
 }
 
 .btn p {
@@ -297,12 +295,24 @@ header h1 {
 								SECTIONS
 	---------------------------------------------------------- */
 
-
 h1 {
-	text-align: right;
 	color: #fff;
 	margin-bottom: 15px;
-	font-size: 1.4em;
+	text-transform: uppercase !important;
+}
+
+h1 span {
+	display: block;
+}
+
+.bold-upper {
+	font-weight: 1000;
+	font-size: 1.2em;
+}
+
+.light-upper {
+	font-family: 'Gotham Light';
+	font-size: 0.8em;
 }
 
 h2 {
@@ -321,48 +331,59 @@ p {
 .carousel {
 	width: 100%;
 	display: flex;
-	overflow-y: scroll;
+	overflow-x: scroll;
+	overflow-y: hidden;
 }
 
 .carousel figure {
-	width: 60%;
-	margin-left: 5%;
+	min-width: 210px !important;
+	margin-right: 5%;
 }
 
 .carousel figure img {
 	width: 100%;
-	height: 75px;
+	max-height: 200px;
 	border-radius: 5%;
 	object-fit: cover;
 }
 
+.carousel figcaption {
+	max-height: 125px;
+}
+
+#generate-route{
+	margin-top: 15%;
+}
+
 #generate-route img {
-	width: 80%;
-	padding: 15%;
+	width: 40%;
+	padding: 5%;
+}
+
+.border-top {
+	border-top: 3px dashed #000;
 }
 
 #generate-route-opt {
-	background-color: #fff;
+	font-size: 14px;
 	border-radius: 20px;
 	text-align: center;
 }
 
-/* #generate-route-opt :nth-child(2){
-	border-top: 3px dashed #000;
-} */
-
-#generate-route-opt {
-	font-size: 14px;
-}
-
 #generate-route-opt div {
-	width: 70%;
+	width: 100%;
 	margin: auto;
+	padding: 5% 0;
+	background-color: #fff;
+	border-radius: 10%;
+	margin-bottom: 10%;
 }
 
 #generate-route-opt div p {
-	padding-bottom: 5%;
+	padding: 5%;
 	font-size: 1em;
+	height: 50px;
+	font-size: 1.1em;
 }
 
 #generate-route-opt div p,
@@ -373,7 +394,7 @@ p {
 #generate-route-opt div h2 {
 	text-transform: uppercase;
 	padding-top: 5%;
-	font-size: 1.2em;
+	font-size: 1.4em;
 }
 
 button {
@@ -427,7 +448,6 @@ button {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
-	background-color: #fff;
 }
 
 #route-gallery img {
@@ -459,18 +479,21 @@ button {
 								FEEDBACK PAGE
 	---------------------------------------------------------- */
 
-#feedback p, #feedback div p{
+#feedback p,
+#feedback div p {
 	font-family: 'Gotham Medium', sans-serif;
 	width: 100%;
 	text-align: center;
 	text-transform: none;
 }
 
-#feedback :nth-child(2){
+#feedback :nth-child(2) {
 	text-transform: uppercase;
 }
 
-#feedback p, #feedback div p, #feedback h1{
+#feedback p,
+#feedback div p,
+#feedback h1 {
 	color: #000;
 }
 
@@ -492,7 +515,7 @@ button {
 	width: 100%;
 }
 
-#feedback :nth-child(8) img{
+#feedback :nth-child(8) img {
 	width: 20%;
 }
 
@@ -500,22 +523,27 @@ button {
 								FEEDBACK PAGE
 	---------------------------------------------------------- */
 
-#instructions li{
+#instructions {
+	margin-top: 35%;
+}
+
+#instructions li {
 	display: flex;
-	flex-wrap: wrap;	
+	flex-wrap: wrap;
 }
 
-#instructions li p{
+#instructions li p {
 	width: 70% !important;
-	margin-top: 7%;	
+	margin-top: 6%;
+	font-size: .7em;
 }
 
-#instructions .xl{
-		font-size: 4em !important;
-		font-weight: bolder;
-		width: 30%;
-	}
+#instructions .xl {
+	font-size: 4em !important;
+	font-weight: bolder;
+	width: 30%;
+}
 
-	ul li{
-		list-style: none;
-	}
+ul li {
+	list-style: none;
+}
