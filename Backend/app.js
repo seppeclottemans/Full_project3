@@ -5,6 +5,10 @@ const axios = require('./node_modules/axios').default;
 const sha256 = require("./node_modules/js-sha256");
 const request = require('request');
 const fs = require('fs');
+const recombee = require('recombee-api-client');
+const rqs = recombee.requests;
+const uuidv4 = require('uuid/v4');
+
 //  const pf = require('pathfinding');
 const port = 3000;
 let key = "2dadbed20e3367139efb39ccc110d335b1497f36f3bbbebc822ff90b9d637b85";
@@ -28,17 +32,20 @@ let paintingList = [];
 //setup("1004");
 
 //this function saves the tags into the database: doesn't have to be done everytime, only when new paintings were added
-function setup(id){ //=> you just run the function once per added painting
+function setup(id) { //=> you just run the function once per added painting
 
-    new Promise(function(resolve, reject){
-      get_image(id, resolve, reject, painting);
-    }).then(function(result){
-      let paintingObject = {image: result.image, id: result.id}
-      console.log(paintingObject)
+  new Promise(function (resolve, reject) {
+    get_image(id, resolve, reject, painting);
+  }).then(function (result) {
+    let paintingObject = {
+      image: result.image,
+      id: result.id
+    }
+    console.log(paintingObject)
 
-      let tags = get_tags(paintingObject.image, paintingObject.id);
-      console.log(tags);
-    });
+    let tags = get_tags(paintingObject.image, paintingObject.id);
+    console.log(tags);
+  });
 
 };
 
@@ -146,14 +153,14 @@ function get_image(resourceID, resolve, reject, currentPainting) {
 
 // request is being used because this is required to use for the imagga api
 function get_tags(imageUrl, resourceID) {
-  setTimeout(function(){
+  setTimeout(function () {
     request.get('https://api.imagga.com/v2/tags?image_url=' + encodeURIComponent(imageUrl), function (error, response, body) {
       //console.log(body);
-    console.log(response.statusCode);
-      if(response.statusCode == "200"){
+      console.log(response.statusCode);
+      if (response.statusCode == "200") {
         let result = JSON.parse(body).result;
         let tagList = [];
-        for(let i = 0; i < 5; i++){
+        for (let i = 0; i < 5; i++) {
           tagList.push(result.tags[i].tag.en);
         }
         console.log(tagList);
@@ -163,11 +170,11 @@ function get_tags(imageUrl, resourceID) {
   }, 1000);
 };
 
-function set_tags(resourceID, tags){
+function set_tags(resourceID, tags) {
   let query = `user=${user}&function=update_field&param1=${resourceID}&param2=25&param3=${tags}`;
   let signedRequestString = sha256(key + query);
   axios.post(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
-  console.log("added" + resourceID);
+      console.log("added" + resourceID);
     })
     .catch(function (error) {
       console.log("Well, maybe you should try something else...")
@@ -204,9 +211,9 @@ function get_Question(resolveFull) {
     resolveFull(question);
 
   } else {
-    new Promise(function(resolve){
+    new Promise(function (resolve) {
       get_imageQuestion(resolve)
-    }).then(function(result){
+    }).then(function (result) {
       resolveFull(result);
     })
 
@@ -216,25 +223,27 @@ function get_Question(resolveFull) {
 }
 
 function get_imageQuestion(resolve) {
-  var promise = new Promise(function(resolve){get_all_paintings("KMSKA", resolve)}).then(function(paintings){
+  var promise = new Promise(function (resolve) {
+    get_all_paintings("KMSKA", resolve)
+  }).then(function () {
 
-  
+
     //console.log(paintings);
-  //get an image question
-  let images = [];
-  for (let i = 0; i < 4; i++) {
-    images[i] = chooseOneFromList(paintingList);
-  }
+    //get an image question
+    let images = [];
+    for (let i = 0; i < 4; i++) {
+      images[i] = chooseOneFromList(paintingList);
+    }
 
-  let question = {
-    "type": "image",
-    "questionString": "Choose an image",
-    "answers": images
-  }
+    let question = {
+      "type": "image",
+      "questionString": "Choose an image",
+      "answers": images
+    }
 
-  //console.log(question);
-  resolve(question);
-});
+    //console.log(question);
+    resolve(question);
+  });
 
 }
 
@@ -252,13 +261,103 @@ function resetQuiz() {
   questionTypes = ["imageChooser", "practical"];
 }
 
+//SAVE THE GROUP AS A USER
 let group;
 
 function saveGroup(data) {
   group = data;
-  console.log(group);
+  group.id = uuidv4();
+  //console.log(group);
+  send_purchases(group);
 }
 
+//RECOMBEE RECOMMENDATIONS
+
+const client = new recombee.ApiClient('erasmus-community-college-brussels-dev', "c2kpeay9E09tBs2vNTX0LLexqa6gKU020qqpIViJwpgHWMccspZb11pGVpEPDAhp");
+
+//making the product list - only has to be done once
+
+//setup_productList();
+function setup_productList() {
+  //this function creates the necessary fields we need for the products (paintings)
+  client.send(new rqs.AddItemProperty('title', 'string')).then((response) => {
+      return client.send(new rqs.AddItemProperty('tags', 'set'));
+    })
+    .then((response) => {
+      return client.send(new rqs.AddItemProperty('image', 'image'));
+    })
+    .catch((error) => {
+      console.log("something went wrong with the product setup");
+    });
+}
+
+new Promise(function (resolve) {
+  get_all_paintings("KMSKA", resolve)
+}).then(function () {
+  //you just fill in the index of the painting you want to add to the productlist
+  //console.log(paintingList[0]);
+  // setup_painting(paintingList[0]);
+
+});
+
+function setup_painting(painting) {
+  let paintingTitle = painting.title;
+  let paintingTags = painting.tags.split(',');
+  let paintingImage = painting.image;
+  let paintingArtist = painting.artist;
+  let paintingInfo = painting.info.split(',');
+  let paintingStyle;
+  for(let i = 0; i < paintingInfo.length; i++){
+    if(paintingInfo[i] != "KMSKA" && paintingInfo[i] != "room_A" && paintingInfo[i] != "room_B" && paintingInfo[i] != "room_C"){
+      paintingStyle = paintingInfo[i];
+    }
+  }
+
+  client.send(new rqs.SetItemValues(painting.id,
+      // values
+      {
+        title: paintingTitle,
+        tags: paintingTags,
+        image: paintingImage,
+        artist: paintingArtist,
+        style: paintingStyle
+      },
+      // optional parameters
+      {
+        cascadeCreate: true
+      }
+    ),
+    (err, response) => {
+      console.log(err);
+      //console.log(response);
+    });
+
+};
+
+function send_purchases(group){
+  console.log(group);
+  for(let i = 0; i < group.answers.images; i++){
+    
+  }
+
+  client.send(new rqs.AddPurchase(group.id, group.answers.images[0], {cascadeCreate: true}),
+    (err, response) => {
+    getRecommendations(group);
+    }
+);
+}
+
+function getRecommendations(group){
+  client.send(new rqs.RecommendItemsToUser(group.id, 5),
+    (err, recommended) => {
+      console.log(recommended.recomms);
+      return recommended.recomms;
+    }
+);
+}
+
+
+//APP PATHS (Express)
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -274,33 +373,14 @@ app.use(bodyParser.json());
 
 app.get('/resetQuiz', (req, res) => res.send(resetQuiz()));
 app.get('/getQuestion', (req, res) => (
-  new Promise(function(resolve){
+  new Promise(function (resolve) {
     get_Question(resolve);
-  }).then(function(result){
+  }).then(function (result) {
     res.send(result);
   })
 ));
 
-app.post('/saveGroup', (req, res) => (saveGroup(req.body)));
+app.post('/saveGroup', (req, res) => res.send(saveGroup(req.body)));
 
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
