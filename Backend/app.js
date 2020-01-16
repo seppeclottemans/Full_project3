@@ -43,24 +43,53 @@ const artLocations = {
 
 //MAKE THE ROUTE = ordered list of paintings
 
-get_route([1012, 1015, 1001, 1008, 1010]);
-
-function get_route(recomms){ //recomms = array 5 painting id's, unordered
-        let startingPoint = 1000;
-        recomms.push(startingPoint);
-        recomms = recomms.sort((a, b) => a - b);
+function get_route(recomms, resolveAll){ //recomms = array 5 painting id's, unordered
+console.log(recomms);
         let route = [];
+        new Promise(function(resolve, reject){
+            get_image(recomms[0], resolve, reject, new Painting());
+        }).then(function(result){
+            route.push(result.image);
+            new Promise(function(resolve, reject){
+                get_image(recomms[1], resolve, reject, new Painting());
+            }).then(function(result){
+                route.push(result.image);
+                new Promise(function(resolve, reject){
+                    get_image(recomms[2], resolve, reject, new Painting());
+                }).then(function(result){
+                    route.push(result.image);
+                    new Promise(function(resolve, reject){
+                        get_image(recomms[3], resolve, reject, new Painting());
+                    }).then(function(result){
+                        route.push(result.image);
+                        new Promise(function(resolve, reject){
+                            get_image(recomms[4], resolve, reject, new Painting());
+                        }).then(function(result){
+                            route.push(result.image);
+                            resolveAll(route);
+                        });
+                    });
+                });
+            });
+        });
+
+        console.log(route);
+
+        // let startingPoint = 1000;
+        // recomms.push(startingPoint);
+        // recomms = recomms.sort((a, b) => a - b);
+        // let route = [];
 
         // if(recomms.includes(1000)){
         //     route.push(1000);
         //     currentLocation = recomms.indexOf(1000);
         //     recomms.splice(removeIndex, 1);
         // }
-        recomms.forEach(paintingID => {
-            console.log(get_next_location(paintingID, recomms));
-            //route.push(get_next_location(paintingID, recomms));
-        });
-        console.log(route);
+        // recomms.forEach(paintingID => {
+        //     console.log(get_next_location(paintingID, recomms));
+        //     //route.push(get_next_location(paintingID, recomms));
+        // });
+        // console.log(route);
     //look for the closest one to start, put that one first in the route array and take it out of the recomms array
     //then look for the closest one to that one
     //repeat until you have them all ordered
@@ -297,7 +326,7 @@ function get_imageQuestion(resolve) {
 
         let question = {
             "type": "image",
-            "questionString": "Choose an image",
+            "questionString": "Choose an artwork",
             "answers": images
         }
 
@@ -484,7 +513,12 @@ app.post('/saveGroup', (req, res) => (
 ));
 
 app.post('/getRoute', (req, res) => (
-    res.send(get_route(req.body))
+    console.log(req.body)
+    // new Promise(function (resolve) {
+    //     //get_route(req.body, resolve);
+    // }).then(function (result) {
+    //     res.send(result);
+    // })
 ));
 
 
