@@ -76,30 +76,6 @@ $(function () {
             }).done(function (recomms) {
                 //console.log(recomms);
 
-                let recomPromises = [];
-
-                $.ajax({
-                    'url': 'http://localhost:3000/getPainting',
-                    'method': 'POST',
-                    'data': recomms[0]
-                }).done(function(data){
-                    console.log(data);
-                });
-
-                // recomms.forEach(function(recom){
-                //     let recomPromise = new Promise(function(resolve, reject){
-                //         $.ajax({
-                //             'url': 'http://localhost:3000/getPainting',
-                //             'method': 'POST',
-                //             'data': recom
-                //         });
-                //     });
-                //     recomPromises.push(recomPromise);
-                // });
-
-                // Promise.all(recomPromises).then(function(result){
-                //     console.log(result);
-                // })
             })
 
 
