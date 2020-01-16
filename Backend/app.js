@@ -1,3 +1,5 @@
+//import route from './route.js';
+import Painting from './painting.js';
 const express = require('./node_modules/express');
 const app = express();
 const bodyParser = require("./node_modules/body-parser");
@@ -14,15 +16,7 @@ const port = 3000;
 let key = "2dadbed20e3367139efb39ccc110d335b1497f36f3bbbebc822ff90b9d637b85";
 let user = "admin";
 let paintingsIDs = [];
-let painting = {
-  id: 0,
-  title: "",
-  artist: "",
-  year: 0,
-  image: "",
-  info: [],
-  tags: []
-};
+let painting = new Painting(0, "", "", 0, "", [], []);
 let paintingList = [];
 
 // get paintings by a search word
@@ -45,6 +39,16 @@ function setup(id) { //=> you just run the function once per added painting
 
     let tags = get_tags(paintingObject.image, paintingObject.id);
     console.log(tags);
+  });
+
+};
+
+function get_next_location(id){ //=> returns the information of the next painting
+
+  new Promise(function(resolve, reject){
+    
+  }).then(function(result){
+    
   });
 
 };

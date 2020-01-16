@@ -11,13 +11,14 @@
   "dependencies": {
     "axios": "^0.19.1",
     "body-parser": "^1.19.0",
+    "esm": "^3.2.25",
     "express": "^4.17.1",
     "file-system": "^2.2.2",
     "js-sha256": "^0.9.0",
     "pathfinding": "^0.4.18",
-    "recombee-api-client": "^2.4.1",
     "request": "^2.88.0",
     "sha256": "^0.2.0",
+    "recombee-api-client": "^2.4.1",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
