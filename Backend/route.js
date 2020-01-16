@@ -63,6 +63,8 @@ const route = {
        createWalls: function(){
         this.createWallX(5, 5, 0);
         this.createWallY(5, 11, 0);
+        this.createWallX(2, 5, 5);
+        this.createWallX(8, 2, 5);
         this.createDoorX(5, 1, 3);
         this.createDoorY(5, 1, 3);
         this.createDoorY(5, 1, 7);
