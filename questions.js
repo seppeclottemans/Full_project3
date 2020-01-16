@@ -145,7 +145,6 @@ $(function () {
                 }).append(
                     $("<img>", {
                         "src": q.image,
-                        "style": "width: 500px;"
                     })
                 );
             }
