@@ -195,24 +195,27 @@ function chooseOneFromList(array) {
 }
 
 //make a question
-function get_Question() {
+function get_Question(resolveFull) {
   var questionType = chooseOneFromList(questionTypes);
 
   if (questionType == "practical") {
     questionTypes = ["imageChooser"];
     question = chooseOneFromList(practicalQuestions);
-    return question;
+    resolveFull(question);
 
   } else {
-
-    return get_imageQuestion();
+    new Promise(function(resolve){
+      get_imageQuestion(resolve)
+    }).then(function(result){
+      resolveFull(result);
+    })
 
   }
 
 
 }
 
-function get_imageQuestion() {
+function get_imageQuestion(resolve) {
   var promise = new Promise(function(resolve){get_all_paintings("KMSKA", resolve)}).then(function(paintings){
 
   
@@ -229,8 +232,8 @@ function get_imageQuestion() {
     "answers": images
   }
 
-  console.log(question);
-  return question;
+  //console.log(question);
+  resolve(question);
 });
 
 }
@@ -270,7 +273,13 @@ app.use(bodyParser.json());
 
 
 app.get('/resetQuiz', (req, res) => res.send(resetQuiz()));
-app.get('/getQuestion', (req, res) => res.send(get_Question()));
+app.get('/getQuestion', (req, res) => (
+  new Promise(function(resolve){
+    get_Question(resolve);
+  }).then(function(result){
+    res.send(result);
+  })
+));
 
 app.post('/saveGroup', (req, res) => (saveGroup(req.body)));
 

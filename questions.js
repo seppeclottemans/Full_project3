@@ -58,9 +58,9 @@ $(function () {
 
     $("body").on("click", ".answer", function () {
         if (currentQuestionType == "practical") {
-            answers.practical.push($(this).val());
+            answers.practical.push($(this).attr("id"));
         } else {
-            answers.images.push($(this).val());
+            answers.images.push($(this).attr("id"));
         }
 
         if(count < 7){
@@ -113,27 +113,17 @@ $(function () {
             })
         );
 
-        console.log(question);
+        //console.log(question);
 
         question.answers.forEach(function (q) {
-            console.log(q);
+            //console.log(q);
             var answer;
             if (question.type == "practical") {
-                answer = $("<input>", {
-                    "type": "radio",
-                    "name": "answer",
-                    "value": q,
-                    "class": "answer"
-                }).append(
+                answer = $("<div>", {"class": "answer", "id": q}).append(
                     q
                 );
             } else {
-                answer = $("<input>", {
-                    "type": "radio",
-                    "name": "answer",
-                    "value": q.id,
-                    "class": "answer"
-                }).append(
+                answer = $("<div>", {"class": "answer", "id": q.id}).append(
                     $("<img>", {"src": q.image})
                 );
             }
