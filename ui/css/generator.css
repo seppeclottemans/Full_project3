@@ -1,10 +1,26 @@
-.question input{
+.question input {
     background-color: #000;
     font-family: 'Gotham Medium', sans-serif;
     font-weight: normal;
     padding: 10px;
 }
 
-.question .btn{
-margin-top: 5%;
+.question .btn {
+    margin-top: 5%;
+}
+
+#answers{
+    margin-top: 10px;
+}
+
+#answer{
+    display: flex;
+}
+
+#answers img{
+    width: 45%;
+}
+
+.answer{
+    width: 40%;
 }
