@@ -124,7 +124,7 @@ $(function () {
                 );
             } else {
                 answer = $("<div>", {"class": "answer", "id": q.id}).append(
-                    $("<img>", {"src": q.image})
+                    $("<img>", {"src": q.image, "style": "width: 500px;"})
                 );
             }
             $("#answers").append(
