@@ -21,6 +21,7 @@ let paintingList = [];
 
 const artLocations = {
     locations: [
+        [0, 0],
         [2, 1],
         [4, 1],
         [4, 4],
@@ -37,7 +38,32 @@ const artLocations = {
         [3, 10],
         [3, 7]
     ],
-    id: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1012, 1013, 1014, 1015, 1016]
+    id: [0000, 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1012, 1013, 1014, 1015, 1016]
+};
+
+//MAKE THE ROUTE = ordered list of paintings
+
+function get_route(recomms){ //recomms = array 5 painting id's, unordered
+    let route = [] //ordered list of paintings
+    //look for the closest one to start, put that one first in the route array and take it out of the recomms array
+    //then look for the closest one to that one
+    //repeat until you have them all ordered
+    //then you return them
+    return route;
+}
+
+
+function get_next_location(id, locationList) { //=> returns the information of the next painting
+
+    new Promise(function (resolve, reject) {
+        get_painting(id, resolve, reject);
+
+    }).then(function (result) {
+        let currentPainting = painting;
+        console.log(route.closestArt(currentPainting.coordinates, locationList));
+
+    });
+
 };
 
 // get paintings by a search word
@@ -64,18 +90,6 @@ function setup(id) { //=> you just run the function once per added painting
 
 };
 
-function get_next_location(id) { //=> returns the information of the next painting
-
-    new Promise(function (resolve, reject) {
-        get_painting(id, resolve, reject);
-
-    }).then(function (result) {
-        let currentPainting = painting;
-        console.log(route.closestArt(currentPainting.coordinates, artLocations));
-
-    });
-
-};
 
 
 
@@ -415,10 +429,7 @@ function getRecommendations(group, resolve) {
     );
 }
 
-//MAKE THE ROUTE 
-function get_route(recomms){
-    return "route";
-}
+
 
 //APP PATHS (Express)
 app.use(function (req, res, next) {
