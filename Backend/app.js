@@ -268,7 +268,12 @@ function saveGroup(data) {
   group = data;
   group.id = uuidv4();
   //console.log(group);
-  send_purchases(group);
+  new Promise(function(resolve, reject){
+    send_purchases(group, resolve);
+  }).then(function(result){
+    return result;
+  });
+  
 }
 
 //RECOMBEE RECOMMENDATIONS
@@ -334,24 +339,38 @@ function setup_painting(painting) {
 
 };
 
-function send_purchases(group){
-  console.log(group);
-  for(let i = 0; i < group.answers.images; i++){
-    
-  }
+function send_purchases(group, resolveAll){
+  //console.log(group.answers.images);
+  let promises = [];
 
-  client.send(new rqs.AddPurchase(group.id, group.answers.images[0], {cascadeCreate: true}),
+  group.answers.images.forEach(function(image){
+    console.log(image);
+    let newPromise = new Promise(function(resolve, reject){
+      send_purchase(group.id, image, resolve);
+    });
+    promises.push(newPromise);
+  });
+
+  Promise.all(promises).then(function(result){
+    resolveAll(getRecommendations(group));
+  });
+
+}
+
+function send_purchase(id, image, resolve){
+  client.send(new rqs.AddPurchase(id, image, {cascadeCreate: true}),
     (err, response) => {
-    getRecommendations(group);
+      //console.log(image);
+      resolve();
     }
-);
+  );
 }
 
 function getRecommendations(group){
   client.send(new rqs.RecommendItemsToUser(group.id, 5),
     (err, recommended) => {
-      console.log(recommended.recomms);
-      return recommended.recomms;
+      console.log(recommended);
+      return recommended;
     }
 );
 }
