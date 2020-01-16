@@ -16,11 +16,6 @@
         text-transform: uppercase;
     }
     
-    #feedback p,
-    #feedback div p,
-    #feedback h1 {
-        color: #000;
-    }
     
     #feedback div {
         width: 100%;
@@ -43,3 +38,40 @@
     #feedback :nth-child(8) img {
         width: 20%;
     }
+    #feedback-intro p{
+        margin-top: 100%;
+        font-size: 125%;
+        text-align: center;
+        font-weight: bold;
+        font-family: 'Gotham Medium', sans-serif;
+    }
+    #feedback-intro .btn {
+        width: 80%;
+	    margin: 10% 10%;
+	    padding: 10px;
+    }
+
+#share > p, #feedback p {
+    margin-top: 75%;
+    font-size: 125%;
+    text-align: center;
+    padding: 5%;
+    font-weight: bold;
+    font-family: 'Gotham Medium', sans-serif;
+    color: white;
+}
+#share div p {
+    margin-top: 35%;
+    text-align: center;
+}
+#share div img {
+    margin-top: 2%;
+    width: 10%;
+}
+#share div  {
+    margin: auto;
+    text-align: center;
+}
+#feedback p {
+    margin-top: 35%;
+}

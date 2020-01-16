@@ -63,7 +63,7 @@ $(function () {
             answers.images.push($(this).attr("id"));
         }
 
-        if(count < 7){
+        if(count < 4){
             count++;
             nextQuestion();
         } else {
@@ -75,6 +75,7 @@ $(function () {
                 "data": group
             }).done(function(e){
                 console.log(group);
+                console.log(e);
             })
 
             
