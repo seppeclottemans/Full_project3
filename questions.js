@@ -63,7 +63,7 @@ $(function () {
             answers.images.push($(this).attr("id"));
         }
 
-        if(count < 4){
+        if (count < 4) {
             count++;
             nextQuestion();
         } else {
@@ -73,14 +73,38 @@ $(function () {
                 "url": "http://localhost:3000/saveGroup",
                 "method": "POST",
                 "data": group
-            }).done(function(e){
-                console.log(group);
-                console.log(e);
+            }).done(function (recomms) {
+                //console.log(recomms);
+
+                let recomPromises = [];
+
+                $.ajax({
+                    'url': 'http://localhost:3000/getPainting',
+                    'method': 'POST',
+                    'data': recomms[0]
+                }).done(function(data){
+                    console.log(data);
+                });
+
+                // recomms.forEach(function(recom){
+                //     let recomPromise = new Promise(function(resolve, reject){
+                //         $.ajax({
+                //             'url': 'http://localhost:3000/getPainting',
+                //             'method': 'POST',
+                //             'data': recom
+                //         });
+                //     });
+                //     recomPromises.push(recomPromise);
+                // });
+
+                // Promise.all(recomPromises).then(function(result){
+                //     console.log(result);
+                // })
             })
 
-            
+
         }
-        
+
     });
 
     var currentQuestionType;
@@ -120,12 +144,21 @@ $(function () {
             //console.log(q);
             var answer;
             if (question.type == "practical") {
-                answer = $("<div>", {"class": "answer", "id": q}).append(
+                answer = $("<div>", {
+                    "class": "answer",
+                    "id": q
+                }).append(
                     q
                 );
             } else {
-                answer = $("<div>", {"class": "answer", "id": q.id}).append(
-                    $("<img>", {"src": q.image, "style": "width: 500px;"})
+                answer = $("<div>", {
+                    "class": "answer",
+                    "id": q.id
+                }).append(
+                    $("<img>", {
+                        "src": q.image,
+                        "style": "width: 500px;"
+                    })
                 );
             }
             $("#answers").append(
