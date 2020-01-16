@@ -31,9 +31,7 @@ $(function () {
             }
         }
 
-       // if(window.location.href == "http://127.0.0.1:5500/routeinf.html"){
             getSelectedRoute(allRoutes);
-        //}
 
         for (let route of allRoutes) {
             $('.carousel').append(`<figure>
@@ -53,9 +51,7 @@ $(function () {
     }
 
     $.ajax({
-        url: '/js/routes.json',
-        method: 'GET',
-        dataType: 'json'
+        url: 'routes.json'
     }).done(function (data) {
         appendRoutes(data);
     }).fail(function (err1, err2) {

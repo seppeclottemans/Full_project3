@@ -3,6 +3,7 @@
 @import '../fonts/Gotham.css';
 @import '../fonts/Roboto.css';
 @import '../css/feedback.css';
+@import '../css/feedback.css';
 
 :root {
 	--redorange: #DB5A4A;
@@ -411,16 +412,15 @@ button {
 	width: 100%;
 }
 
+#route-inf .btn{
+	width: 100%;
+}
+
 #route-inf img {
 	width: 100%;
 	border-radius: 5%;
 	max-height: 100px;
 	object-fit: cover;
-}
-
-#route-inf div {
-	width: 100%;
-	display: flex;
 }
 
 #route-inf :nth-child(3) {
@@ -436,12 +436,10 @@ button {
 	text-transform: uppercase;
 }
 
-#route-inf div :nth-child(2) {
-	margin-left: 10px;
-}
-
-#route-inf div img {
-	width: 40%;
+#route-inf .route-inf-extra{
+	width: 50%;
+	text-align: center;
+	float:left;
 }
 
 #route-gallery {
