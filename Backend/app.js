@@ -218,7 +218,8 @@ function chooseOneFromList(array) {
 
 //make a question
 function get_Question(resolveFull) {
-  var questionType = chooseOneFromList(questionTypes);
+  let question;
+  let questionType = chooseOneFromList(questionTypes);
 
   if (questionType == "practical") {
     questionTypes = ["imageChooser"];
@@ -279,14 +280,14 @@ function resetQuiz() {
 //SAVE THE GROUP AS A USER
 let group;
 
-function saveGroup(data) {
+function saveGroup(data, resolveAll) {
   group = data;
   group.id = uuidv4();
   //console.log(group);
   new Promise(function(resolve, reject){
     send_purchases(group, resolve);
   }).then(function(result){
-    return result;
+    resolveAll(result);
   });
   
 }
@@ -367,7 +368,11 @@ function send_purchases(group, resolveAll){
   });
 
   Promise.all(promises).then(function(result){
-    resolveAll(getRecommendations(group));
+    new Promise(function(resolve, reject){
+      getRecommendations(group, resolve);
+    }).then(function(result){
+      resolveAll(result.recomms);
+    });
   });
 
 }
@@ -381,12 +386,14 @@ function send_purchase(id, image, resolve){
   );
 }
 
-function getRecommendations(group){
+function getRecommendations(group, resolve){
+
   client.send(new rqs.RecommendItemsToUser(group.id, 5),
     (err, recommended) => {
-      console.log(recommended);
-      return recommended;
+      //console.log(recommended);
+      resolve(recommended);
     }
+    
 );
 }
 
@@ -413,8 +420,21 @@ app.get('/getQuestion', (req, res) => (
     res.send(result);
   })
 ));
+app.post('/getPaintings', (req, res) => (
+  new Promise(function(resolve){
+    get_all_paintings();
+  }).then(function(result){
+    res.send(result);
+  })
+));
 
-app.post('/saveGroup', (req, res) => res.send(saveGroup(req.body)));
+app.post('/saveGroup', (req, res) => (
+  new Promise(function (resolve) {
+    saveGroup(req.body, resolve);
+  }).then(function (result) {
+    res.send(result);
+  })
+));
 
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
