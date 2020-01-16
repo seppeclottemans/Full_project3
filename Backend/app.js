@@ -43,15 +43,30 @@ const artLocations = {
 
 //MAKE THE ROUTE = ordered list of paintings
 
+get_route([1012, 1015, 1001, 1008, 1010]);
+
 function get_route(recomms){ //recomms = array 5 painting id's, unordered
-    let route = [] //ordered list of paintings
+        let startingPoint = 1000;
+        recomms.push(startingPoint);
+        recomms = recomms.sort((a, b) => a - b);
+        let route = [];
+
+        // if(recomms.includes(1000)){
+        //     route.push(1000);
+        //     currentLocation = recomms.indexOf(1000);
+        //     recomms.splice(removeIndex, 1);
+        // }
+        recomms.forEach(paintingID => {
+            console.log(get_next_location(paintingID, recomms));
+            //route.push(get_next_location(paintingID, recomms));
+        });
+        console.log(route);
     //look for the closest one to start, put that one first in the route array and take it out of the recomms array
     //then look for the closest one to that one
     //repeat until you have them all ordered
     //then you return them
-    return route;
-}
-
+    //return route;
+};
 
 function get_next_location(id, locationList) { //=> returns the information of the next painting
 
@@ -60,8 +75,7 @@ function get_next_location(id, locationList) { //=> returns the information of t
 
     }).then(function (result) {
         let currentPainting = painting;
-        console.log(route.closestArt(currentPainting.coordinates, locationList));
-
+        return route.closestArt(currentPainting.coordinates, locationList);
     });
 
 };
