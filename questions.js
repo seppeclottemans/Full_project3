@@ -140,7 +140,7 @@ $(function () {
                 );
             } else {
                 answer = $("<div>", {
-                    "class": "answer",
+                    "class": "answer imganswer",
                     "id": q.id
                 }).append(
                     $("<img>", {
