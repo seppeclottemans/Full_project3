@@ -63,7 +63,7 @@ $(function () {
             answers.images.push($(this).attr("id"));
         }
 
-        if (count < 4) {
+        if (count < 1) {
             count++;
             nextQuestion();
         } else {
@@ -76,18 +76,17 @@ $(function () {
             }).done(function (recomms) {
 
                 console.log(recomms);
-                let data = [];
+                let selectedPaintings = [];
                 recomms.forEach(function(recomm){
-                    data.push(recomm.id);
+                    selectedPaintings.push(recomm.id);
                 });
 
-                console.log(data);
+                console.log(selectedPaintings);
 
                 $.ajax({
-                    "url": "http://localhost:3000/getRoute",
-                    "method": "POST",
-                    "data": data, 
-                    "type": "JSON"
+                    url: "http://localhost:3000/getRoute",
+                    method: "POST",
+                    data: {selectedPaintings:selectedPaintings}, 
                 }).done(function(route){
                     console.log(route);
         

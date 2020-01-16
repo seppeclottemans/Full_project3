@@ -513,12 +513,12 @@ app.post('/saveGroup', (req, res) => (
 ));
 
 app.post('/getRoute', (req, res) => (
-    console.log(req.body)
-    // new Promise(function (resolve) {
-    //     //get_route(req.body, resolve);
-    // }).then(function (result) {
-    //     res.send(result);
-    // })
+    //console.log(req.body.selectedPaintings)
+    new Promise(function (resolve) {
+        get_route(req.body.selectedPaintings, resolve);
+    }).then(function (result) {
+        res.send(result);
+    })
 ));
 
 
