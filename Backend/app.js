@@ -415,6 +415,10 @@ function getRecommendations(group, resolve) {
     );
 }
 
+//MAKE THE ROUTE 
+function get_route(recomms){
+    return "route";
+}
 
 //APP PATHS (Express)
 app.use(function (req, res, next) {
@@ -452,6 +456,10 @@ app.post('/saveGroup', (req, res) => (
     }).then(function (result) {
         res.send(result);
     })
+));
+
+app.post('/getRoute', (req, res) => (
+    res.send(get_route(req.body))
 ));
 
 

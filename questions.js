@@ -74,7 +74,9 @@ $(function () {
                 "method": "POST",
                 "data": group
             }).done(function (recomms) {
-                //console.log(recomms);
+                console.log(recomms);
+
+                getRoute(recomms);
 
             })
 
@@ -82,6 +84,16 @@ $(function () {
         }
 
     });
+
+    function getRoute(recomms){
+        $.ajax({
+            "url": "http://localhost:3000/getRoute",
+            "method": "POST",
+            "data": recomms
+        }).done(function(route){
+            console.log(route);
+        })
+    }
 
     var currentQuestionType;
 
