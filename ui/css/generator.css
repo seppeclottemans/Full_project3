@@ -15,12 +15,9 @@
 
 #answer{
     display: flex;
+    flex-wrap: wrap;
 }
 
-#answers img{
+.imganswer{
     width: 45%;
-}
-
-.answer{
-    width: 40%;
 }
