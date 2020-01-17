@@ -34,6 +34,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+   /*border-radius: 5%; 
+    overflow: hidden;*/
 }
 
 #answers .answer{

@@ -5,11 +5,11 @@ $(function () {
             return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
         }
 
-        let getSelectedRoute = (allRoutes) =>{
+        let getSelectedRoute = (allRoutes) => {
             let selectedRoute = getURLParameter('name');
             console.log(selectedRoute);
-            for(let route of allRoutes){
-                if(route.name == selectedRoute){
+            for (let route of allRoutes) {
+                if (route.name == selectedRoute) {
                     $('#route-inf').append(`
                     <img src="${route.images[0]}" alt="">
                     <p>${route.info}</p>
@@ -31,7 +31,7 @@ $(function () {
             }
         }
 
-            getSelectedRoute(allRoutes);
+        getSelectedRoute(allRoutes);
 
         for (let route of allRoutes) {
             $('.carousel').append(`<figure>
@@ -44,20 +44,46 @@ $(function () {
     </figure>`);
         }
 
-        $('.carousel figure img').click(function(){
-           selectedRoute = $($($(this).siblings()[0]).children()[0]).attr('id');
-           window.location.href = `routeinf.html?name=${selectedRoute}`
+        $('.carousel figure img').click(function () {
+            selectedRoute = $($($(this).siblings()[0]).children()[0]).attr('id');
+            window.location.href = `routeinf.html?name=${selectedRoute}`
         });
     }
 
-    $.ajax({
-        url: 'routes.json'
-    }).done(function (data) {
-        appendRoutes(data);
-    }).fail(function (err1, err2) {
-        console.log(err1);
-        console.log(err2);
-    }).always(function () {
-        console.log('always');
-    });
+    if (window.cordova) {
+        console.log('Using Apache Cordova HTTP GET function');
+        cordovaHTTP.get(
+            'routes.json',
+            function (response) {
+                if (response) {
+                    appendRoutes(response);
+                }
+            },
+            function (error) {
+                console.log(JSON.stringify(error));
+            });
+    } else {
+        console.log('Not using Cordova, fallback to AJAX via jquery');
+        $.ajax({
+            url: 'routes.json'
+        }).done(function (data) {
+            appendRoutes(data);
+        }).fail(function (err1, err2) {
+            console.log(err1);
+            console.log(err2);
+        }).always(function () {
+            console.log('always');
+        });
+    }
+
+    // $.ajax({
+    //     url: 'routes.json'
+    // }).done(function (data) {
+    //     appendRoutes(data);
+    // }).fail(function (err1, err2) {
+    //     console.log(err1);
+    //     console.log(err2);
+    // }).always(function () {
+    //     console.log('always');
+    // });
 });
