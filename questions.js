@@ -63,7 +63,7 @@ $(function () {
             answers.images.push($(this).attr("id"));
         }
 
-        if (count < 1) {
+        if (count < 4) {
             count++;
             nextQuestion();
         } else {
