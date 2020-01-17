@@ -43,62 +43,38 @@ const artLocations = {
 
 //MAKE THE ROUTE = ordered list of paintings
 
-function get_route(recomms, resolveAll){ //recomms = array 5 painting id's, unordered
-console.log(recomms);
-        let route = [];
-        new Promise(function(resolve, reject){
-            get_image(recomms[0], resolve, reject, new Painting());
-        }).then(function(result){
+function get_route(recomms, resolveAll) { //recomms = array 5 painting id's, unordered
+    console.log(recomms);
+    let route = [];
+    new Promise(function (resolve, reject) {
+        get_image(recomms[0], resolve, reject, new Painting());
+    }).then(function (result) {
+        route.push(result.image);
+        new Promise(function (resolve, reject) {
+            get_image(recomms[1], resolve, reject, new Painting());
+        }).then(function (result) {
             route.push(result.image);
-            new Promise(function(resolve, reject){
-                get_image(recomms[1], resolve, reject, new Painting());
-            }).then(function(result){
+            new Promise(function (resolve, reject) {
+                get_image(recomms[2], resolve, reject, new Painting());
+            }).then(function (result) {
                 route.push(result.image);
-                new Promise(function(resolve, reject){
-                    get_image(recomms[2], resolve, reject, new Painting());
-                }).then(function(result){
+                new Promise(function (resolve, reject) {
+                    get_image(recomms[3], resolve, reject, new Painting());
+                }).then(function (result) {
                     route.push(result.image);
-                    new Promise(function(resolve, reject){
-                        get_image(recomms[3], resolve, reject, new Painting());
-                    }).then(function(result){
+                    new Promise(function (resolve, reject) {
+                        get_image(recomms[4], resolve, reject, new Painting());
+                    }).then(function (result) {
                         route.push(result.image);
-                        new Promise(function(resolve, reject){
-                            get_image(recomms[4], resolve, reject, new Painting());
-                        }).then(function(result){
-                            route.push(result.image);
-                            resolveAll(route);
-                        });
+                        resolveAll(route);
                     });
                 });
             });
         });
-
-        console.log(route);
-
-        // let startingPoint = 1000;
-        // recomms.push(startingPoint);
-        // recomms = recomms.sort((a, b) => a - b);
-        // let route = [];
-
-        // if(recomms.includes(1000)){
-        //     route.push(1000);
-        //     currentLocation = recomms.indexOf(1000);
-        //     recomms.splice(removeIndex, 1);
-        // }
-        // recomms.forEach(paintingID => {
-        //     console.log(get_next_location(paintingID, recomms));
-        //     //route.push(get_next_location(paintingID, recomms));
-        // });
-        // console.log(route);
-    //look for the closest one to start, put that one first in the route array and take it out of the recomms array
-    //then look for the closest one to that one
-    //repeat until you have them all ordered
-    //then you return them
-    //return route;
+    });
 };
 
 function get_next_location(id, locationList) { //=> returns the information of the next painting
-
     new Promise(function (resolve, reject) {
         get_painting(id, resolve, reject);
 
@@ -192,34 +168,6 @@ function get_painting(resourceID, resolve, reject) {
         });
 };
 
-// get all user collections
-//get_user_collections();
-
-function get_user_collections() {
-    let query = `user=${user}&function=get_user_collections`;
-    let signedRequestString = sha256(key + query);
-    axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (response) {
-            //console.log(response);
-        })
-        .catch(function (error) {
-            console.log("Try Again...")
-            console.log(error);
-        });
-};
-
-// get all public collections
-function get_collections() {
-    let query = `user=${user}&function=search_public_collections`;
-    let signedRequestString = sha256(key + query);
-    axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (response) {
-            //console.log(response);
-        })
-        .catch(function (error) {
-            console.log("better luck next time :-) ")
-            console.log(error);
-        });
-};
-
 // get painting image
 function get_image(resourceID, resolve, reject, currentPainting) {
     let query = `user=${user}&function=get_resource_path&param1=${resourceID}&param2=false`;
@@ -283,7 +231,6 @@ function write_json(newData) {
 
 
 //CHOOSE IMAGES FOR QUIZ
-
 //function that chooses something from an array
 function chooseOneFromList(array) {
     return array[Math.floor(Math.random() * array.length)];
@@ -298,45 +245,34 @@ function get_Question(resolveFull) {
         questionTypes = ["imageChooser"];
         question = chooseOneFromList(practicalQuestions);
         resolveFull(question);
-
     } else {
         new Promise(function (resolve) {
             get_imageQuestion(resolve)
         }).then(function (result) {
             resolveFull(result);
         })
-
     }
-
-
 }
 
 function get_imageQuestion(resolve) {
     var promise = new Promise(function (resolve) {
         get_all_paintings("KMSKA", resolve)
     }).then(function () {
-
-
         //console.log(paintings);
         //get an image question
         let images = [];
         for (let i = 0; i < 4; i++) {
             images[i] = chooseOneFromList(paintingList);
         }
-
         let question = {
             "type": "image",
             "questionString": "Choose an artwork",
             "answers": images
         }
-
         //console.log(question);
         resolve(question);
     });
-
 }
-
-
 
 let questionTypes = ["imageChooser", "practical"];
 
@@ -362,7 +298,6 @@ function saveGroup(data, resolveAll) {
     }).then(function (result) {
         resolveAll(result);
     });
-
 }
 
 //RECOMBEE RECOMMENDATIONS
@@ -391,7 +326,6 @@ new Promise(function (resolve) {
     //you just fill in the index of the painting you want to add to the productlist
     //console.log(paintingList[0]);
     // setup_painting(paintingList[0]);
-
 });
 
 function setup_painting(painting) {
@@ -462,17 +396,13 @@ function send_purchase(id, image, resolve) {
 }
 
 function getRecommendations(group, resolve) {
-
     client.send(new rqs.RecommendItemsToUser(group.id, 5),
         (err, recommended) => {
             //console.log(recommended);
             resolve(recommended);
         }
-
     );
 }
-
-
 
 //APP PATHS (Express)
 app.use(function (req, res, next) {
