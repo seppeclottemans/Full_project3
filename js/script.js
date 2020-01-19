@@ -1,5 +1,4 @@
 $(function () {
-
     let appendRoutes = (allRoutes) => {
         function getURLParameter(name) {
             return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
@@ -50,31 +49,16 @@ $(function () {
         });
     }
 
-    if (window.cordova) {
-        console.log('Using Apache Cordova HTTP GET function');
-        cordovaHTTP.get(
-            'routes.json',
-            function (response) {
-                if (response) {
-                    appendRoutes(response);
-                }
-            },
-            function (error) {
-                console.log(JSON.stringify(error));
-            });
-    } else {
-        console.log('Not using Cordova, fallback to AJAX via jquery');
-        $.ajax({
-            url: 'routes.json'
-        }).done(function (data) {
-            appendRoutes(data);
-        }).fail(function (err1, err2) {
-            console.log(err1);
-            console.log(err2);
-        }).always(function () {
-            console.log('always');
+
+        $.getJSON('routes.json', function (d) {
+            console.log('ok');
+            appendRoutes(d);
+        }).fail(function (e1, e2) {
+            console.log(e1);
+            console.log(e2);
         });
-    }
+    
+        
 
     // $.ajax({
     //     url: 'routes.json'
