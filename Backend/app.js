@@ -12,6 +12,7 @@ const assert = require('assert');
 const recombee = require('recombee-api-client');
 const rqs = recombee.requests;
 const uuidv4 = require('uuid/v4');
+let ObjectId = require('mongodb').ObjectID;
 
 //  const pf = require('pathfinding');
 const port = 3000;
@@ -471,6 +472,20 @@ app.post('/getRoute', (req, res) => (
         res.send(result);
     })
 ));
+
+app.get('/getRouteMongo/:id', (req, res) => {
+        const collection = db.collection('routes');
+        const selectedRoute =  collection.find({"_id": ObjectId(req.params.id)});
+        res.send(selectedRoute);
+});
+
+app.get('/getAllRoutesMongo', (req, res) => {
+    const collection = db.collection('routes');
+    collection.find({}).toArray(function(err, result) {
+        if (err) throw err;
+        res.send(result);
+      });
+});
 
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
