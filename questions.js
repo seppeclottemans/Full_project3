@@ -37,16 +37,14 @@ $(function () {
         $(".name").each(function () {
             var name = $(this).val();
             if (name != "") {
-                ;
                 group.names.push(name);
             }
 
         });
 
         group.groupSize = group.names.length;
-        //        console.log(group);
-        window.localStorage.setItem("group", JSON.stringify(group));
-
+        console.log(group);
+        window.sessionStorage.setItem("group", JSON.stringify(group));
 
         $.ajax({
             "url": "http://localhost:3000/resetQuiz",
@@ -65,7 +63,7 @@ $(function () {
             answers.images.push($(this).attr("id"));
         }
 
-        let group = JSON.parse(window.localStorage.getItem("group"));
+        let group = JSON.parse(window.sessionStorage.getItem("group"));
         let questionCount = Math.max(group.groupSize, 5);
 
         if (count < questionCount) {
@@ -116,7 +114,7 @@ $(function () {
     });
 
     var currentQuestionType;
-    let currentGroup = JSON.parse(window.localStorage.getItem("group"));
+    let currentGroup = JSON.parse(window.sessionStorage.getItem("group"));
     let unusedUsers = currentGroup.names;
     function nextQuestion() {
         $(".generator").empty();
@@ -135,11 +133,22 @@ $(function () {
                 if(currentQuestionType == "image"){
                     let i = Math.floor(Math.random() * unusedUsers.length);
                     let currentUser = unusedUsers.pop(i);
-                    console.log(currentUser);
+                    
+                    if(currentUser == undefined) {
+                        currentUser = "group"
+                    }
 
                     $(".generator").append(
-                        $("<div>", {"class": "nameShouter"}).text(currentUser)
+                        $("<div>", {"class": "nameShouter"}).text(currentUser + "'s turn")
                     );
+
+                    $(".generator").append(
+                        $("<div>", {"id": "currentName"}).text(currentUser)
+                    );
+
+                    setTimeout(function() {
+                        $(".nameShouter").slideUp();
+                    }, 2500);
                 }
             }
 

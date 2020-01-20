@@ -12,6 +12,7 @@ const assert = require('assert');
 const recombee = require('recombee-api-client');
 const rqs = recombee.requests;
 const uuidv4 = require('uuid/v4');
+let ObjectId = require('mongodb').ObjectID;
 
 //  const pf = require('pathfinding');
 const port = 3000;
@@ -416,8 +417,20 @@ function send_purchase(id, image, resolve) {
     );
 }
 
+let recommAmount;
+
 function getRecommendations(group, resolve) {
-    client.send(new rqs.RecommendItemsToUser(group.id, 5),
+    console.log(group);
+    if(group.answers.practical[0] == "30 minutes or less"){
+        recommAmount = 3;
+    } else if (group.answers.practical[0] == "30 minutes - 1 hour") {
+        recommAmount = 4;
+    } else if (group.answers.practical[0] == "1 hour - 2 hours") {
+        recommAmount = 5;
+    } else {
+        recommAmount = 6;
+    }
+    client.send(new rqs.RecommendItemsToUser(group.id, recommAmount),
         (err, recommended) => {
             //console.log(recommended);
             resolve(recommended);
@@ -471,6 +484,20 @@ app.post('/getRoute', (req, res) => (
         res.send(result);
     })
 ));
+
+app.get('/getRouteMongo/:id', (req, res) => {
+        const collection = db.collection('routes');
+        const selectedRoute =  collection.find({"_id": ObjectId(req.params.id)});
+        res.send(selectedRoute);
+});
+
+app.get('/getAllRoutesMongo', (req, res) => {
+    const collection = db.collection('routes');
+    collection.find({}).toArray(function(err, result) {
+        if (err) throw err;
+        res.send(result);
+      });
+});
 
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));

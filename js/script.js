@@ -61,3 +61,14 @@ $(function () {
         console.log(e2);
     });
 });
+
+$.ajax({
+    url: "http://localhost:3000/getAllRoutesMongo",
+    method: 'GET'
+}).done(function (data) {
+    console.log(data);
+}).fail(function (err1, err2) {
+    console.log('Fail');
+    console.log(err1);
+    console.log(err2);
+});
