@@ -8,7 +8,7 @@ $(function () {
     var count = 0;
 
     $("#addPerson").click(function (e) {
-        e.preventDefault();
+        //e.preventDefault();
         var groupSize = $(".name").length;
 
         if (groupSize < 7) {
@@ -31,7 +31,7 @@ $(function () {
     });
 
     $("body").on("click", "#next", function (e) {
-        e.preventDefault();
+        //e.preventDefault();
         group.names = [];
 
         $(".name").each(function () {
@@ -45,6 +45,8 @@ $(function () {
 
         group.groupSize = group.names.length;
         //        console.log(group);
+        window.localStorage.setItem("group", JSON.stringify(group));
+
 
         $.ajax({
             "url": "http://localhost:3000/resetQuiz",
@@ -62,6 +64,8 @@ $(function () {
         } else {
             answers.images.push($(this).attr("id"));
         }
+
+        let group = window.localStorage.getItem("group");
 
         if (count < 4) {
             count++;
@@ -125,6 +129,12 @@ $(function () {
             "method": "GET"
         }).done(function (question) {
             currentQuestionType = question.type;
+            let group = window.localStorage.getItem("group");
+            console.log(group);
+            if(group.groupSize > 1){
+
+            }
+
             displayQuestion(question);
         });
 

@@ -2,7 +2,7 @@
     {
         "name": "Common route",
         "rating": 8.5,
-        "images": ["/ui/images/madonna.jpg", "/ui/images/verlorenzoon.jpg", "/ui/images/heiligbarbara.jpg"],
+        "images": ["ui/images/madonna.jpg", "/ui/images/verlorenzoon.jpg", "/ui/images/heiligbarbara.jpg"],
         "info": "Following this route, you will get led into the world of the rennaiscance, barok and surrealism. Including works of the artists Magritte, Jan van Eyck, Ensor,... "
     },
     {
