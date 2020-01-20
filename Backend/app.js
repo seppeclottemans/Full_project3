@@ -395,8 +395,20 @@ function send_purchase(id, image, resolve) {
     );
 }
 
+let recommAmount;
+
 function getRecommendations(group, resolve) {
-    client.send(new rqs.RecommendItemsToUser(group.id, 5),
+    console.log(group);
+    if(group.answers.practical[0] == "30 minutes or less"){
+        recommAmount = 3;
+    } else if (group.answers.practical[0] == "30 minutes - 1 hour") {
+        recommAmount = 4;
+    } else if (group.answers.practical[0] == "1 hour - 2 hours") {
+        recommAmount = 5;
+    } else {
+        recommAmount = 6;
+    }
+    client.send(new rqs.RecommendItemsToUser(group.id, recommAmount),
         (err, recommended) => {
             //console.log(recommended);
             resolve(recommended);
