@@ -65,9 +65,10 @@ $(function () {
             answers.images.push($(this).attr("id"));
         }
 
-        let group = window.localStorage.getItem("group");
+        let group = JSON.parse(window.localStorage.getItem("group"));
+        let questionCount = Math.max(group.groupSize, 5);
 
-        if (count < 4) {
+        if (count < questionCount) {
             count++;
             nextQuestion();
         } else {
@@ -115,7 +116,8 @@ $(function () {
     });
 
     var currentQuestionType;
-
+    let currentGroup = JSON.parse(window.localStorage.getItem("group"));
+    let unusedUsers = currentGroup.names;
     function nextQuestion() {
         $(".generator").empty();
         $(".generator").append(
@@ -129,10 +131,16 @@ $(function () {
             "method": "GET"
         }).done(function (question) {
             currentQuestionType = question.type;
-            let group = window.localStorage.getItem("group");
-            console.log(group);
-            if(group.groupSize > 1){
+            if(currentGroup.groupSize > 1){
+                if(currentQuestionType == "image"){
+                    let i = Math.floor(Math.random() * unusedUsers.length);
+                    let currentUser = unusedUsers.pop(i);
+                    console.log(currentUser);
 
+                    $(".generator").append(
+                        $("<div>", {"class": "nameShouter"}).text(currentUser)
+                    );
+                }
             }
 
             displayQuestion(question);
