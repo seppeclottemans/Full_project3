@@ -13,10 +13,10 @@ $(function () {
                     <img src="${route.images[0]}" alt="">
                     <p>${route.info}</p>
                     <div>
-                        <div>
+                        <div class="route-inf-extra">
                             <p>Rating:</p><img src="ui/images/rating-white.png">
                         </div>
-                        <div>
+                        <div class="route-inf-extra">
                             <p>Duration:</p>
                             <p>2:45h</p>
                         </div>
