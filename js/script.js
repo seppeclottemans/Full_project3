@@ -38,12 +38,16 @@ $(function () {
        <figcaption>
             <h2 id="${route.name}">${route.name}</h2>
             <p>${route.info}</p>
-            <button class="btn readmore"><a href="routeinf.html">Read more</a></button>
+            <button class="btn readmore"><a href="routeinf.html">Read more >></a></button>
         </figcaption>
     </figure>`);
         }
 
         $('.carousel figure img').click(function () {
+            selectedRoute = $($($(this).siblings()[0]).children()[0]).attr('id');
+            window.location.href = `routeinf.html?name=${selectedRoute}`
+        });
+        $('.carousel .readmore').click(function(){
             selectedRoute = $($($(this).siblings()[0]).children()[0]).attr('id');
             window.location.href = `routeinf.html?name=${selectedRoute}`
         });
