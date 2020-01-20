@@ -142,40 +142,29 @@ header button {
 	position: absolute;
 	top: 50%;
 	max-height: 70%;
-
 	margin: 0;
-
-	font-size: 30%;
-
 	-webkit-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
 }
 
-header button.back {
-	position: absolute;
+button.back {
+	width: 100%;
 	left: 0;
-
-	height: 100%;
 	margin: 0;
-	padding: 0 0.9em;
-
-	/* Font size is percentage of the header's font size. */
-	font-size: 50%;
+	font-size:2.5rem;
 	color: #fff;
-
 	text-align: left;
-
-	background: none;
-
-	border-radius: 0;
 	border: none;
-
 	box-shadow: none;
+	width: 5%;
+	display: flex;
+	align-content: space-between;
+	text-transform: uppercase;
 }
 
-header button.back img {
-	height: 0.5em;
+button.back img {
+	width: 100%;
 }
 
 header img.logotype {
@@ -337,6 +326,14 @@ p {
 	font-family: 'Roboto Regular', sans-serif;
 }
 
+/*  ----------------------------------------------------------
+								GUIDED TOURS
+	---------------------------------------------------------- */
+
+#guided-tours{
+	margin-top: 5%;
+}
+
 .carousel {
 	width: 100%;
 	display: flex;
@@ -360,9 +357,13 @@ p {
 	max-height: 125px;
 }
 
-/* #generate-route{
-	margin-top: 15%;
-} */
+/*  ----------------------------------------------------------
+								GENERATE ROUTE
+	---------------------------------------------------------- */
+
+#generate-route{
+	margin-top: 10%;
+} 
 
 #generate-route img {
 	width: 40%;
