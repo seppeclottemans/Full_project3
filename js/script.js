@@ -14,11 +14,11 @@ $(function () {
                     <p>${route.info}</p>
                     <div>
                         <div class="route-inf-extra">
-                            <p>Rating:</p><img src="ui/images/rating-white.png">
+                            <p>Rating:</p><img src="ui/images/rating-red.png">
                         </div>
                         <div class="route-inf-extra">
                             <p>Duration:</p>
-                            <p>2:45h</p>
+                            <p class="redorange">2:45h</p>
                         </div>
                     </div>
                     <button class="btn"><a href="routeinstructions.html">Select route</a></button>
