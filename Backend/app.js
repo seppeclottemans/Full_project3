@@ -7,18 +7,39 @@ const axios = require('./node_modules/axios').default;
 const sha256 = require("./node_modules/js-sha256");
 const request = require('request');
 const fs = require('fs');
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
 const recombee = require('recombee-api-client');
 const rqs = recombee.requests;
 const uuidv4 = require('uuid/v4');
 
 //  const pf = require('pathfinding');
 const port = 3000;
-let key = "2dadbed20e3367139efb39ccc110d335b1497f36f3bbbebc822ff90b9d637b85";
-let user = "admin";
+let recourceSpaceKey = "2dadbed20e3367139efb39ccc110d335b1497f36f3bbbebc822ff90b9d637b85";
+let recourceSpaceUser = "admin";
+const mongoUsername = '1920PROJECTDB001';
+const mongoPassword = 97354681;
+let db;
+
+// Connection URL
+const mongoUrl = `mongodb://${mongoUsername}:${mongoPassword}@172.20.0.54:27017/?authMechanism=DEFAULT&authSource=${mongoUsername}`;
+
+// Database Name
+const dbName = mongoUsername;
+
+// Create a new MongoClient
+const myMongoClientclient = new MongoClient(mongoUrl);
+
+// Use connect method to connect to the Server
+myMongoClientclient.connect(function(err) {
+  assert.equal(null, err);
+  console.log("Connected successfully to server");
+  db = myMongoClientclient.db(dbName);
+});
+
 let paintingsIDs = [];
 let painting = new Painting(0, "", "", 0, "", [], [], []);
 let paintingList = [];
-
 const artLocations = {
     locations: [
         [0, 0],
@@ -113,8 +134,8 @@ function setup(id) { //=> you just run the function once per added painting
 
 
 function get_all_paintings(search, resolveAll) {
-    let query = `user=${user}&function=do_search&param1=${search}`;
-    let signedRequestString = sha256(key + query);
+    let query = `user=${recourceSpaceUser}&function=do_search&param1=${search}`;
+    let signedRequestString = sha256(recourceSpaceKey + query);
     axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
             res.data.forEach(responsePainting => {
                 paintingsIDs.push(responsePainting.ref);
@@ -148,8 +169,8 @@ function get_all_paintings(search, resolveAll) {
 // get all data of a specific painting
 function get_painting(resourceID, resolve, reject) {
     painting = {};
-    let query = `user=${user}&function=get_resource_field_data&param1=${resourceID}`;
-    let signedRequestString = sha256(key + query);
+    let query = `user=${recourceSpaceUser}&function=get_resource_field_data&param1=${resourceID}`;
+    let signedRequestString = sha256(recourceSpaceKey + query);
     axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
             painting.year = parseInt((res.data).filter(field => field.title = "Expiration date")[0].value.substr(0, 4));
             painting.title = (res.data).filter(field => field.name == "title")[0].value;
@@ -170,8 +191,8 @@ function get_painting(resourceID, resolve, reject) {
 
 // get painting image
 function get_image(resourceID, resolve, reject, currentPainting) {
-    let query = `user=${user}&function=get_resource_path&param1=${resourceID}&param2=false`;
-    let signedRequestString = sha256(key + query);
+    let query = `user=${recourceSpaceUser}&function=get_resource_path&param1=${resourceID}&param2=false`;
+    let signedRequestString = sha256(recourceSpaceKey + query);
     axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
             //console.log(currentPainting);
             currentPainting.image = res.data;
@@ -207,8 +228,8 @@ function get_tags(imageUrl, resourceID) {
 };
 
 function set_tags(resourceID, tags) {
-    let query = `user=${user}&function=update_field&param1=${resourceID}&param2=25&param3=${tags}`;
-    let signedRequestString = sha256(key + query);
+    let query = `user=${recourceSpaceUser}&function=update_field&param1=${resourceID}&param2=25&param3=${tags}`;
+    let signedRequestString = sha256(recourceSpaceKey + query);
     axios.post(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
             console.log("added" + resourceID);
         })
