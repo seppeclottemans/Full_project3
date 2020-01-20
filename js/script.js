@@ -11,6 +11,7 @@ $(function () {
             for (let route of allRoutes) {
                 if (route._id == selectedRoute) {
                     $('#route-inf').append(`
+                    <h1>${route.name}</h1>
                     <img src="${route.images[0]}" alt="">
                     <p>${route.info}</p>
                     <div>
@@ -30,6 +31,9 @@ $(function () {
                 }
             }
             $('.starrr').starrr();
+            $('.starrr').on('starrr:change', function(e, value){
+                console.log(value)
+              })
 
         //     let selectedRoute = getURLParameter('id');
         //     //$.getJSON(`http://localhost:3000/getRouteMongo/${selectedRoute}`, function (route) {
