@@ -4,9 +4,10 @@
 @import '../fonts/Roboto.css';
 @import '../css/feedback.css';
 @import '../css/generator.css';
+@import '../css/loadingicon.css';
 
 :root {
-	--redorange: #DB5A4A;
+	--redorange: #ec4f41;
 	font-size: 12px;
 }
 
@@ -99,9 +100,6 @@ section::after {
 	padding: 0px;
 }
 
-
-
-
 a {
 	text-decoration: none;
 }
@@ -135,7 +133,11 @@ header {
 	z-index: 1000;
 	background-image: url('/ui/images/Kmska_Jean_Auguste_Dominique_Ingres_\(1780-1867\)_-_Zelfportret_\(1864\)_-_28-02-2010_13-37-05.jpg');
 	background-size: cover;
+<<<<<<< HEAD
+	background-color: #000;
+=======
 	background-color: black;
+>>>>>>> 94739a79c1c0c5eb8163984f507f4175e0c0b93a
 }
 
 header button {
@@ -153,8 +155,13 @@ header button {
 button.back {
 	width: 100%;
 	left: 0;
+<<<<<<< HEAD
+	margin: 0;
+	font-size:2rem;
+=======
 	margin: 0 0 10px 0;
 	font-size:2.5rem;
+>>>>>>> 94739a79c1c0c5eb8163984f507f4175e0c0b93a
 	color: #fff;
 	text-align: left;
 	border: none;
