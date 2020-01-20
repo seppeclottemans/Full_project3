@@ -28,4 +28,4 @@ cordova.plugins.barcodeScanner.scan(
           }, function(fail) {
             alert("encoding failed: " + fail);
           }
-        );
+        )
