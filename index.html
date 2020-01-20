@@ -23,53 +23,20 @@
 </head>
 
 <body ontouchstart="">
+	<div id="loading_screen">
+		<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+	</div>
 	<!-- ontouchstart="" enables low-delay CSS transitions. -->
 	<img src="ui/images/Kmska_Jean_Auguste_Dominique_Ingres_(1780-1867)_-_Zelfportret_(1864)_-_28-02-2010_13-37-05.jpg"
 		alt="" id="bg">
 	<header>
-		<button class="back" onclick="history.back()">
-			<img src="ui/images/arrow-left.svg" />
-		</button>
-
 		<a href="index.html"><img class="logotype" src="ui/images/logo-white.png" alt="logo kmska" /></a>
 		<a href="instructions.html"><img id="inf-icon" class="logotype" src="ui/images/inf-white.png" alt="info" /></a>
-
-		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
 	</header>
 	<main>
 		<section id="guided-tours">
 			<h1><span class="light-upper">Existing</span><span class="bold-upper"> routes</span></h1>
 			<div class="carousel">
-				<figure>
-					<img src="ui/images/madonna.jpg" alt="">
-					<figcaption>
-						<h2 id="Common route">Common route</h2>
-						<p>Following this route, you will get led into the world of the rennaiscance, barok and surrealism.
-							 Including works of the artists Magritte, Jan van Eyck, Ensor and Van Gogh. </p>
-					</figcaption>
-					<button class="btn readmore"><a href="routeinf.html">Read more ></a></button>
-				</figure>
-				<figure>
-					<img src="ui/images/madonna.jpg" alt="">
-					<figcaption>
-						<h2 id="Common route">Common route</h2>
-						<p>Hightlights gives you the most impressive vision on which artist that made the art world. 
-							Including works of the artists Magritte, Jan van Eyck, Ensor and many more! </p>
-					</figcaption>
-					<button class="btn readmore"><a href="routeinf.html">Read more ></a></button>
-				</figure>
-				<figure>
-					<img src="ui/images/madonna.jpg" alt="">
-					<figcaption>
-						<h2 id="Common route">Common route</h2>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil molestias impedit similique,
-							nisi assumenda mollitia! Eveniet commodi ipsam dolore eligendi eius amet id laboriosam ipsa
-							unde labore explicabo delectus illum facere quasi, consectetur molestiae consequatur illo!
-							Dolor enim iure deserunt dolorum possimus, praesentium iste molestiae consectetur est fuga
-							ipsam reiciendis.</p>
-					</figcaption>
-					<button class="btn readmore"><a href="routeinf.html">Read more ></a></button>
-				</figure>
 			</div>
 		</section>
 		<section id="generate-route">
@@ -89,11 +56,13 @@
 		</section>
 	</main>
 	</div>
-	<script src="cordova.js"></script>
+	
+	<!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js" -->
+		<!-- integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script> -->
+		<script src="js/jquery-3.4.1.js"></script>
+		<script src="cordova.js"></script>
 	<script src="libs/evothings/evothings.js"></script>
 	<script src="libs/evothings/ui/ui.js"></script>
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js"
-		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script src="js/script.js"></script>
 	<!-- TODO: Add libraries that you need -->
 
