@@ -13,19 +13,16 @@ $(function () {
                     <img src="${route.images[0]}" alt="">
                     <p>${route.info}</p>
                     <div>
-                        <div>
-                            <p>Rating:</p><img src="ui/images/rating-white.png">
+                        <div class="route-inf-extra">
+                            <p>Rating:</p><img src="ui/images/rating-red.png">
                         </div>
-                        <div>
+                        <div class="route-inf-extra">
                             <p>Duration:</p>
-                            <p>2:45h</p>
+                            <p class="redorange">2:45h</p>
                         </div>
                     </div>
-                    <a href="routeinstructions.html">
-                        <div class="btn">
-                            <p>Select route</p>
-                        </div>
-                    </a>`)
+                    <button class="btn"><a href="routeinstructions.html">Select route</a></button>
+`)
                 }
             }
         }
@@ -62,13 +59,32 @@ $(function () {
     });
 });
 
-$.ajax({
-    url: "http://localhost:3000/getAllRoutesMongo",
-    method: 'GET'
-}).done(function (data) {
-    console.log(data);
-}).fail(function (err1, err2) {
-    console.log('Fail');
-    console.log(err1);
-    console.log(err2);
-});
+
+getAllRoutesMongo();
+// return all routes as array of object
+function getAllRoutesMongo(){
+    $.ajax({
+        url: "http://localhost:3000/getAllRoutesMongo",
+        method: 'GET'
+    }).done(function (data) {
+        console.log(data);
+    }).fail(function (err1, err2) {
+        console.log('Fail');
+        console.log(err1);
+        console.log(err2);
+    });
+}
+
+function getRouteMongo(){
+    // let routeId;
+    $.ajax({
+        url: `http://localhost:3000/getRouteMongo/${routeId}`,
+        method: 'GET'
+    }).done(function (data) {
+        console.log(data);
+    }).fail(function (err1, err2) {
+        console.log('Fail');
+        console.log(err1);
+        console.log(err2);
+    });
+}
