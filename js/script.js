@@ -49,25 +49,11 @@ $(function () {
         });
     }
 
-
-        $.getJSON('routes.json', function (d) {
-            console.log('ok');
+        $.getJSON('js/routes.json', function (d) {
+            $('#loading_screen').hide();
             appendRoutes(d);
         }).fail(function (e1, e2) {
             console.log(e1);
             console.log(e2);
         });
-    
-        
-
-    // $.ajax({
-    //     url: 'routes.json'
-    // }).done(function (data) {
-    //     appendRoutes(data);
-    // }).fail(function (err1, err2) {
-    //     console.log(err1);
-    //     console.log(err2);
-    // }).always(function () {
-    //     console.log('always');
-    // });
 });
