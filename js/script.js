@@ -21,11 +21,8 @@ $(function () {
                             <p>2:45h</p>
                         </div>
                     </div>
-                    <a href="routeinstructions.html">
-                        <div class="btn">
-                            <p>Select route</p>
-                        </div>
-                    </a>`)
+                    <button class="btn"><a href="routeinstructions.html">Select route</a></button>
+`)
                 }
             }
         }
