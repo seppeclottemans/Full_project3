@@ -27,16 +27,13 @@
 	<img src="ui/images/Kmska_Jean_Auguste_Dominique_Ingres_(1780-1867)_-_Zelfportret_(1864)_-_28-02-2010_13-37-05.jpg"
 		alt="" id="bg">
 	<header>
-		<button class="back" onclick="history.back()">
-			<img src="ui/images/arrow-left.svg" />
-		</button>
-
 		<a href="index.html"><img class="logotype" src="ui/images/logo-white.png" alt="logo kmska" /></a>
 		<a href="instructions.html"><img id="inf-icon" class="logotype" src="ui/images/inf-white.png" alt="info" /></a>
-
-		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
 	</header>
 	<main>
+		<button class="back" onclick="history.back()">
+			<img src="ui/images/back.png" /><p>Back</p>
+		</button>
 		<section id="guided-tours">
 			<h1><span class="light-upper">Existing</span><span class="bold-upper"> routes</span></h1>
 			<div class="carousel">
@@ -89,11 +86,13 @@
 		</section>
 	</main>
 	</div>
-	<script src="cordova.js"></script>
+	
+	<!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js" -->
+		<!-- integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script> -->
+		<script src="js/jquery-3.4.1.js"></script>
+		<script src="cordova.js"></script>
 	<script src="libs/evothings/evothings.js"></script>
 	<script src="libs/evothings/ui/ui.js"></script>
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js"
-		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script src="js/script.js"></script>
 	<!-- TODO: Add libraries that you need -->
 

@@ -67,7 +67,7 @@ $(function () {
 
         let group = window.localStorage.getItem("group");
 
-        if (count < 1 + group.groupSize) {
+        if (count < 4) {
             count++;
             nextQuestion();
         } else {
