@@ -153,7 +153,7 @@ header button {
 button.back {
 	width: 100%;
 	left: 0;
-	margin: 0;
+	margin: 0 0 10px 0;
 	font-size:2.5rem;
 	color: #fff;
 	text-align: left;
@@ -164,11 +164,15 @@ button.back {
 	align-content: space-between;
 	text-transform: uppercase;
 }
-
+.generator button.back p {
+	color: black;
+}
 button.back img {
 	width: 100%;
 }
-
+button.back p {
+	padding-left: 10px;
+}
 header img.logotype {
 	position: absolute;
 	top: 50%;
