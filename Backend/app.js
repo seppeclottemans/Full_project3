@@ -236,6 +236,14 @@ function chooseOneFromList(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
 
+let questionTypes = ["practical"];
+
+let practicalQuestions = [{
+    "type": "practical",
+    "questionString": "How long do you want to stay in the museum?",
+    "answers": ["30 minutes or less", "30 minutes - 1 hour", "1 hour - 2 hours", "2+ hours"]
+}];
+
 //make a question
 function get_Question(resolveFull) {
     let question;
@@ -274,16 +282,8 @@ function get_imageQuestion(resolve) {
     });
 }
 
-let questionTypes = ["imageChooser", "practical"];
-
-let practicalQuestions = [{
-    "type": "practical",
-    "questionString": "How long do you want to stay in the museum?",
-    "answers": ["30 minutes or less", "30 minutes - 1 hour", "1 hour - 2 hours", "2+ hours"]
-}]
-
 function resetQuiz() {
-    questionTypes = ["imageChooser", "practical"];
+    questionTypes = ["practical"];
 }
 
 //SAVE THE GROUP AS A USER

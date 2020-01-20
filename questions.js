@@ -66,8 +66,9 @@ $(function () {
         }
 
         let group = JSON.parse(window.localStorage.getItem("group"));
+        let questionCount = Math.max(group.groupSize, 5);
 
-        if (count < group.groupSize) {
+        if (count < questionCount) {
             count++;
             nextQuestion();
         } else {
