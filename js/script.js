@@ -38,7 +38,7 @@ $(function () {
        <figcaption>
             <h2 id="${route.name}">${route.name}</h2>
             <p>${route.info}</p>
-            <button class="btn"><a href="routeinf.html">Read more</a></button>
+            <button class="btn readmore"><a href="routeinf.html">Read more</a></button>
         </figcaption>
     </figure>`);
         }
@@ -49,11 +49,11 @@ $(function () {
         });
     }
 
-        $.getJSON('js/routes.json', function (d) {
-            $('#loading_screen').hide();
-            appendRoutes(d);
-        }).fail(function (e1, e2) {
-            console.log(e1);
-            console.log(e2);
-        });
+    $.getJSON('js/routes.json', function (d) {
+        $('#loading_screen').hide();
+        appendRoutes(d);
+    }).fail(function (e1, e2) {
+        console.log(e1);
+        console.log(e2);
+    });
 });
