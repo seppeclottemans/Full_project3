@@ -38,7 +38,7 @@ $(function () {
        <figcaption>
             <h2 id="${route.name}">${route.name}</h2>
             <p>${route.info}</p>
-            <button class="btn"><a href="routeinf.html">Read more</a></button>
+            <button class="btn readmore"><a href="routeinf.html">Read more</a></button>
         </figcaption>
     </figure>`);
         }
@@ -49,27 +49,11 @@ $(function () {
         });
     }
 
-
-        $.getJSON('routes.json', function (d) {
-            console.log('ok');
-            appendRoutes(d);
-        }).fail(function (e1, e2) {
-            console.log(e1);
-            console.log(e2);
-        });
-    
-        
-
-    // $.ajax({
-    //     url: 'routes.json'
-    // }).done(function (data) {
-    //     appendRoutes(data);
-    // }).fail(function (err1, err2) {
-    //     console.log(err1);
-    //     console.log(err2);
-    // }).always(function () {
-    //     console.log('always');
-    // });
+    $.getJSON('js/routes.json', function (d) {
+        $('#loading_screen').hide();
+        appendRoutes(d);
+    }).fail(function (e1, e2) {
+        console.log(e1);
+        console.log(e2);
+    });
 });
-
-// +++++++++++++++++++++routeinstructions+++++++++++++++++++++
