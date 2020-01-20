@@ -350,7 +350,7 @@ p {
 }
 
 .carousel figure {
-	min-width: 210px !important;
+	min-width: 250px !important;
 	margin-right: 5%;
 }
 
@@ -362,7 +362,7 @@ p {
 }
 
 .carousel figcaption {
-	max-height: 125px;
+	max-height: 175px;
 }
 
 /*  ----------------------------------------------------------
