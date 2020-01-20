@@ -8,7 +8,7 @@ $(function () {
     var count = 0;
 
     $("#addPerson").click(function (e) {
-        e.preventDefault();
+        //e.preventDefault();
         var groupSize = $(".name").length;
 
         if (groupSize < 7) {
@@ -31,7 +31,7 @@ $(function () {
     });
 
     $("body").on("click", "#next", function (e) {
-        e.preventDefault();
+        //e.preventDefault();
         group.names = [];
 
         $(".name").each(function () {
@@ -45,6 +45,8 @@ $(function () {
 
         group.groupSize = group.names.length;
         //        console.log(group);
+        window.localStorage.setItem("group", JSON.stringify(group));
+
 
         $.ajax({
             "url": "http://localhost:3000/resetQuiz",
@@ -63,7 +65,10 @@ $(function () {
             answers.images.push($(this).attr("id"));
         }
 
-        if (count < 4) {
+        let group = JSON.parse(window.localStorage.getItem("group"));
+        let questionCount = Math.max(group.groupSize, 5);
+
+        if (count < questionCount) {
             count++;
             nextQuestion();
         } else {
@@ -111,7 +116,8 @@ $(function () {
     });
 
     var currentQuestionType;
-
+    let currentGroup = JSON.parse(window.localStorage.getItem("group"));
+    let unusedUsers = currentGroup.names;
     function nextQuestion() {
         $(".generator").empty();
         $(".generator").append(
@@ -125,6 +131,18 @@ $(function () {
             "method": "GET"
         }).done(function (question) {
             currentQuestionType = question.type;
+            if(currentGroup.groupSize > 1){
+                if(currentQuestionType == "image"){
+                    let i = Math.floor(Math.random() * unusedUsers.length);
+                    let currentUser = unusedUsers.pop(i);
+                    console.log(currentUser);
+
+                    $(".generator").append(
+                        $("<div>", {"class": "nameShouter"}).text(currentUser)
+                    );
+                }
+            }
+
             displayQuestion(question);
         });
 

@@ -133,7 +133,11 @@ header {
 	z-index: 1000;
 	background-image: url('/ui/images/Kmska_Jean_Auguste_Dominique_Ingres_\(1780-1867\)_-_Zelfportret_\(1864\)_-_28-02-2010_13-37-05.jpg');
 	background-size: cover;
+<<<<<<< HEAD
 	background-color: #000;
+=======
+	background-color: black;
+>>>>>>> 94739a79c1c0c5eb8163984f507f4175e0c0b93a
 }
 
 header button {
@@ -142,6 +146,7 @@ header button {
 	top: 50%;
 	max-height: 70%;
 	margin: 0;
+	font-size: 30%;
 	-webkit-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
@@ -150,8 +155,13 @@ header button {
 button.back {
 	width: 100%;
 	left: 0;
+<<<<<<< HEAD
 	margin: 0;
 	font-size:2rem;
+=======
+	margin: 0 0 10px 0;
+	font-size:2.5rem;
+>>>>>>> 94739a79c1c0c5eb8163984f507f4175e0c0b93a
 	color: #fff;
 	text-align: left;
 	border: none;
@@ -161,11 +171,15 @@ button.back {
 	align-content: space-between;
 	text-transform: uppercase;
 }
-
+.generator button.back p {
+	color: black;
+}
 button.back img {
 	width: 100%;
 }
-
+button.back p {
+	padding-left: 10px;
+}
 header img.logotype {
 	position: absolute;
 	top: 50%;
