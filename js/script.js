@@ -14,7 +14,7 @@ $(function () {
                     <p>${route.info}</p>
                     <div>
                         <div class="route-inf-extra">
-                            <p>Rating:</p><img src="ui/images/rating-white.png">
+                            <p>Rating:</p><div class="my-rating"></div>
                         </div>
                         <div class="route-inf-extra">
                             <p>Duration:</p>
