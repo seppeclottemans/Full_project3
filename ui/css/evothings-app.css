@@ -554,6 +554,7 @@ ul li {
 	font-size: 16px;
 	padding: 0 1px;
 	cursor: pointer;
-	color: #FFD119;
+	color: var(--redorange);
 	text-decoration: none;
 }
+

@@ -14,7 +14,7 @@ $(function () {
                     <p>${route.info}</p>
                     <div>
                         <div class="route-inf-extra">
-                            <p>Rating:</p><div class="starrr"></div>
+                            <p>Rating:</p><div class="existingroute-rating starrr"></div>
                         </div>
                         <div class="route-inf-extra">
                             <p>Duration:</p>
@@ -25,7 +25,15 @@ $(function () {
 `)
                 }
             }
-            $('.starrr').starrr();
+            $('.selections-rating').starrr().on('starrr:change', function(e, value){
+               console.log(value)
+              })
+            $('.generated-rating').starrr().on('starrr:change', function(e, value){
+                console.log(value)
+               })
+            $('.existingroute-rating').starrr({
+                rating: 4
+              })
         }
 
         getSelectedRoute(allRoutes);
