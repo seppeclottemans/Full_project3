@@ -27,6 +27,14 @@
 </head>
 
 <body ontouchstart="" class="white-bg">
+	<div id="loading_screen">
+		<div class="lds-ellipsis">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+	</div>
 	<!-- ontouchstart="" enables low-delay CSS transitions. -->
 	<header class="black-bg">
 		<a href="index.html"><img class="logotype" src="ui/images/logo-white.png" alt="logo kmska" /></a>
@@ -38,9 +46,9 @@
 		<button class="back" onclick="history.back()">
 			<img src="ui/images/back.png" /><p>Back</p>
 		</button>
-        <h1><span class="light-upper">Route</span><span class="bold-upper"> generator</span></h1>
+		<h1><span class="light-upper">Route</span><span class="bold-upper"> generator</span></h1>
         <div class="question">
-            <h2 id="question">Name the people in your group:</h2>
+			<h2 id="question">Name the people in your group:</h2>
             <input type="text" placeholder="name" class="name">	
             <button id="addPerson" class="btn">Add a person</button>
             <br>

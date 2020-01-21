@@ -1,4 +1,6 @@
 $(function () {
+    $('#loading_screen').hide();
+
     const loadProgressionbalk = function (groupSize) {
         let numberBalk = groupSize;
         if (numberBalk > 4) {
@@ -179,7 +181,13 @@ $(function () {
             "method": "POST",
             "data": {
                 id: answerID
-            }
+            },
+                beforeSend: function() {
+                    $('#loading_screen').show();
+                },
+                complete: function(){
+                $('#loading_screen').hide();
+                }
         }).done(function (question) {
             currentQuestionType = question.type;
             if (currentGroup.groupSize > 1) {
@@ -271,6 +279,26 @@ $(function () {
             $(`footer #midway g path`).addClass("st0");
         }
     }
+
+    // timer
+
+    $(function(){
+        // Update the count down every 1 second
+        let maxTime = 30;
+        
+        var x = setInterval(function() {
+            maxTime--;
+          // Display the result in the element with id="demo"
+          $("#countdown-number").text(maxTime)
+        
+          // If the count down is finished, write some text
+          if (maxTime == 0) {
+            clearInterval(x);
+          }
+        }, 1000);
+        });
+
+
     const balk5 = `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          viewBox="0 0 318.5 29.5" style="enable-background:new 0 0 318.5 29.5;" xml:space="preserve">
     <style type="text/css">

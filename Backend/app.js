@@ -537,10 +537,17 @@ app.post('/getRoute', (req, res) => (
 
 app.get('/getRouteMongo/:id', (req, res) => {
     const collection = db.collection('routes');
-    const selectedRoute = collection.find({
-        "_id": ObjectId(req.params.id)
-    });
-    res.send(selectedRoute);
+    const selectedRoute = collection.find({"_id": ObjectId(req.params.id)});
+    
+    function iterateFunc(doc) {
+        res.json(JSON.stringify(doc, null, 4));
+     }
+     
+     function errorFunc(error) {
+        console.log(error);
+     }
+     
+     selectedRoute.forEach(iterateFunc, errorFunc);
 });
 
 app.get('/getAllRoutesMongo', (req, res) => {
