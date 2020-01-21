@@ -30,10 +30,6 @@ $(function () {
                     </button>`)
                 }
             }
-            $('.starrr').starrr();
-            $('.starrr').on('starrr:change', function(e, value){
-                console.log(value)
-              })
 
         //     let selectedRoute = getURLParameter('id');
         //     //$.getJSON(`http://localhost:3000/getRouteMongo/${selectedRoute}`, function (route) {
