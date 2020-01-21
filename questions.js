@@ -1,4 +1,6 @@
 $(function () {
+    $('#loading_screen').hide();
+
     const loadProgressionbalk = function (groupSize) {
         let numberBalk = groupSize;
         if (numberBalk > 4) {
@@ -179,7 +181,13 @@ $(function () {
             "method": "POST",
             "data": {
                 id: answerID
-            }
+            },
+                beforeSend: function() {
+                    $('#loading_screen').show();
+                },
+                complete: function(){
+                $('#loading_screen').hide();
+                }
         }).done(function (question) {
             currentQuestionType = question.type;
             if (currentGroup.groupSize > 1) {

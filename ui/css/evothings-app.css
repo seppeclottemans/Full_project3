@@ -587,6 +587,9 @@ ul li {
     bottom: 5%;
     position: fixed;
   }
+  .imganswer, .answer {
+    height: 190px;
+}
   @media screen and (min-width: 600px) {
 
 	#guided-tours {
@@ -607,7 +610,7 @@ ul li {
 	}
 	.tablettekst {
 		display: inline-block;
-		margin-top: 50%;
+		/* margin-top: 50%; */
 		text-align: center;
 
 	}
