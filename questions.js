@@ -124,7 +124,7 @@ $(function () {
         
                     route.forEach(function(rout){
                         $(".recommended").append(
-                            $("<img>", {"src": rout})
+                            $("<img>", {"src": rout.image})
                         )
                     });
         
@@ -221,7 +221,7 @@ $(function () {
 
     
     const colorBalk = function(currentQuestion, totalQuestions){
-        let id = currentQuestion + 1;
+        let id = currentQuestion;
         console.log(currentQuestion);
         $( `footer svg #${id} rect`).removeClass();
         $( `footer svg #${id} rect`).addClass("st0");
