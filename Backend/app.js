@@ -496,5 +496,17 @@ app.get('/getAllRoutesMongo', (req, res) => {
     });
 });
 
+app.post('/create-route', (req, res) => {
+    const collection = db.collection('routes');
+    const route = {
+      name: req.body.name,
+      rating: req.body.rating,
+      images: req.body.images,
+      info: req.body.info
+    }
+    collection.insertOne(route);
+    res.json(route);
+});
+
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
