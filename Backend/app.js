@@ -68,8 +68,16 @@ const artLocations = {
 function get_route(recomms, resolveAll) { //recomms = array 5 painting id's, unordered
     //console.log(recomms);
     let route = [];
+    let orderedIDs = [];
     let promiseList = [];
 
+    recomms.forEach(function(recom){
+
+    });
+
+
+
+    //get the images from each painting in the route
     recomms.forEach(function(recom){
         let promise = new Promise(function (resolve, reject){
             get_image(recom, resolve, reject, new Painting());
@@ -84,6 +92,9 @@ function get_route(recomms, resolveAll) { //recomms = array 5 painting id's, uno
     });
 
 };
+
+function calculateClosest(currentPosition, unusedPaintings)
+
 
 function get_next_location(id, locationList) { //=> returns the information of the next painting
     new Promise(function (resolve, reject) {
