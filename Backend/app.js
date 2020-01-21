@@ -104,7 +104,6 @@ function get_next_location(id, locationList) { //=> returns the information of t
 
 //this function saves the tags into the database: doesn't have to be done everytime, only when new paintings were added
 function setup(id) { //=> you just run the function once per added painting
-
     new Promise(function (resolve, reject) {
         get_image(id, resolve, reject, painting);
     }).then(function (result) {
@@ -122,10 +121,23 @@ function setup(id) { //=> you just run the function once per added painting
 
 
 
+let timing = function(begin, end){
+   return end - begin;
+}
+
+let totalTime = 0;
 
 function get_all_paintings(search, resolveAll) {
+    paintingsIDs = [];
+    //++++++TIMING+++++++
+    let begin;
+    let end;
+    let date = Date.now();
+    begin = date;
+
     let query = `user=${recourceSpaceUser}&function=do_search&param1=${search}`;
     let signedRequestString = sha256(recourceSpaceKey + query);
+    
     axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
             res.data.forEach(responsePainting => {
                 paintingsIDs.push(responsePainting.ref);
@@ -147,17 +159,30 @@ function get_all_paintings(search, resolveAll) {
                 paintingList = result;
                 resolveAll(paintingList);
             });
+            // +++++++TIMING+++++
+            end = new Date();
+            let date2 = Date.now();
+            end = date2;
+            totalTime += timing(begin, end);
+            console.log("get_all_paintings  " + timing(begin, end) + " ms");
 
         })
         .catch(function (error) {
             console.log("Thinking of unicorns?")
             console.log(error);
         });
-
+       
 };
 
 // get all data of a specific painting
 function get_painting(resourceID, resolve, reject) {
+    //++++++TIMING+++++++
+    let begin;
+    let end;
+    let date = Date.now();
+    begin = date;
+
+
     painting = {};
     let query = `user=${recourceSpaceUser}&function=get_resource_field_data&param1=${resourceID}`;
     let signedRequestString = sha256(recourceSpaceKey + query);
@@ -172,6 +197,13 @@ function get_painting(resourceID, resolve, reject) {
             //console.log(res);
             let thisPainting = JSON.parse(JSON.stringify(painting));
             get_image(resourceID, resolve, reject, thisPainting);
+
+            //++++END TIME++++++
+            end = new Date();
+            let date2 = Date.now();
+            end = date2;
+            totalTime += timing(begin, end);
+            console.log("get_painting  " + timing(begin, end) + " ms");
         })
         .catch(function (error) {
             console.log("Maybe you should try to take a nap")
@@ -181,6 +213,13 @@ function get_painting(resourceID, resolve, reject) {
 
 // get painting image
 function get_image(resourceID, resolve, reject, currentPainting) {
+    //++++++TIMING+++++++
+    let begin;
+    let end;
+    let date = Date.now();
+    begin = date;
+
+
     let query = `user=${recourceSpaceUser}&function=get_resource_path&param1=${resourceID}&param2=false`;
     let signedRequestString = sha256(recourceSpaceKey + query);
     axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
@@ -191,6 +230,13 @@ function get_image(resourceID, resolve, reject, currentPainting) {
             resolve(thisPainting);
 
             //get_tags(res.data, resourceID, resolve, reject);
+
+            //++++END TIME++++++
+            end = new Date();
+            let date2 = Date.now();
+            end = date2;
+            totalTime += timing(begin, end);
+            console.log("get_image  " + timing(begin, end) + " ms");
         })
         .catch(function (error) {
             console.log("Try Again...")
@@ -200,6 +246,7 @@ function get_image(resourceID, resolve, reject, currentPainting) {
 
 // request is being used because this is required to use for the imagga api
 function get_tags(imageUrl, resourceID) {
+  
     setTimeout(function () {
         request.get('https://api.imagga.com/v2/tags?image_url=' + encodeURIComponent(imageUrl), function (error, response, body) {
             //console.log(body);
@@ -244,6 +291,7 @@ function write_json(newData) {
 //CHOOSE IMAGES FOR QUIZ
 //function that chooses something from an array
 function chooseOneFromList(array) {
+
     return array[Math.floor(Math.random() * array.length)];
 }
 
@@ -268,12 +316,15 @@ function get_Question(resolveFull, answerID) {
         new Promise(function (resolve) {
             get_imageQuestion(resolve, answerID)
         }).then(function (result) {
+            console.log("totalTime:  " + totalTime);
+            totalTime = 0;
             resolveFull(result);
         })
     }
 }
 
 function get_imageQuestion(resolve, answerID) {
+
     var promise = new Promise(function (resolve) {
         get_all_paintings("KMSKA", resolve)
     }).then(function () {
@@ -306,6 +357,7 @@ function resetQuiz() {
 let group;
 
 function saveGroup(data, resolveAll) {
+
     group = data;
     group.id = uuidv4();
     //console.log(group);
@@ -337,11 +389,14 @@ function setup_productList() {
 }
 
 new Promise(function (resolve) {
+ 
     get_all_paintings("KMSKA", resolve)
 }).then(function () {
     //you just fill in the index of the painting you want to add to the productlist
     //console.log(paintingList[0]);
     // setup_painting(paintingList[0]);
+    console.log("totalTime: " + totalTime);
+    totalTime = 0;
 });
 
 function setup_painting(painting) {
@@ -380,6 +435,7 @@ function setup_painting(painting) {
 
 function send_purchases(group, resolveAll) {
     //console.log(group.answers.images);
+
     let promises = [];
 
     group.answers.images.forEach(function (image) {
@@ -401,6 +457,7 @@ function send_purchases(group, resolveAll) {
 }
 
 function send_purchase(id, image, resolve) {
+
     client.send(new rqs.AddPurchase(id, image, {
             cascadeCreate: true
         }),
@@ -414,6 +471,7 @@ function send_purchase(id, image, resolve) {
 let recommAmount;
 
 function getRecommendations(group, resolve) {
+
     console.log(group);
     if (group.answers.practical[0] == "30 minutes or less") {
         recommAmount = 3;
