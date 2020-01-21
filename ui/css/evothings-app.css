@@ -35,7 +35,7 @@ body {
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
-	-ms-user-select: none;
+	-ms-user-select: none
 	user-select: none;
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -560,6 +560,7 @@ ul li {
 	color: black;
 	border-radius: 10px;
 	float: left;
+	margin-bottom: 5%;
 }
 .starrr {
 	display: inline-block;
@@ -619,4 +620,7 @@ ul li {
 	.question input {
 		width: 45%;
 	}
-  }
+	.imganswer, .answer {
+		height: 1000px;
+	}
+}

@@ -50,7 +50,7 @@
 
 .imganswer, .answer{
     width: 48%;
-    height: 175px;
+    height: 50%;
     overflow: hidden;
     text-align: center;
     font-size: 0.6em;
