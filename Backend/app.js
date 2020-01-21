@@ -517,11 +517,30 @@ app.post('/create-route', (req, res) => {
     const route = {
       name: req.body.name,
       rating: req.body.rating,
+      number_of_ratings: req.body.number_of_ratings,
       images: req.body.images,
       info: req.body.info
     }
     collection.insertOne(route);
     res.json(route);
+});
+
+app.put('/update_rating/:id', (req, res) => {
+    const collection = db.collection('routes');
+    const selectedRoute = collection.find({
+        "_id": ObjectId(req.params.id)
+    });
+    let newRating = ((selectedRoute.rating * selectedRoute.number_of_ratings) + req.body.rating) / (selectedRoute.number_of_ratings + 1);
+    collection.updateMany(
+        {"_id": ObjectId(req.params.id)}, // Filter
+        {$set:{"number_of_ratings": selectedRoute.number_of_ratings += 1, "rating": newRating}} // Update
+    )
+    .then((obj) => {
+        res.json({ message: 'thank you for the feedback!' });
+    })
+    .catch((err) => {
+        console.log('Error: ' + err);
+    })
 });
 
 
