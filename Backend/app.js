@@ -132,19 +132,11 @@ function setup(id) { //=> you just run the function once per added painting
 
 
 
-let timing = function(begin, end){
-   return end - begin;
-}
 
-let totalTime = 0;
 
 function get_all_paintings(search, resolveAll) {
     paintingsIDs = [];
-    //++++++TIMING+++++++
-    let begin;
-    let end;
-    let date = Date.now();
-    begin = date;
+ 
 
     let query = `user=${recourceSpaceUser}&function=do_search&param1=${search}`;
     let signedRequestString = sha256(recourceSpaceKey + query);
@@ -170,12 +162,6 @@ function get_all_paintings(search, resolveAll) {
                 paintingList = result;
                 resolveAll(paintingList);
             });
-            // +++++++TIMING+++++
-            end = new Date();
-            let date2 = Date.now();
-            end = date2;
-            totalTime += timing(begin, end);
-            console.log("get_all_paintings  " + timing(begin, end) + " ms");
 
         })
         .catch(function (error) {
@@ -187,12 +173,6 @@ function get_all_paintings(search, resolveAll) {
 
 // get all data of a specific painting
 function get_painting(resourceID, resolve, reject) {
-    //++++++TIMING+++++++
-    let begin;
-    let end;
-    let date = Date.now();
-    begin = date;
-
 
     painting = {};
     let query = `user=${recourceSpaceUser}&function=get_resource_field_data&param1=${resourceID}`;
@@ -209,12 +189,6 @@ function get_painting(resourceID, resolve, reject) {
             let thisPainting = JSON.parse(JSON.stringify(painting));
             get_image(resourceID, resolve, reject, thisPainting);
 
-            //++++END TIME++++++
-            end = new Date();
-            let date2 = Date.now();
-            end = date2;
-            totalTime += timing(begin, end);
-            console.log("get_painting  " + timing(begin, end) + " ms");
         })
         .catch(function (error) {
             console.log("Maybe you should try to take a nap")
@@ -224,12 +198,6 @@ function get_painting(resourceID, resolve, reject) {
 
 // get painting image
 function get_image(resourceID, resolve, reject, currentPainting) {
-    //++++++TIMING+++++++
-    let begin;
-    let end;
-    let date = Date.now();
-    begin = date;
-
 
     let query = `user=${recourceSpaceUser}&function=get_resource_path&param1=${resourceID}&param2=false`;
     let signedRequestString = sha256(recourceSpaceKey + query);
@@ -242,12 +210,6 @@ function get_image(resourceID, resolve, reject, currentPainting) {
 
             //get_tags(res.data, resourceID, resolve, reject);
 
-            //++++END TIME++++++
-            end = new Date();
-            let date2 = Date.now();
-            end = date2;
-            totalTime += timing(begin, end);
-            console.log("get_image  " + timing(begin, end) + " ms");
         })
         .catch(function (error) {
             console.log("Try Again...")
@@ -327,8 +289,6 @@ function get_Question(resolveFull, answerID) {
         new Promise(function (resolve) {
             get_imageQuestion(resolve, answerID)
         }).then(function (result) {
-            console.log("totalTime:  " + totalTime);
-            totalTime = 0;
             resolveFull(result);
         })
     }
@@ -406,8 +366,6 @@ new Promise(function (resolve) {
     //you just fill in the index of the painting you want to add to the productlist
     //console.log(paintingList[0]);
     // setup_painting(paintingList[0]);
-    console.log("totalTime: " + totalTime);
-    totalTime = 0;
 });
 
 function setup_painting(painting) {
@@ -570,11 +528,30 @@ app.post('/create-route', (req, res) => {
     const route = {
       name: req.body.name,
       rating: req.body.rating,
+      number_of_ratings: req.body.number_of_ratings,
       images: req.body.images,
       info: req.body.info
     }
     collection.insertOne(route);
     res.json(route);
+});
+
+app.put('/update_rating/:id', (req, res) => {
+    const collection = db.collection('routes');
+    const selectedRoute = collection.find({
+        "_id": ObjectId(req.params.id)
+    });
+    let newRating = ((selectedRoute.rating * selectedRoute.number_of_ratings) + req.body.rating) / (selectedRoute.number_of_ratings + 1);
+    collection.updateMany(
+        {"_id": ObjectId(req.params.id)}, // Filter
+        {$set:{"number_of_ratings": selectedRoute.number_of_ratings += 1, "rating": newRating}} // Update
+    )
+    .then((obj) => {
+        res.json({ message: 'thank you for the feedback!' });
+    })
+    .catch((err) => {
+        console.log('Error: ' + err);
+    })
 });
 
 
