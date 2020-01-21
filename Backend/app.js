@@ -66,34 +66,23 @@ const artLocations = {
 //MAKE THE ROUTE = ordered list of paintings
 
 function get_route(recomms, resolveAll) { //recomms = array 5 painting id's, unordered
-    console.log(recomms);
+    //console.log(recomms);
     let route = [];
-    new Promise(function (resolve, reject) {
-        get_image(recomms[0], resolve, reject, new Painting());
-    }).then(function (result) {
-        route.push(result.image);
-        new Promise(function (resolve, reject) {
-            get_image(recomms[1], resolve, reject, new Painting());
-        }).then(function (result) {
-            route.push(result.image);
-            new Promise(function (resolve, reject) {
-                get_image(recomms[2], resolve, reject, new Painting());
-            }).then(function (result) {
-                route.push(result.image);
-                new Promise(function (resolve, reject) {
-                    get_image(recomms[3], resolve, reject, new Painting());
-                }).then(function (result) {
-                    route.push(result.image);
-                    new Promise(function (resolve, reject) {
-                        get_image(recomms[4], resolve, reject, new Painting());
-                    }).then(function (result) {
-                        route.push(result.image);
-                        resolveAll(route);
-                    });
-                });
-            });
+    let promiseList = [];
+
+    recomms.forEach(function(recom){
+        let promise = new Promise(function (resolve, reject){
+            get_image(recom, resolve, reject, new Painting());
         });
+
+        promiseList.push(promise);
     });
+
+    Promise.all(promiseList).then(function(result){
+        route.push(result);
+        resolveAll(route[0]);
+    });
+
 };
 
 function get_next_location(id, locationList) { //=> returns the information of the next painting
@@ -214,7 +203,7 @@ function get_tags(imageUrl, resourceID) {
     setTimeout(function () {
         request.get('https://api.imagga.com/v2/tags?image_url=' + encodeURIComponent(imageUrl), function (error, response, body) {
             //console.log(body);
-            console.log(response.statusCode);
+            //console.log(response.statusCode);
             if (response.statusCode == "200") {
                 let result = JSON.parse(body).result;
                 let tagList = [];
@@ -505,6 +494,18 @@ app.get('/getAllRoutesMongo', (req, res) => {
         if (err) throw err;
         res.send(result);
     });
+});
+
+app.post('/create-route', (req, res) => {
+    const collection = db.collection('routes');
+    const route = {
+      name: req.body.name,
+      rating: req.body.rating,
+      images: req.body.images,
+      info: req.body.info
+    }
+    collection.insertOne(route);
+    res.json(route);
 });
 
 

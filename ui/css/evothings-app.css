@@ -94,6 +94,7 @@ section::after {
 .btn p {
 	margin: auto;
 }
+
 .readmore {
 	background-color: transparent;
 	text-align: left;
@@ -133,11 +134,9 @@ header {
 	z-index: 1000;
 	background-image: url('/ui/images/Kmska_Jean_Auguste_Dominique_Ingres_\(1780-1867\)_-_Zelfportret_\(1864\)_-_28-02-2010_13-37-05.jpg');
 	background-size: cover;
-<<<<<<< HEAD
-	background-color: #000;
-=======
-	background-color: black;
->>>>>>> 94739a79c1c0c5eb8163984f507f4175e0c0b93a
+	<<<<<<< HEAD background-color: #000;
+	=======background-color: black;
+	>>>>>>>94739a79c1c0c5eb8163984f507f4175e0c0b93a
 }
 
 header button {
@@ -155,7 +154,7 @@ header button {
 button.back {
 	width: 100%;
 	left: 0;
-	font-size:2.5rem;
+	font-size: 2.5rem;
 	color: #fff;
 	text-align: left;
 	border: none;
@@ -166,15 +165,19 @@ button.back {
 	text-transform: uppercase;
 	padding: 0 0 10px 0;
 }
+
 .generator button.back p {
 	color: black;
 }
+
 button.back img {
 	width: 100%;
 }
+
 button.back p {
 	padding-left: 10px;
 }
+
 header img.logotype {
 	position: absolute;
 	top: 50%;
@@ -316,6 +319,7 @@ h1 span {
 	font-weight: 1000;
 	font-size: 0.8em;
 }
+
 .light-upper {
 	font-family: 'Gotham Light';
 	font-size: 0.5em !important;
@@ -338,7 +342,7 @@ p {
 								GUIDED TOURS
 	---------------------------------------------------------- */
 
-#guided-tours{
+#guided-tours {
 	margin-top: 5%;
 }
 
@@ -369,9 +373,9 @@ p {
 								GENERATE ROUTE
 	---------------------------------------------------------- */
 
-#generate-route{
+#generate-route {
 	margin-top: 10%;
-} 
+}
 
 #generate-route img {
 	width: 40%;
@@ -428,7 +432,7 @@ button {
 	width: 100%;
 }
 
-#route-inf .btn{
+#route-inf .btn {
 	width: 100%;
 }
 
@@ -452,24 +456,25 @@ button {
 	text-transform: uppercase;
 }
 
-#route-inf .route-inf-extra{
+#route-inf .route-inf-extra {
 	width: 50%;
 	text-align: center;
-	float:left;
+	float: left;
 }
-#route-inf .route-inf-extra p + p{
+
+#route-inf .route-inf-extra p+p {
 	margin-top: 5%;
 }
 
 #route-gallery {
 	padding: 5%;
 	width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    background-color: white;
-    position: absolute;
-    left: 0%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	background-color: white;
+	position: absolute;
+	left: 0%;
 }
 
 #route-gallery img {
@@ -477,24 +482,27 @@ button {
 	border-radius: 5%;
 	margin-top: 5%;
 }
-#route-gallery h2{
+
+#route-gallery h2 {
 	width: 100%;
 	text-align: center;
 	color: black;
 }
+
 #goto {
-    background-color: #fff;
-    border-radius: 100%;
-    padding: 10% 0 0% 0;
-    width: 70%;
-    margin: auto;
+	background-color: #fff;
+	border-radius: 100%;
+	padding: 10% 0 0% 0;
+	width: 70%;
+	margin: auto;
 }
+
 #goto p {
-    width: 100%;
-    color: #000;
-    text-align: center;
-    text-transform: uppercase;
-    font-weight: bold;
+	width: 100%;
+	color: #000;
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: bold;
 }
 
 .xl {
@@ -529,6 +537,7 @@ button {
 ul li {
 	list-style: none;
 }
+
 #route-instructions img {
 	width: 100%;
 	border-radius: 0%;
@@ -573,7 +582,6 @@ ul li {
 	.question {
 		float: left;
     	width: 100%;
-}
 	}
 	.question input {
 		background-color: transparent;
@@ -584,3 +592,15 @@ ul li {
 		float: left;
 	}
   }
+
+.starrr {
+	display: inline-block;
+}
+
+.starrr a {
+	font-size: 16px;
+	padding: 0 1px;
+	cursor: pointer;
+	color: #FFD119;
+	text-decoration: none;
+}
