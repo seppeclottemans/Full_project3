@@ -5,6 +5,7 @@
 @import '../css/feedback.css';
 @import '../css/generator.css';
 @import '../css/loadingicon.css';
+@import '../css/timer.css';
 
 :root {
 	--redorange: #ec4f41;
