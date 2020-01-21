@@ -1,18 +1,18 @@
 $(function () {
-    const loadProgressionbalk = function(groupSize){
+    const loadProgressionbalk = function (groupSize) {
         let numberBalk = groupSize;
-        if(numberBalk > 4){
+        if (numberBalk > 4) {
             numberBalk = numberBalk + 1;
-        }else{
+        } else {
             numberBalk = 5;
         }
-        if(numberBalk = 5){
+        if (numberBalk = 5) {
             $("footer").append(balk5);
-        }else if(numberBalk = 6){
+        } else if (numberBalk = 6) {
             $("footer").append(balk6);
-        }else if(numberBalk = 7){
+        } else if (numberBalk = 7) {
             $("footer").append(balk7);
-        }else if(numberBalk = 8){
+        } else if (numberBalk = 8) {
             $("footer").append(balk8);
         }
 
@@ -102,7 +102,7 @@ $(function () {
 
                 console.log(recomms);
                 let selectedPaintings = [];
-                recomms.forEach(function(recomm){
+                recomms.forEach(function (recomm) {
                     selectedPaintings.push(recomm.id);
                 });
 
@@ -111,23 +111,27 @@ $(function () {
                 $.ajax({
                     url: "http://localhost:3000/getRoute",
                     method: "POST",
-                    data: {selectedPaintings:selectedPaintings}, 
-                }).done(function(route){
+                    data: {
+                        selectedPaintings: selectedPaintings
+                    },
+                }).done(function (route) {
                     console.log(route);
-        
+
                     $(".generator").empty();
                     $(".generator").append(
                         $("<div>", {
                             "class": "recommended"
                         })
                     );
-        
-                    route.forEach(function(rout){
+
+                    route.forEach(function (rout) {
                         $(".recommended").append(
-                            $("<img>", {"src": rout.image})
+                            $("<img>", {
+                                "src": rout.image
+                            })
                         )
                     });
-        
+                    saveRoute(route)
                 })
 
             })
@@ -135,9 +139,34 @@ $(function () {
 
     });
 
+    function saveRoute(route) {
+        let images = [];
+        route.forEach(paintingInRoute => {
+            images.push(paintingInRoute.image)
+        });
+
+        $.ajax({
+            url: "http://localhost:3000/create-route",
+            method: 'POST',
+            data: {
+                name: "custom_route",
+                rating: 5,
+                images: images,
+                info: "Dit is een route gecureerd door de werknemers van het museum veel plezier tijdens uw bezoek."
+            }
+        }).done(function (data) {
+            
+        }).fail(function (err1, err2) {
+            console.log('Fail');
+            console.log(err1);
+            console.log(err2);
+        });
+    }
+
     var currentQuestionType;
     let currentGroup = JSON.parse(window.sessionStorage.getItem("group"));
     let unusedUsers = currentGroup.names;
+
     function nextQuestion(answerID) {
         $(".generator").empty();
         $(".generator").append(
@@ -149,27 +178,33 @@ $(function () {
         $.ajax({
             "url": "http://localhost:3000/getQuestion",
             "method": "POST",
-            "data": {id: answerID}
+            "data": {
+                id: answerID
+            }
         }).done(function (question) {
             currentQuestionType = question.type;
-            if(currentGroup.groupSize > 1){
-                if(currentQuestionType == "image"){
+            if (currentGroup.groupSize > 1) {
+                if (currentQuestionType == "image") {
                     let i = Math.floor(Math.random() * unusedUsers.length);
                     let currentUser = unusedUsers.pop(i);
-                    
-                    if(currentUser == undefined) {
+
+                    if (currentUser == undefined) {
                         currentUser = "group"
                     }
 
                     $(".generator").append(
-                        $("<div>", {"class": "nameShouter"}).text(currentUser + "'s turn")
+                        $("<div>", {
+                            "class": "nameShouter"
+                        }).text(currentUser + "'s turn")
                     );
 
                     $(".generator").append(
-                        $("<div>", {"id": "currentName"}).text(currentUser)
+                        $("<div>", {
+                            "id": "currentName"
+                        }).text(currentUser)
                     );
 
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $(".nameShouter").slideUp();
                     }, 2500);
                 }
@@ -219,22 +254,22 @@ $(function () {
         });
     }
 
-    
-    const colorBalk = function(currentQuestion, totalQuestions){
+
+    const colorBalk = function (currentQuestion, totalQuestions) {
         let id = currentQuestion;
         console.log(currentQuestion);
-        $( `footer svg #${id} rect`).removeClass();
-        $( `footer svg #${id} rect`).addClass("st0");
-        if(id == totalQuestions){
-            $( `footer svg #${id} path`).removeClass();
-            $( `footer svg #${id} path`).addClass("st0");
-            $( `footer #end g path`).removeClass();
-            $( `footer #end g path`).addClass("st0");
+        $(`footer svg #${id} rect`).removeClass();
+        $(`footer svg #${id} rect`).addClass("st0");
+        if (id == totalQuestions) {
+            $(`footer svg #${id} path`).removeClass();
+            $(`footer svg #${id} path`).addClass("st0");
+            $(`footer #end g path`).removeClass();
+            $(`footer #end g path`).addClass("st0");
 
         }
-        if(id >= (totalQuestions/2) ){
-            $( `footer #midway g path`).removeClass();
-            $( `footer #midway g path`).addClass("st0");
+        if (id >= (totalQuestions / 2)) {
+            $(`footer #midway g path`).removeClass();
+            $(`footer #midway g path`).addClass("st0");
         }
     }
     const balk5 = `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -341,7 +376,7 @@ $(function () {
                 c2,0,3.7,1.6,3.7,3.6c0,0,0,0,0,0l0,0C162.6,9.7,161,11.4,159,11.4z"/>
         </g>
     </g>
-    </svg>` ;
+    </svg>`;
     const balk7 = `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          viewBox="0 0 318.5 29.5" style="enable-background:new 0 0 318.5 29.5;" xml:space="preserve">
     <style type="text/css">
@@ -400,7 +435,7 @@ $(function () {
         </g>
     </g>
     </svg>`;
-    const balk8 =`<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    const balk8 = `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          viewBox="0 0 318.5 29.5" style="enable-background:new 0 0 318.5 29.5;" xml:space="preserve">
     <style type="text/css">
         .st0{fill:#EC4F41;}
@@ -462,7 +497,7 @@ $(function () {
         </g>
     </g>
     </svg>
-    ` ;
+    `;
 
 
 });
