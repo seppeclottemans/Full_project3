@@ -550,7 +550,32 @@ ul li {
 .tablettekst {
 	display: none;
 }
-@media screen and (min-width: 600px) {
+.question {
+	width: 100%;
+}
+.question input {
+	width: 100%;
+	background-color: transparent;
+	border: 1px solid black;
+	color: black;
+	border-radius: 10px;
+	float: left;
+}
+.starrr {
+	display: inline-block;
+}
+
+.starrr a {
+	font-size: 16px;
+	padding: 0 1px;
+	cursor: pointer;
+	color: var(--redorange);
+	text-decoration: none;
+}
+.generator input:nth-child(even) {
+	margin-right: 10%;
+  }
+  @media screen and (min-width: 600px) {
 
 	#guided-tours {
 		display: none;
@@ -580,27 +605,8 @@ ul li {
 	}
 	.question {
 		float: left;
-    	width: 100%;
 	}
 	.question input {
-		background-color: transparent;
-		border: 1px solid black;
-		color: black;
-		border-radius: 10px;
 		width: 40%;
-		float: left;
 	}
   }
-
-.starrr {
-	display: inline-block;
-}
-
-.starrr a {
-	font-size: 16px;
-	padding: 0 1px;
-	cursor: pointer;
-	color: var(--redorange);
-	text-decoration: none;
-}
-
