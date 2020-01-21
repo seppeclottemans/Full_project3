@@ -286,9 +286,9 @@ $(function () {
     const balk6 = `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          viewBox="0 0 318.5 29.5" style="enable-background:new 0 0 318.5 29.5;" xml:space="preserve">
     <style type="text/css">
-        .st0{fill:#EB5041;}
+        .st0{fill:#EC4F41;}
         .st1{fill:none;}
-        .st2{fill:none;stroke:#EB5041;}
+        .st2{fill:none;stroke:#EC4F41;}
     </style>
     <title>Asset 1</title>
     <g id="1">
@@ -340,9 +340,9 @@ $(function () {
     const balk7 = `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          viewBox="0 0 318.5 29.5" style="enable-background:new 0 0 318.5 29.5;" xml:space="preserve">
     <style type="text/css">
-        .st0{fill:#EB5041;}
+        .st0{fill:#EC4F41;}
         .st1{fill:none;}
-        .st2{fill:none;stroke:#EB5041;}
+        .st2{fill:none;stroke:#EC4F41;}
     </style>
     <title>Asset 1</title>
     <g id="1">
@@ -398,9 +398,9 @@ $(function () {
     const balk8 =`<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          viewBox="0 0 318.5 29.5" style="enable-background:new 0 0 318.5 29.5;" xml:space="preserve">
     <style type="text/css">
-        .st0{fill:#EB5041;}
+        .st0{fill:#EC4F41;}
         .st1{fill:none;}
-        .st2{fill:none;stroke:#EB5041;}
+        .st2{fill:none;stroke:#EC4F41;}
     </style>
     <title>Asset 1</title>
     <g id="1">
