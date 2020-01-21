@@ -575,6 +575,16 @@ ul li {
 .generator input:nth-child(even) {
 	margin-right: 10%;
   }
+  #currentName {
+	  color: var(--redorange);
+	  font-size: 0.5em;
+
+  }
+  footer svg {
+	width: 85%;
+    bottom: 5%;
+    position: fixed;
+  }
   @media screen and (min-width: 600px) {
 
 	#guided-tours {
@@ -607,6 +617,6 @@ ul li {
 		float: left;
 	}
 	.question input {
-		width: 40%;
+		width: 45%;
 	}
   }
