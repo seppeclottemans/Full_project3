@@ -36,8 +36,6 @@ $(function () {
                     "placeholder": "name",
                     "class": "name"
                 })
-            ).before(
-                $("<br>")
             );
         } else {
             $("#addPerson").after(

@@ -134,9 +134,8 @@ header {
 	z-index: 1000;
 	background-image: url('/ui/images/Kmska_Jean_Auguste_Dominique_Ingres_\(1780-1867\)_-_Zelfportret_\(1864\)_-_28-02-2010_13-37-05.jpg');
 	background-size: cover;
-	<<<<<<< HEAD background-color: #000;
-	=======background-color: black;
-	>>>>>>>94739a79c1c0c5eb8163984f507f4175e0c0b93a
+	background-color: #000;
+	background-color: black;
 }
 
 header button {
@@ -551,7 +550,42 @@ ul li {
 .tablettekst {
 	display: none;
 }
-@media screen and (min-width: 600px) {
+.question {
+	width: 100%;
+}
+.question input {
+	width: 100%;
+	background-color: transparent;
+	border: 1px solid black;
+	color: black;
+	border-radius: 10px;
+	float: left;
+}
+.starrr {
+	display: inline-block;
+}
+
+.starrr a {
+	font-size: 16px;
+	padding: 0 1px;
+	cursor: pointer;
+	color: var(--redorange);
+	text-decoration: none;
+}
+.generator input:nth-child(even) {
+	margin-right: 10%;
+  }
+  #currentName {
+	  color: var(--redorange);
+	  font-size: 0.5em;
+
+  }
+  footer svg {
+	width: 85%;
+    bottom: 5%;
+    position: fixed;
+  }
+  @media screen and (min-width: 600px) {
 
 	#guided-tours {
 		display: none;
@@ -581,26 +615,8 @@ ul li {
 	}
 	.question {
 		float: left;
-    	width: 100%;
 	}
 	.question input {
-		background-color: transparent;
-		border: 1px solid black;
-		color: black;
-		border-radius: 10px;
-		width: 40%;
-		float: left;
+		width: 45%;
 	}
   }
-
-.starrr {
-	display: inline-block;
-}
-
-.starrr a {
-	font-size: 16px;
-	padding: 0 1px;
-	cursor: pointer;
-	color: #FFD119;
-	text-decoration: none;
-}
