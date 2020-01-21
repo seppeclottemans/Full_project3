@@ -53,6 +53,7 @@ $(function () {
         }
 
         $('.carousel figure img').click(function () {
+            console.log($($($(this).siblings()[0]).children()[0]).attr('id'));
             let selectedRoute = $($($(this).siblings()[0]).children()[0]).attr('id');
             localStorage.setItem('selectedRoute', selectedRoute);
             // window.location.href = `routeinf.html?name=${selectedRoute}`
