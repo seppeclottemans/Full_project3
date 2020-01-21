@@ -267,7 +267,7 @@ let practicalQuestions = [{
 }];
 
 //make a question
-function get_Question(resolveFull) {
+function get_Question(resolveFull, answerID) {
     let question;
     let questionType = chooseOneFromList(questionTypes);
 
@@ -277,14 +277,14 @@ function get_Question(resolveFull) {
         resolveFull(question);
     } else {
         new Promise(function (resolve) {
-            get_imageQuestion(resolve)
+            get_imageQuestion(resolve, answerID)
         }).then(function (result) {
             resolveFull(result);
         })
     }
 }
 
-function get_imageQuestion(resolve) {
+function get_imageQuestion(resolve, answerID) {
     var promise = new Promise(function (resolve) {
         get_all_paintings("KMSKA", resolve)
     }).then(function () {
@@ -292,7 +292,7 @@ function get_imageQuestion(resolve) {
         //get an image question
         let images = [];
 
-        client.send(new rqs.RecommendItemsToItem("1001", null, 4, {
+        client.send(new rqs.RecommendItemsToItem(answerID, null, 4, {
             /*optional parameters */ })).then(function (response) {
             for (let i = 0; i < 4; i++) {
                 let painting = paintingList.filter(element => element.id == response.recomms[i].id)[0];
@@ -458,9 +458,10 @@ app.use(bodyParser.json());
 
 
 app.get('/resetQuiz', (req, res) => res.send(resetQuiz()));
-app.get('/getQuestion', (req, res) => (
+
+app.post('/getQuestion', (req, res) => (
     new Promise(function (resolve) {
-        get_Question(resolve);
+        get_Question(resolve, req.body.id);
     }).then(function (result) {
         res.send(result);
     })
