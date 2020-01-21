@@ -1,7 +1,6 @@
 $(function () {
-    
     $('#loading_screen').hide();
-    
+
     const loadProgressionbalk = function (groupSize) {
         let numberBalk = groupSize;
         if (numberBalk > 4) {
