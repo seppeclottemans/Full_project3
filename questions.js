@@ -151,6 +151,7 @@ $(function () {
             data: {
                 name: "custom_route",
                 rating: 5,
+                number_of_ratings: 1,
                 images: images,
                 info: "Dit is een route gecureerd door de werknemers van het museum veel plezier tijdens uw bezoek."
             }
