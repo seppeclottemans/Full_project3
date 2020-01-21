@@ -1,30 +1,35 @@
 [
     {
         "name": "Common route",
+        "_id": "5e25a9216d52f30c42ef39df",
         "rating": 8.5,
         "images": ["ui/images/madonna.jpg", "ui/images/verlorenzoon.jpg", "ui/images/heiligbarbara.jpg"],
         "info": "Following this route, you will get led into the world of the rennaiscance, barok and surrealism. Including works of the artists Magritte, Jan van Eyck, Ensor,... "
     },
     {
         "name": "Highlights",
+        "_id": "5e25a9336d52f30c42ef39e5",
         "rating": 9.5,
         "images": ["ui/images/jacopo.jpg", "ui/images/madonna.jpg", "ui/images/verlorenzoon.jpg"],
         "info": "Hightlights gives you the most impressive vision on which artist that made the art world. Including works of the artists Magritte, Jan van Eyck, Ensor,... "
     },
     {
         "name": "Renaissance",
+        "_id": "5e25a93e6d52f30c42ef39ef",
         "rating": 7,
         "images": ["ui/images/verlorenzoon.jpg", "ui/images/jacopo.jpg", "ui/images/madonna.jpg"],
         "info": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut magna lorem, luctus non feugiat tristique, viverra id ante. Sed nulla justo, malesuada eu nisl at, commodo tempor purus"
     },
     {
         "name": "Barok",
+        "_id" : "5e25a9496d52f30c42ef39f3",
         "rating": 8,
         "images": ["ui/images/heiligbarbara.jpg", "ui/images/zestienseptember.jpg", "ui/images/jacopo.jpg"],
         "info": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut magna lorem, luctus non feugiat tristique, viverra id ante. Sed nulla justo, malesuada eu nisl at, commodo tempor purus"
     },
     {
         "name": "New collection",
+        "_id" : "5e25a95c6d52f30c42ef39f9",
         "rating": 7.5,
         "images": ["ui/images/zestienseptember.jpg", "ui/images/heiligbarbara.jpg", "ui/images/zestienseptember.jpg"],
         "info": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut magna lorem, luctus non feugiat tristique, viverra id ante. Sed nulla justo, malesuada eu nisl at, commodo tempor purus"

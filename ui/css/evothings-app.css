@@ -443,9 +443,9 @@ button {
 	margin-top: 5%;
 }
 
-#route-inf :nth-child(4) {
+/* #route-inf :nth-child(4) {
 	margin-bottom: 10%;
-}
+} */
 
 #route-inf div :first-child {
 	font-family: 'Gotham Medium', sans-serif;
@@ -462,10 +462,14 @@ button {
 }
 
 #route-gallery {
+	padding: 5%;
 	width: 100%;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color: white;
+    position: absolute;
+    left: 0%;
 }
 
 #route-gallery img {
@@ -473,7 +477,11 @@ button {
 	border-radius: 5%;
 	margin-top: 5%;
 }
-
+#route-gallery h2{
+	width: 100%;
+	text-align: center;
+	color: black;
+}
 #goto {
     background-color: #fff;
     border-radius: 100%;

@@ -1,4 +1,23 @@
 $(function () {
+    const loadProgressionbalk = function(groupSize){
+        let numberBalk = groupSize;
+        if(numberBalk > 4){
+            numberBalk = numberBalk + 1;
+        }else{
+            numberBalk = 5;
+        }
+        if(numberBalk = 5){
+            $("footer").append(balk5);
+        }else if(numberBalk = 6){
+            $("footer").append(balk6);
+        }else if(numberBalk = 7){
+            $("footer").append(balk7);
+        }else if(numberBalk = 8){
+            $("footer").append(balk8);
+        }
+
+    };
+
     var group = {};
     var answers = {
         "practical": [],
@@ -50,17 +69,19 @@ $(function () {
             "method": "GET"
         }).done(function () {
             loadProgressionbalk(group.groupSize);
-            nextQuestion();
+            nextQuestion("1001");
         });
 
 
     });
 
     $("body").on("click", ".answer", function () {
+        let nextQuestionID = "1001";
         if (currentQuestionType == "practical") {
             answers.practical.push($(this).attr("id"));
         } else {
             answers.images.push($(this).attr("id"));
+            nextQuestionID = $(this).attr("id");
         }
 
         let group = JSON.parse(window.sessionStorage.getItem("group"));
@@ -68,7 +89,7 @@ $(function () {
 
         if (count < questionCount) {
             count++;
-            nextQuestion();
+            nextQuestion(nextQuestionID);
             colorBalk(count, questionCount);
         } else {
             group.answers = answers;
@@ -117,7 +138,7 @@ $(function () {
     var currentQuestionType;
     let currentGroup = JSON.parse(window.sessionStorage.getItem("group"));
     let unusedUsers = currentGroup.names;
-    function nextQuestion() {
+    function nextQuestion(answerID) {
         $(".generator").empty();
         $(".generator").append(
             $("<div>", {
@@ -127,7 +148,8 @@ $(function () {
 
         $.ajax({
             "url": "http://localhost:3000/getQuestion",
-            "method": "GET"
+            "method": "POST",
+            "data": {id: answerID}
         }).done(function (question) {
             currentQuestionType = question.type;
             if(currentGroup.groupSize > 1){
@@ -197,24 +219,7 @@ $(function () {
         });
     }
 
-    const loadProgressionbalk = function(groupSize){
-        let numberBalk = groupSize;
-        if(numberBalk > 4){
-            numberBalk = numberBalk + 1;
-        }else{
-            numberBalk = 5;
-        }
-        if(numberBalk = 5){
-            $("footer").append(balk5);
-        }else if(numberBalk = 6){
-            $("footer").append(balk6);
-        }else if(numberBalk = 7){
-            $("footer").append(balk7);
-        }else if(numberBalk = 8){
-            $("footer").append(balk8);
-        }
-
-    };
+    
     const colorBalk = function(currentQuestion, totalQuestions){
         let id = currentQuestion + 1;
         console.log(currentQuestion);

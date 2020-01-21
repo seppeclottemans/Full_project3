@@ -32,10 +32,10 @@ const dbName = mongoUsername;
 const myMongoClientclient = new MongoClient(mongoUrl);
 
 // Use connect method to connect to the Server
-myMongoClientclient.connect(function(err) {
-  assert.equal(null, err);
-  console.log("Connected successfully to server");
-  db = myMongoClientclient.db(dbName);
+myMongoClientclient.connect(function (err) {
+    assert.equal(null, err);
+    console.log("Connected successfully to server");
+    db = myMongoClientclient.db(dbName);
 });
 
 let paintingsIDs = [];
@@ -267,7 +267,7 @@ let practicalQuestions = [{
 }];
 
 //make a question
-function get_Question(resolveFull) {
+function get_Question(resolveFull, answerID) {
     let question;
     let questionType = chooseOneFromList(questionTypes);
 
@@ -277,30 +277,35 @@ function get_Question(resolveFull) {
         resolveFull(question);
     } else {
         new Promise(function (resolve) {
-            get_imageQuestion(resolve)
+            get_imageQuestion(resolve, answerID)
         }).then(function (result) {
             resolveFull(result);
         })
     }
 }
 
-function get_imageQuestion(resolve) {
+function get_imageQuestion(resolve, answerID) {
     var promise = new Promise(function (resolve) {
         get_all_paintings("KMSKA", resolve)
     }).then(function () {
         //console.log(paintings);
         //get an image question
         let images = [];
-        for (let i = 0; i < 4; i++) {
-            images[i] = chooseOneFromList(paintingList);
-        }
-        let question = {
-            "type": "image",
-            "questionString": "Choose an artwork",
-            "answers": images
-        }
-        //console.log(question);
-        resolve(question);
+
+        client.send(new rqs.RecommendItemsToItem(answerID, null, 4, {
+            /*optional parameters */ })).then(function (response) {
+            for (let i = 0; i < 4; i++) {
+                let painting = paintingList.filter(element => element.id == response.recomms[i].id)[0];
+                images.push(painting);
+            }
+            let question = {
+                "type": "image",
+                "questionString": "Choose an artwork",
+                "answers": images
+            }
+
+            resolve(question);
+        });
     });
 }
 
@@ -421,7 +426,7 @@ let recommAmount;
 
 function getRecommendations(group, resolve) {
     console.log(group);
-    if(group.answers.practical[0] == "30 minutes or less"){
+    if (group.answers.practical[0] == "30 minutes or less") {
         recommAmount = 3;
     } else if (group.answers.practical[0] == "30 minutes - 1 hour") {
         recommAmount = 4;
@@ -453,9 +458,10 @@ app.use(bodyParser.json());
 
 
 app.get('/resetQuiz', (req, res) => res.send(resetQuiz()));
-app.get('/getQuestion', (req, res) => (
+
+app.post('/getQuestion', (req, res) => (
     new Promise(function (resolve) {
-        get_Question(resolve);
+        get_Question(resolve, req.body.id);
     }).then(function (result) {
         res.send(result);
     })
@@ -486,17 +492,19 @@ app.post('/getRoute', (req, res) => (
 ));
 
 app.get('/getRouteMongo/:id', (req, res) => {
-        const collection = db.collection('routes');
-        const selectedRoute =  collection.find({"_id": ObjectId(req.params.id)});
-        res.send(selectedRoute);
+    const collection = db.collection('routes');
+    const selectedRoute = collection.find({
+        "_id": ObjectId(req.params.id)
+    });
+    res.send(selectedRoute);
 });
 
 app.get('/getAllRoutesMongo', (req, res) => {
     const collection = db.collection('routes');
-    collection.find({}).toArray(function(err, result) {
+    collection.find({}).toArray(function (err, result) {
         if (err) throw err;
         res.send(result);
-      });
+    });
 });
 
 
