@@ -254,6 +254,22 @@ $(function () {
             <circle r="18" cx="20" cy="20"></circle>
         </svg>
     </div>`);
+    const mq = window.matchMedia( "(min-width: 600px)" );
+    if (mq.matches) {
+        $(".generator").prepend(`<div id="countdown">
+        <div id="countdown-number"><p></p></div>
+        <svg id="svgTimer">
+            <circle r="36" cx="40" cy="40"></circle>
+        </svg>
+    </div>`)
+        } else {
+            $(".generator").prepend(`<div id="countdown">
+            <div id="countdown-number"><p></p></div>
+            <svg id="svgTimer">
+                <circle r="18" cx="20" cy="20"></circle>
+            </svg>
+        </div>`)
+        }
             // Update the count down every 1 second
             let maxTime = 30;
             $("#countdown-number p").text(maxTime);
