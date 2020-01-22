@@ -485,7 +485,7 @@ button {
 #route-gallery h2 {
 	width: 100%;
 	text-align: center;
-	color: black;
+	color:#000;
 }
 
 #goto {
@@ -556,8 +556,8 @@ ul li {
 .question input {
 	width: 100%;
 	background-color: transparent;
-	border: 1px solid black;
-	color: black;
+	border: 1px solid #000;
+	color: #000;
 	border-radius: 10px;
 	float: left;
 	margin-bottom: 5%;
@@ -609,7 +609,6 @@ ul li {
 	}
 	.tablettekst {
 		display: inline-block;
-		/* margin-top: 50%; */
 		text-align: center;
 
 	}
