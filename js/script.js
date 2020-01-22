@@ -43,7 +43,7 @@ $(function () {
             $('#route-gallery').append(`<img src="${routeImg}">`)
         });
         $('.existingroute-rating').starrr({
-            rating: 4
+            rating: Math.round(route.rating)
         })
     }
 
