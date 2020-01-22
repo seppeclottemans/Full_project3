@@ -447,7 +447,7 @@ button {
 	margin: 5% 0;
 }
 
-#route-inf div :first-child {
+#route-inf .route-inf-extra p {
 	font-family: 'Gotham Medium', sans-serif;
 	text-transform: uppercase;
 }
