@@ -439,17 +439,13 @@ button {
 #route-inf img {
 	width: 100%;
 	border-radius: 5%;
-	max-height: 100px;
+	max-height: 150px;
 	object-fit: cover;
 }
 
 #route-inf :nth-child(3) {
-	margin-top: 5%;
+	margin: 5% 0;
 }
-
-/* #route-inf :nth-child(4) {
-	margin-bottom: 10%;
-} */
 
 #route-inf div :first-child {
 	font-family: 'Gotham Medium', sans-serif;

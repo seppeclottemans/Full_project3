@@ -1,6 +1,28 @@
 $(function () {
+    let appendRoutes = (allRoutes) => {
+        for (let route of allRoutes) {
+            $('.carousel').append(`<figure>
+           <a href="routeinf.html"><img src="${route.images[0]}" alt="" class="${route._id}"></a>
+       <figcaption>
+            <h2>${route.name}</h2>
+            <p>${route.info}</p>
+            <button class="btn readmore ${route.id}"><a href="routeinf.html">Read more >></a></button>
+        </figcaption>
+    </figure>`);
+        }
+
+        $('.carousel figure img').click(function () {
+            let selectedRoute = $(this).attr('class');
+            localStorage.setItem('selectedRoute', selectedRoute);
+        });
+        $('.carousel .readmore').click(function () {
+            let selectedRoute = $($(this).parent()).attr('class')[2];
+            console.log(selectedRoute);
+            localStorage.setItem('selectedRoute', selectedRoute);
+        });
+    }
+
     let displaySelectedRoute = (route) => {
-        route = JSON.parse(route);
         $('#route-inf').append(`
             <h1>${route.name}</h1>
                             <img src="${route.images[0]}" alt="">
@@ -30,25 +52,28 @@ $(function () {
         })
     }
 
-    let appendRoutes = (allRoutes) => {
-        for (let route of allRoutes) {
-            $('.carousel').append(`<figure>
-           <a href="routeinf.html"><img src="${route.images[0]}" alt="" class="${route._id}"></a>
-       <figcaption>
-            <h2>${route.name}</h2>
-            <p>${route.info}</p>
-            <button class="btn readmore ${route.id}"><a href="routeinf.html">Read more >></a></button>
-        </figcaption>
-    </figure>`);
-        }
+    let displayRouteInstructions = (route) =>{
+        $('#route-instructions').prepend(`<h1>${route.name}</h1>`)
+    }
 
-        $('.carousel figure img').click(function () {
-            let selectedRoute = $(this).attr('class');
-            localStorage.setItem('selectedRoute', selectedRoute);
-        });
-        $('.carousel .readmore').click(function () {
-            let selectedRoute = $(this).attr('class')[2];
-            localStorage.setItem('selectedRoute', selectedRoute);
+    let getSelectedRoute = () =>{
+        $('#loading_screen').show();
+        let routeId = localStorage.getItem('selectedRoute');
+        $.ajax({
+            url: `http://localhost:3000/getRouteMongo/${routeId}`,
+            method: 'GET'
+        }).done(function (data) {
+            $('#loading_screen').hide();
+            if ($('#route-inf').length) {
+             displaySelectedRoute(JSON.parse(data));
+            }
+            if ($('#route-instructions').length) {
+                displayRouteInstructions(JSON.parse(data));
+            }
+        }).fail(function (err1, err2) {
+            console.log('Fail');
+            console.log(err1);
+            console.log(err2);
         });
     }
 
@@ -62,19 +87,7 @@ $(function () {
         });
     }
 
-    if ($('#route-inf').length) {
-        $('#loading_screen').show();
-        let routeId = localStorage.getItem('selectedRoute');
-        $.ajax({
-            url: `http://localhost:3000/getRouteMongo/${routeId}`,
-            method: 'GET'
-        }).done(function (data) {
-            $('#loading_screen').hide();
-            displaySelectedRoute(data);
-        }).fail(function (err1, err2) {
-            console.log('Fail');
-            console.log(err1);
-            console.log(err2);
-        });
+    if ($('#route-inf').length || $('#route-instructions').length) {
+        getSelectedRoute();
     }
 });
