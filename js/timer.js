@@ -5,7 +5,7 @@ let maxTime = 30;
 var x = setInterval(function() {
     maxTime--;
   // Display the result in the element with id="demo"
-  document.getElementById("demo").innerHTML = maxTime;
+  document.getElementById("countdown-number").innerHTML = maxTime;
 
   // If the count down is finished, write some text
   if (maxTime == 0) {
