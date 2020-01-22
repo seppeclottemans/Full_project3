@@ -594,7 +594,8 @@ app.post('/update_rating/:id', (req, res) => {
             {$set:{"rating": changedRoute.rating, "number_of_ratings": changedRoute.number_of_ratings }} // Update
         )
         res.json(changedRoute);
-        })});
+    })
+});
 
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
