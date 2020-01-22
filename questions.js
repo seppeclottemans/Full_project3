@@ -247,6 +247,33 @@ $(function () {
 
     };
 
+    const timer = function(){
+        $(".generator").prepend(`<div id="countdown">
+        <div id="countdown-number"><p></p></div>
+        <svg id="svgTimer">
+            <circle r="18" cx="20" cy="20"></circle>
+        </svg>
+    </div>`);
+            // Update the count down every 1 second
+            let maxTime = 30;
+            $("#countdown-number p").text(maxTime);
+            let questionCount = Math.max(group.groupSize, 5)
+            var x = setInterval(function() {
+                maxTime--;
+              $("#countdown-number p").text(maxTime)
+              $("body").on("click", ".answer", function () {
+                clearInterval(x);
+              })
+              if (maxTime == 0) {
+                clearInterval(x);
+                let possibilities = ["1001", "1002", "1003", "1004", "1005", "1006", "1007", "1008", "1009", "1010", "1012", "1013", "1014", "1015"];
+                count += 1;
+                nextQuestion(possibilities[ Math.floor(Math.random() * possibilities.length)]);
+                colorBalk(count, questionCount)
+              }
+            }, 1000);
+    }
+
     var group = {};
     var answers = {
         "practical": [],
@@ -379,7 +406,6 @@ $(function () {
         route.forEach(paintingInRoute => {
             images.push(paintingInRoute.image)
         });
-
         $.ajax({
             url: "http://localhost:3000/create-route",
             method: 'POST',
@@ -391,7 +417,6 @@ $(function () {
                 info: "Dit is een route gecureerd door de werknemers van het museum veel plezier tijdens uw bezoek."
             }
         }).done(function (data) {
-
         }).fail(function (err1, err2) {
             console.log('Fail');
             console.log(err1);
@@ -405,12 +430,6 @@ $(function () {
 
     function nextQuestion(answerID) {
         $(".generator").empty();
-        $(".generator").append(
-            $("<div>", {
-                "class": "question"
-            })
-        );
-
         $.ajax({
             "url": "http://localhost:3000/getQuestion",
             "method": "POST",
@@ -452,8 +471,11 @@ $(function () {
                     }, 2500);
                 }
             }
-
+            if (currentQuestionType == "image"){
+                timer();
+            } 
             displayQuestion(question);
+
         });
 
     }
@@ -468,6 +490,7 @@ $(function () {
                 "id": "answers"
             })
         );
+      ;
 
         //console.log(question);
 
@@ -495,6 +518,7 @@ $(function () {
                 answer
             ).append($("<br>"));
         });
+
     }
 
 
@@ -506,16 +530,18 @@ $(function () {
         if (id == totalQuestions) {
             $(`footer svg #${id} path`).removeClass();
             $(`footer svg #${id} path`).addClass("st0");
-            $(`footer #end g path`).removeClass();
-            $(`footer #end g path`).addClass("st0");
 
         }
         if (id >= (totalQuestions / 2)) {
             $(`footer #midway g path`).removeClass();
             $(`footer #midway g path`).addClass("st0");
         }
+            $(`footer #end g path`).removeClass();
+            $(`footer #end g path`).addClass("st0");
+
     }
 
+  
     // timer
 
     $(function () {
