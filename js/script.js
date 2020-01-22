@@ -1,4 +1,7 @@
 $(function () {
+    let count = 0;
+    let currentRoute;
+
     let appendRoutes = (allRoutes) => {
         for (let route of allRoutes) {
             if (route.name != 'custom_route') {
@@ -24,8 +27,13 @@ $(function () {
     }
 
     let displaySelectedRoute = (route) => {
+        let nameTemp = route.name.split("_");
+        let name = "";
+        nameTemp.forEach(function(part){
+            name += " " + part;
+        });
         $('#route-inf').append(`
-            <h1>${route.name}</h1>
+            <h1>${name}</h1>
                             <img src="${route.images[0]}" alt="">
                             <p>${route.info}</p>
                             <div>
@@ -46,6 +54,10 @@ $(function () {
             rating: Math.round(route.rating),
             readOnly: true
         })
+
+        if(route.name == "custom_route"){
+            $(".route-inf-extra").hide();
+        }
     }
 
     function updateRating(routeId, rating) {
@@ -65,8 +77,68 @@ $(function () {
     }
 
     let displayRouteInstructions = (route) => {
-        $('#route-instructions').prepend(`<h1>${route.name}</h1>`)
+        console.log(route);
+        console.log(count);
+
+        //make the name of the generated routes nice to display
+        let nameTemp = route.name.split("_");
+        let name = "";
+        nameTemp.forEach(function(part){
+            name += " " + part;
+        });
+
+        //display the name
+        $('#route-instructions').prepend(`<h1>${name}</h1>`);
+        //display the image
+        $("#route-instructions img").attr("src", route.images[count]);
+        //get the information from the painting
+        $.ajax({
+            url: `http://localhost:3000/getOnePainting`,
+            method: 'POST',
+            data: {
+                id: route.paintingsIDs[count]
+            }
+        }).done(function (data) {
+            //console.log(data);
+            $("#gotoinf h2").text(data.title);
+            $("#gotoinf h3").text(data.artist);
+            $("#gotoinf p").text(data.year);
+
+            let info = data.info.split(",");
+            //console.log(info);
+            let room;
+            let painting;
+            info.forEach(function(value){
+                if(value == "room_A"){
+                    room = "A";
+                } else if(value == "room_B"){
+                    room = "B";
+                } else if(value == "room_C"){
+                    room = "C";
+                } else if (!isNaN(parseFloat(value)) && isFinite(value)){ //https://stackoverflow.com/questions/5778020/check-whether-an-input-string-contains-a-number-in-javascript
+                    painting = value;
+                }
+            });
+
+            $("#roomnumber").text(room);
+            $("#artNumber").text(room + painting);
+
+        }).fail(function (err1, err2) {
+            console.log('Fail');
+            console.log(err1);
+            console.log(err2);
+        });
     }
+
+    $("#goto").on("click", function(){
+        $('#route-instructions h1').remove();
+        if(count == currentRoute.images.length - 1){
+            window.location.replace("http://127.0.0.1:5500/feedbackintro.html");
+        } else {
+            count++;
+        }
+        displayRouteInstructions(currentRoute);
+    })
 
     let getSelectedRoute = () => {
         $('#loading_screen').show();
@@ -75,6 +147,7 @@ $(function () {
             url: `http://localhost:3000/getRouteMongo/${routeId}`,
             method: 'GET'
         }).done(function (data) {
+            currentRoute = data;
             $('#loading_screen').hide();
             if ($('#route-inf').length) {
                 displaySelectedRoute(data);

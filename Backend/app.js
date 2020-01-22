@@ -518,6 +518,7 @@ app.post('/getQuestion', (req, res) => (
         res.send(result);
     })
 ));
+
 app.post('/getPaintings', (req, res) => (
     new Promise(function (resolve) {
         get_all_paintings();
@@ -525,6 +526,16 @@ app.post('/getPaintings', (req, res) => (
         res.send(result);
     })
 ));
+
+app.post('/getOnePainting', (req, res) => (
+    new Promise(function (resolve, reject) {
+        get_painting(req.body.id, resolve, reject);
+    }).then(function (result) {
+        res.send(result);
+    })
+));
+
+
 
 app.post('/saveGroup', (req, res) => (
     new Promise(function (resolve) {
@@ -576,7 +587,8 @@ app.post('/create-route', (req, res) => {
         rating: req.body.rating,
         number_of_ratings: req.body.number_of_ratings,
         images: req.body.images,
-        info: req.body.info
+        info: req.body.info,
+        paintingsIDs: req.body.paintingsIDs
     }
     collection.insertOne(route, function (err, docsInserted) {
         res.json(docsInserted.insertedId);
