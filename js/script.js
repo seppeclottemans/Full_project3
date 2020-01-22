@@ -22,7 +22,6 @@ $(function () {
         });
     }
 
-<<<<<<< HEAD
     let displaySelectedRoute = (route) => {
         $('#route-inf').append(`
             <h1>${route.name}</h1>
@@ -52,7 +51,7 @@ $(function () {
             rating: 4
         })
     }
-=======
+
 updateRating("5e25a95c6d52f30c42ef39f9", 1);
 function updateRating(routeId, rating){
     $.ajax({
@@ -67,7 +66,6 @@ function updateRating(routeId, rating){
         console.log(err2);
     });
 }
->>>>>>> a67ebcfc500c083420a310006f3db67676611453
 
     let displayRouteInstructions = (route) =>{
         $('#route-instructions').prepend(`<h1>${route.name}</h1>`)
@@ -82,10 +80,10 @@ function updateRating(routeId, rating){
         }).done(function (data) {
             $('#loading_screen').hide();
             if ($('#route-inf').length) {
-             displaySelectedRoute(JSON.parse(data));
+             displaySelectedRoute(data);
             }
             if ($('#route-instructions').length) {
-                displayRouteInstructions(JSON.parse(data));
+                displayRouteInstructions(data);
             }
         }).fail(function (err1, err2) {
             console.log('Fail');
