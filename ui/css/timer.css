@@ -63,4 +63,9 @@
         text-align: center;
       }
 
+      #svgTimer{
+        width: 200px;
+        height: 200px;
+}
+
 }

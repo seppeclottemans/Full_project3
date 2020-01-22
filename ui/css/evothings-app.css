@@ -606,7 +606,7 @@ footer svg {
 	}
 
 	p {
-		font-size: 5rem !important;
+		font-size: 2rem !important;
 	}
 
 	#generate-route-opt div h2{
@@ -648,17 +648,16 @@ footer svg {
 	.tablettekst {
 		display: inline-block;
 		text-align: center;
-
+		width: 100%;
 	}
 
 	.tablettekst .light-upper {
-		font-size: 1em !important;
+		font-size: 1.5em !important;
 	}
 
 	.tablettekst .bold-upper {
-		font-size: 1.2em !important;
+		font-size: 1.7em !important;
 	}
-
 	.question {
 		float: left;
 	}
@@ -667,13 +666,12 @@ footer svg {
 		width: 45%;
 	}
 
-	.imganswer,
-	.answer {
-		height: 500px;
+	.imganswer, .answer {
+		height: 425px;
 	}
 
 	.btn {
-		width: 50%;
+		width: 100%;
 		background-color: var(--redorange);
 		color: #fff;
 		text-transform: uppercase;
@@ -681,8 +679,8 @@ footer svg {
 		border-radius: 100px;
 		padding: 20px;
 		font-weight: 800;
-		font-size: 5rem;
-		margin-left: 25%;
+		font-size: 1rem;
+		margin-left: 0%;
 	}
 
 	.question input{
@@ -692,5 +690,8 @@ footer svg {
 
 	.generator h2{
 		margin: 0% 0% 2% 0%;
+	}
+	#generate-route {
+		margin-top: 50%;
 	}
 }
