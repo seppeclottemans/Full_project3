@@ -1,6 +1,7 @@
 $(function () {
     let count = 0;
     let currentRoute;
+    $('#loading_screen').remove();
 
     let appendRoutes = (allRoutes) => {
         for (let route of allRoutes) {
@@ -61,19 +62,24 @@ $(function () {
     }
 
     function updateRating(routeId, rating) {
-        $.ajax({
-            url: `http://localhost:3000/update_rating/${routeId}`,
-            method: 'POST',
-            data: {
-                rating: rating
-            }
-        }).done(function (data) {
-
-        }).fail(function (err1, err2) {
+        $.post(`http://localhost:3000/update_rating/${routeId}`, { rating: rating }).fail(function (err1, err2) {
             console.log('Fail');
             console.log(err1);
             console.log(err2);
         });
+        // $.ajax({
+        //     url: `http://localhost:3000/update_rating/${routeId}`,
+        //     method: 'POST',
+        //     data: {
+        //         rating: rating
+        //     }
+        // }).done(function (data) {
+
+        // }).fail(function (err1, err2) {
+        //     console.log('Fail');
+        //     console.log(err1);
+        //     console.log(err2);
+        // });
     }
 
     let displayRouteInstructions = (route) => {
@@ -92,14 +98,7 @@ $(function () {
         //display the image
         $("#route-instructions img").attr("src", route.images[count]);
         //get the information from the painting
-        $.ajax({
-            url: `http://localhost:3000/getOnePainting`,
-            method: 'POST',
-            data: {
-                id: route.paintingsIDs[count]
-            }
-        }).done(function (data) {
-            //console.log(data);
+        $.post(`http://localhost:3000/getOnePainting`, { id: route.paintingsIDs[count] }, function(data){
             $("#gotoinf h2").text(data.title);
             $("#gotoinf h3").text(data.artist);
             $("#gotoinf p").text(data.year);
@@ -128,6 +127,43 @@ $(function () {
             console.log(err1);
             console.log(err2);
         });
+
+        // $.ajax({
+        //     url: `http://localhost:3000/getOnePainting`,
+        //     method: 'POST',
+        //     data: {
+        //         id: route.paintingsIDs[count]
+        //     }
+        // }).done(function (data) {
+        //     //console.log(data);
+        //     $("#gotoinf h2").text(data.title);
+        //     $("#gotoinf h3").text(data.artist);
+        //     $("#gotoinf p").text(data.year);
+
+        //     let info = data.info.split(",");
+        //     //console.log(info);
+        //     let room;
+        //     let painting;
+        //     info.forEach(function(value){
+        //         if(value == "room_A"){
+        //             room = "A";
+        //         } else if(value == "room_B"){
+        //             room = "B";
+        //         } else if(value == "room_C"){
+        //             room = "C";
+        //         } else if (!isNaN(parseFloat(value)) && isFinite(value)){ //https://stackoverflow.com/questions/5778020/check-whether-an-input-string-contains-a-number-in-javascript
+        //             painting = value;
+        //         }
+        //     });
+
+        //     $("#roomnumber").text(room);
+        //     $("#artNumber").text(room + painting);
+
+        // }).fail(function (err1, err2) {
+        //     console.log('Fail');
+        //     console.log(err1);
+        //     console.log(err2);
+        // });
     }
 
     $("#goto").on("click", function(){
@@ -141,12 +177,9 @@ $(function () {
     })
 
     let getSelectedRoute = () => {
-        $('#loading_screen').show();
+        //$('#loading_screen').show();
         let routeId = localStorage.getItem('selectedRoute');
-        $.ajax({
-            url: `http://localhost:3000/getRouteMongo/${routeId}`,
-            method: 'GET'
-        }).done(function (data) {
+        $.getJSON(`http://localhost:3000/getRouteMongo/${routeId}`, function(data){
             currentRoute = data;
             $('#loading_screen').hide();
             if ($('#route-inf').length) {

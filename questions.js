@@ -379,6 +379,7 @@ $(function () {
                     },
                 }).done(function (route) {
                     console.log(route);
+                    saveRoute(route);
                     $(`footer #end g path`).removeClass();
                     $(`footer #end g path`).addClass("st0");
                     $(".generator").empty();
@@ -395,7 +396,6 @@ $(function () {
                     //         })
                     //     )
                     // });
-                    saveRoute(route)
                 })
 
             })
@@ -425,6 +425,7 @@ $(function () {
             }
         }).done(function (data) {
             window.localStorage.setItem("selectedRoute", data);
+            console.log(data);
             window.location.replace("http://127.0.0.1:5500/routeinf.html");
         }).fail(function (err1, err2) {
             console.log('Fail');
@@ -447,7 +448,7 @@ $(function () {
                 userId: group.id
             },
             beforeSend: function () {
-                $('#loading_screen').show();
+                //$('#loading_screen').show();
             },
             complete: function () {
                 $('#loading_screen').hide();
