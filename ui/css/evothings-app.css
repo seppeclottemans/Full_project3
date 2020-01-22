@@ -417,6 +417,8 @@ p {
 	text-transform: uppercase;
 	padding-top: 5%;
 	font-size: 1.4em;
+	margin: 0;
+    width: 100%;
 }
 
 button {
@@ -447,7 +449,7 @@ button {
 	margin: 5% 0;
 }
 
-#route-inf div :first-child {
+#route-inf .route-inf-extra p {
 	font-family: 'Gotham Medium', sans-serif;
 	text-transform: uppercase;
 }
