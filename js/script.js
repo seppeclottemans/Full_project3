@@ -1,7 +1,8 @@
 $(function () {
     let appendRoutes = (allRoutes) => {
         for (let route of allRoutes) {
-            $('.carousel').append(`<figure>
+            if (route.name != 'custom_route') {
+                $('.carousel').append(`<figure>
            <a href="routeinf.html"><img src="${route.images[0]}" alt="" class="${route._id}"></a>
        <figcaption>
             <h2>${route.name}</h2>
@@ -9,6 +10,7 @@ $(function () {
             <button class="btn readmore ${route.id}"><a href="routeinf.html">Read more >></a></button>
         </figcaption>
     </figure>`);
+            }
         }
 
         $('.carousel figure img').click(function () {
@@ -17,7 +19,6 @@ $(function () {
         });
         $('.carousel .readmore').click(function () {
             let selectedRoute = $($(this).parent()).attr('class')[2];
-            console.log(selectedRoute);
             localStorage.setItem('selectedRoute', selectedRoute);
         });
     }
@@ -41,37 +42,32 @@ $(function () {
         route.images.forEach(function (routeImg) {
             $('#route-gallery').append(`<img src="${routeImg}">`)
         });
-        $('.selections-rating').starrr().on('starrr:change', function (e, value) {
-            console.log(value)
-        })
-        $('.generated-rating').starrr().on('starrr:change', function (e, value) {
-            console.log(value)
-        })
         $('.existingroute-rating').starrr({
             rating: 4
         })
     }
 
-updateRating("5e25a95c6d52f30c42ef39f9", 1);
-function updateRating(routeId, rating){
-    $.ajax({
-        url: `http://localhost:3000/update_rating/${routeId}`,
-        method: 'POST',
-        data: {rating: rating}
-    }).done(function (data) {
-        
-    }).fail(function (err1, err2) {
-        console.log('Fail');
-        console.log(err1);
-        console.log(err2);
-    });
-}
+    function updateRating(routeId, rating) {
+        $.ajax({
+            url: `http://localhost:3000/update_rating/${routeId}`,
+            method: 'POST',
+            data: {
+                rating: rating
+            }
+        }).done(function (data) {
 
-    let displayRouteInstructions = (route) =>{
+        }).fail(function (err1, err2) {
+            console.log('Fail');
+            console.log(err1);
+            console.log(err2);
+        });
+    }
+
+    let displayRouteInstructions = (route) => {
         $('#route-instructions').prepend(`<h1>${route.name}</h1>`)
     }
 
-    let getSelectedRoute = () =>{
+    let getSelectedRoute = () => {
         $('#loading_screen').show();
         let routeId = localStorage.getItem('selectedRoute');
         $.ajax({
@@ -80,7 +76,7 @@ function updateRating(routeId, rating){
         }).done(function (data) {
             $('#loading_screen').hide();
             if ($('#route-inf').length) {
-             displaySelectedRoute(data);
+                displaySelectedRoute(data);
             }
             if ($('#route-instructions').length) {
                 displayRouteInstructions(data);
@@ -105,4 +101,8 @@ function updateRating(routeId, rating){
     if ($('#route-inf').length || $('#route-instructions').length) {
         getSelectedRoute();
     }
+    
+    $('.generated-rating').starrr().on('starrr:change', function (e, value) {
+        updateRating("5e25a95c6d52f30c42ef39f9", value);
+    })
 });
