@@ -1,304 +1,6 @@
 $(function () {
     $('#loading_screen').hide();
 
-    const loadProgressionbalk = function (groupSize) {
-        let numberBalk = groupSize;
-        if (numberBalk > 4) {
-            numberBalk = numberBalk + 1;
-        } else {
-            numberBalk = 5;
-        }
-        if (numberBalk = 5) {
-            $("footer").append(balk5);
-        } else if (numberBalk = 6) {
-            $("footer").append(balk6);
-        } else if (numberBalk = 7) {
-            $("footer").append(balk7);
-        } else if (numberBalk = 8) {
-            $("footer").append(balk8);
-        }
-
-    };
-
-    var group = {};
-    var answers = {
-        "practical": [],
-        "images": []
-    };
-    var count = 0;
-
-    $("#addPerson").click(function (e) {
-        //e.preventDefault();
-        var groupSize = $(".name").length;
-
-        if (groupSize < 7) {
-            $("#addPerson").before(
-                $("<input>", {
-                    "type": "text",
-                    "placeholder": "name",
-                    "class": "name"
-                })
-            );
-        } else {
-            $("#addPerson").after(
-                $("<p>").text("The group is too big.")
-            );
-        }
-
-
-    });
-
-    $("body").on("click", "#next", function (e) {
-        //e.preventDefault();
-        group.names = [];
-
-        $(".name").each(function () {
-            var name = $(this).val();
-            if (name != "") {
-                group.names.push(name);
-            }
-
-        });
-
-        group.groupSize = group.names.length;
-        console.log(group);
-        window.sessionStorage.setItem("group", JSON.stringify(group));
-
-        $.ajax({
-            "url": "http://localhost:3000/resetQuiz",
-            "method": "GET"
-        }).done(function () {
-            loadProgressionbalk(group.groupSize);
-            nextQuestion("1001");
-        });
-
-
-    });
-
-    $("body").on("click", ".answer", function () {
-        let nextQuestionID = "1001";
-        if (currentQuestionType == "practical") {
-            answers.practical.push($(this).attr("id"));
-        } else {
-            answers.images.push($(this).attr("id"));
-            nextQuestionID = $(this).attr("id");
-        }
-
-        let group = JSON.parse(window.sessionStorage.getItem("group"));
-        let questionCount = Math.max(group.groupSize, 5);
-
-        if (count < questionCount) {
-            count++;
-            nextQuestion(nextQuestionID);
-            colorBalk(count, questionCount);
-        } else {
-            group.answers = answers;
-
-            $.ajax({
-                "url": "http://localhost:3000/saveGroup",
-                "method": "POST",
-                "data": group
-            }).done(function (recomms) {
-
-                console.log(recomms);
-                let selectedPaintings = [];
-                recomms.forEach(function (recomm) {
-                    selectedPaintings.push(recomm.id);
-                });
-
-                console.log(selectedPaintings);
-
-                $.ajax({
-                    url: "http://localhost:3000/getRoute",
-                    method: "POST",
-                    data: {
-                        selectedPaintings: selectedPaintings
-                    },
-                }).done(function (route) {
-                    console.log(route);
-
-                    $(".generator").empty();
-                    $(".generator").append(
-                        $("<div>", {
-                            "class": "recommended"
-                        })
-                    );
-
-                    route.forEach(function (rout) {
-                        $(".recommended").append(
-                            $("<img>", {
-                                "src": rout.image
-                            })
-                        )
-                    });
-                    saveRoute(route)
-                })
-
-            })
-        }
-
-    });
-
-    function saveRoute(route) {
-        let images = [];
-        route.forEach(paintingInRoute => {
-            images.push(paintingInRoute.image)
-        });
-
-        $.ajax({
-            url: "http://localhost:3000/create-route",
-            method: 'POST',
-            data: {
-                name: "custom_route",
-                rating: 5,
-                number_of_ratings: 1,
-                images: images,
-                info: "Dit is een route gecureerd door de werknemers van het museum veel plezier tijdens uw bezoek."
-            }
-        }).done(function (data) {
-            
-        }).fail(function (err1, err2) {
-            console.log('Fail');
-            console.log(err1);
-            console.log(err2);
-        });
-    }
-
-    var currentQuestionType;
-    let currentGroup = JSON.parse(window.sessionStorage.getItem("group"));
-    let unusedUsers = currentGroup.names;
-
-    function nextQuestion(answerID) {
-        $(".generator").empty();
-        $(".generator").append(
-            $("<div>", {
-                "class": "question"
-            })
-        );
-
-        $.ajax({
-            "url": "http://localhost:3000/getQuestion",
-            "method": "POST",
-            "data": {
-                id: answerID
-            },
-                beforeSend: function() {
-                    $('#loading_screen').show();
-                },
-                complete: function(){
-                $('#loading_screen').hide();
-                }
-        }).done(function (question) {
-            currentQuestionType = question.type;
-            if (currentGroup.groupSize > 1) {
-                if (currentQuestionType == "image") {
-                    let i = Math.floor(Math.random() * unusedUsers.length);
-                    let currentUser = unusedUsers.pop(i);
-
-                    if (currentUser == undefined) {
-                        currentUser = "group"
-                    }
-
-                    $(".generator").append(
-                        $("<div>", {
-                            "class": "nameShouter"
-                        }).text(currentUser + "'s turn")
-                    );
-
-                    $(".generator").append(
-                        $("<div>", {
-                            "id": "currentName"
-                        }).text(currentUser)
-                    );
-
-                    setTimeout(function () {
-                        $(".nameShouter").slideUp();
-                    }, 2500);
-                }
-            }
-
-            displayQuestion(question);
-        });
-
-    }
-
-    function displayQuestion(question) {
-        //console.log(question);
-
-        $(".generator").append(
-            $("<h2>").text(question.questionString)
-        ).append(
-            $("<div>", {
-                "id": "answers"
-            })
-        );
-
-        //console.log(question);
-
-        question.answers.forEach(function (q) {
-            //console.log(q);
-            var answer;
-            if (question.type == "practical") {
-                answer = $("<div>", {
-                    "class": "answer textanswer",
-                    "id": q
-                }).append(
-                    q
-                );
-            } else {
-                answer = $("<div>", {
-                    "class": "answer imganswer",
-                    "id": q.id
-                }).append(
-                    $("<img>", {
-                        "src": q.image,
-                    })
-                );
-            }
-            $("#answers").append(
-                answer
-            ).append($("<br>"));
-        });
-    }
-
-
-    const colorBalk = function (currentQuestion, totalQuestions) {
-        let id = currentQuestion;
-        console.log(currentQuestion);
-        $(`footer svg #${id} rect`).removeClass();
-        $(`footer svg #${id} rect`).addClass("st0");
-        if (id == totalQuestions) {
-            $(`footer svg #${id} path`).removeClass();
-            $(`footer svg #${id} path`).addClass("st0");
-            $(`footer #end g path`).removeClass();
-            $(`footer #end g path`).addClass("st0");
-
-        }
-        if (id >= (totalQuestions / 2)) {
-            $(`footer #midway g path`).removeClass();
-            $(`footer #midway g path`).addClass("st0");
-        }
-    }
-
-    // timer
-
-    $(function(){
-        // Update the count down every 1 second
-        let maxTime = 30;
-        
-        var x = setInterval(function() {
-            maxTime--;
-          // Display the result in the element with id="demo"
-          $("#countdown-number").text(maxTime)
-        
-          // If the count down is finished, write some text
-          if (maxTime == 0) {
-            clearInterval(x);
-          }
-        }, 1000);
-        });
-
-
     const balk5 = `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          viewBox="0 0 318.5 29.5" style="enable-background:new 0 0 318.5 29.5;" xml:space="preserve">
     <style type="text/css">
@@ -525,6 +227,315 @@ $(function () {
     </g>
     </svg>
     `;
+
+    const loadProgressionbalk = function (groupSize) {
+        let numberBalk = groupSize;
+        if (numberBalk > 4) {
+            numberBalk = numberBalk + 1;
+        } else {
+            numberBalk = 5;
+        }
+        if (numberBalk = 5) {
+            $("footer").append(balk5);
+        } else if (numberBalk = 6) {
+            $("footer").append(balk6);
+        } else if (numberBalk = 7) {
+            $("footer").append(balk7);
+        } else if (numberBalk = 8) {
+            $("footer").append(balk8);
+        }
+
+    };
+
+    var group = {};
+    var answers = {
+        "practical": [],
+        "images": []
+    };
+    var count = 0;
+
+    $("#addPerson").click(function (e) {
+        //e.preventDefault();
+        var groupSize = $(".name").length;
+
+        if (groupSize < 7) {
+            $("#addPerson").before(
+                $("<input>", {
+                    "type": "text",
+                    "placeholder": "name",
+                    "class": "name"
+                })
+            );
+        } else {
+            $("#addPerson").after(
+                $("<p>").text("The group is too big.")
+            );
+        }
+
+
+    });
+
+    $("body").on("click", "#next", function (e) {
+        //e.preventDefault();
+        group.names = [];
+
+        $(".name").each(function () {
+            var name = $(this).val();
+            if (name != "") {
+                group.names.push(name);
+            }
+
+        });
+
+        group.groupSize = group.names.length;
+
+
+        $.ajax({
+            "url": "http://localhost:3000/setupGroup",
+            "method": "GET"
+        }).done(function (data) {
+            group.id = data;
+            //console.log(group);
+            window.sessionStorage.setItem("group", JSON.stringify(group));
+
+
+            $.ajax({
+                "url": "http://localhost:3000/resetQuiz",
+                "method": "GET"
+            }).done(function () {
+                loadProgressionbalk(group.groupSize);
+                nextQuestion("1001");
+            });
+
+        });
+    });
+
+    $("body").on("click", ".answer", function () {
+        let nextQuestionID = "1001";
+        if (currentQuestionType == "practical") {
+            answers.practical.push($(this).attr("id"));
+        } else {
+            answers.images.push($(this).attr("id"));
+            nextQuestionID = $(this).attr("id");
+        }
+
+        let group = JSON.parse(window.sessionStorage.getItem("group"));
+        let questionCount = Math.max(group.groupSize, 5);
+
+        if (count < questionCount) {
+            count++;
+            nextQuestion(nextQuestionID);
+            colorBalk(count, questionCount);
+        } else {
+            group.answers = answers;
+
+            $.ajax({
+                "url": "http://localhost:3000/saveGroup",
+                "method": "POST",
+                "data": group
+            }).done(function (recomms) {
+
+                console.log(recomms);
+                let selectedPaintings = [];
+                recomms.forEach(function (recomm) {
+                    selectedPaintings.push(recomm.id);
+                });
+
+                console.log(selectedPaintings);
+
+                $.ajax({
+                    url: "http://localhost:3000/getRoute",
+                    method: "POST",
+                    data: {
+                        selectedPaintings: selectedPaintings
+                    },
+                }).done(function (route) {
+                    console.log(route);
+
+                    $(".generator").empty();
+                    $(".generator").append(
+                        $("<div>", {
+                            "class": "recommended"
+                        })
+                    );
+
+                    route.forEach(function (rout) {
+                        $(".recommended").append(
+                            $("<img>", {
+                                "src": rout.image
+                            })
+                        )
+                    });
+                    saveRoute(route)
+                })
+
+            })
+        }
+
+    });
+
+    function saveRoute(route) {
+        let images = [];
+        route.forEach(paintingInRoute => {
+            images.push(paintingInRoute.image)
+        });
+
+        $.ajax({
+            url: "http://localhost:3000/create-route",
+            method: 'POST',
+            data: {
+                name: "custom_route",
+                rating: 5,
+                number_of_ratings: 1,
+                images: images,
+                info: "Dit is een route gecureerd door de werknemers van het museum veel plezier tijdens uw bezoek."
+            }
+        }).done(function (data) {
+
+        }).fail(function (err1, err2) {
+            console.log('Fail');
+            console.log(err1);
+            console.log(err2);
+        });
+    }
+
+    var currentQuestionType;
+    let currentGroup = JSON.parse(window.sessionStorage.getItem("group"));
+    let unusedUsers = currentGroup.names;
+
+    function nextQuestion(answerID) {
+        $(".generator").empty();
+        $(".generator").append(
+            $("<div>", {
+                "class": "question"
+            })
+        );
+
+        $.ajax({
+            "url": "http://localhost:3000/getQuestion",
+            "method": "POST",
+            "data": {
+                id: answerID,
+                userId: group.id
+            },
+            beforeSend: function () {
+                $('#loading_screen').show();
+            },
+            complete: function () {
+                $('#loading_screen').hide();
+            }
+        }).done(function (question) {
+            currentQuestionType = question.type;
+            if (currentGroup.groupSize > 1) {
+                if (currentQuestionType == "image") {
+                    let i = Math.floor(Math.random() * unusedUsers.length);
+                    let currentUser = unusedUsers.pop(i);
+
+                    if (currentUser == undefined) {
+                        currentUser = "group"
+                    }
+
+                    $(".generator").append(
+                        $("<div>", {
+                            "class": "nameShouter"
+                        }).text(currentUser + "'s turn")
+                    );
+
+                    $(".generator").append(
+                        $("<div>", {
+                            "id": "currentName"
+                        }).text(currentUser)
+                    );
+
+                    setTimeout(function () {
+                        $(".nameShouter").slideUp();
+                    }, 2500);
+                }
+            }
+
+            displayQuestion(question);
+        });
+
+    }
+
+    function displayQuestion(question) {
+        //console.log(question);
+
+        $(".generator").append(
+            $("<h2>").text(question.questionString)
+        ).append(
+            $("<div>", {
+                "id": "answers"
+            })
+        );
+
+        //console.log(question);
+
+        question.answers.forEach(function (q) {
+            //console.log(q);
+            var answer;
+            if (question.type == "practical") {
+                answer = $("<div>", {
+                    "class": "answer textanswer",
+                    "id": q
+                }).append(
+                    q
+                );
+            } else {
+                answer = $("<div>", {
+                    "class": "answer imganswer",
+                    "id": q.id
+                }).append(
+                    $("<img>", {
+                        "src": q.image,
+                    })
+                );
+            }
+            $("#answers").append(
+                answer
+            ).append($("<br>"));
+        });
+    }
+
+
+    const colorBalk = function (currentQuestion, totalQuestions) {
+        let id = currentQuestion;
+        console.log(currentQuestion);
+        $(`footer svg #${id} rect`).removeClass();
+        $(`footer svg #${id} rect`).addClass("st0");
+        if (id == totalQuestions) {
+            $(`footer svg #${id} path`).removeClass();
+            $(`footer svg #${id} path`).addClass("st0");
+            $(`footer #end g path`).removeClass();
+            $(`footer #end g path`).addClass("st0");
+
+        }
+        if (id >= (totalQuestions / 2)) {
+            $(`footer #midway g path`).removeClass();
+            $(`footer #midway g path`).addClass("st0");
+        }
+    }
+
+    // timer
+
+    $(function () {
+        // Update the count down every 1 second
+        let maxTime = 30;
+
+        var x = setInterval(function () {
+            maxTime--;
+            // Display the result in the element with id="demo"
+            $("#countdown-number").text(maxTime)
+
+            // If the count down is finished, write some text
+            if (maxTime == 0) {
+                clearInterval(x);
+            }
+        }, 1000);
+    });
+
+
+    
 
 
 });

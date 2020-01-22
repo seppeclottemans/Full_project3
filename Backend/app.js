@@ -304,7 +304,7 @@ let practicalQuestions = [{
 }];
 
 //make a question
-function get_Question(resolveFull, answerID) {
+function get_Question(resolveFull, answer) {
     let question;
     let questionType = chooseOneFromList(questionTypes);
 
@@ -314,14 +314,14 @@ function get_Question(resolveFull, answerID) {
         resolveFull(question);
     } else {
         new Promise(function (resolve) {
-            get_imageQuestion(resolve, answerID)
+            get_imageQuestion(resolve, answer.id, answer.userId)
         }).then(function (result) {
             resolveFull(result);
         })
     }
 }
 
-function get_imageQuestion(resolve, answerID) {
+function get_imageQuestion(resolve, answerID, userID) {
 
     var promise = new Promise(function (resolve) {
         get_all_paintings("KMSKA", resolve)
@@ -330,7 +330,7 @@ function get_imageQuestion(resolve, answerID) {
         //get an image question
         let images = [];
 
-        client.send(new rqs.RecommendItemsToItem(answerID, null, 4, {
+        client.send(new rqs.RecommendItemsToItem(answerID, userID, 4, {
             /*optional parameters */
         })).then(function (response) {
             for (let i = 0; i < 4; i++) {
@@ -358,12 +358,20 @@ let group;
 function saveGroup(data, resolveAll) {
 
     group = data;
-    group.id = uuidv4();
+    //group.id = uuidv4();
     //console.log(group);
     new Promise(function (resolve, reject) {
         send_purchases(group, resolve);
     }).then(function (result) {
         resolveAll(result);
+    });
+}
+
+function setupGroup(resolveAll) {
+    let id = uuidv4();
+    //console.log(group);
+    client.send(new rqs.AddUser(id), function(){
+        resolveAll(id);
     });
 }
 
@@ -505,7 +513,7 @@ app.get('/resetQuiz', (req, res) => res.send(resetQuiz()));
 
 app.post('/getQuestion', (req, res) => (
     new Promise(function (resolve) {
-        get_Question(resolve, req.body.id);
+        get_Question(resolve, req.body);
     }).then(function (result) {
         res.send(result);
     })
@@ -526,6 +534,14 @@ app.post('/saveGroup', (req, res) => (
     })
 ));
 
+app.get('/setupGroup', (req, res) => (
+    new Promise(function (resolve) {
+        setupGroup(resolve);
+    }).then(function (result) {
+        res.send(result);
+    })
+));
+
 app.post('/getRoute', (req, res) => (
     //console.log(req.body.selectedPaintings)
     new Promise(function (resolve) {
@@ -537,17 +553,10 @@ app.post('/getRoute', (req, res) => (
 
 app.get('/getRouteMongo/:id', (req, res) => {
     const collection = db.collection('routes');
-    const selectedRoute = collection.find({"_id": ObjectId(req.params.id)});
-    
-    function iterateFunc(doc) {
-        res.json(JSON.stringify(doc, null, 4));
-     }
-     
-     function errorFunc(error) {
-        console.log(error);
-     }
-     
-     selectedRoute.forEach(iterateFunc, errorFunc);
+    const selectedRoute = collection.findOne({"_id": ObjectId(req.params.id)}, function(err, result) {
+        if (err) throw err;
+        res.json(result);
+      });
 });
 
 app.get('/getAllRoutesMongo', (req, res) => {
@@ -571,30 +580,21 @@ app.post('/create-route', (req, res) => {
     res.json(route);
 });
 
-app.put('/update_rating/:id', (req, res) => {
+app.post('/update_rating/:id', (req, res) => {
     const collection = db.collection('routes');
-    const selectedRoute = collection.find({
-        "_id": ObjectId(req.params.id)
-    });
-    let newRating = ((selectedRoute.rating * selectedRoute.number_of_ratings) + req.body.rating) / (selectedRoute.number_of_ratings + 1);
-    collection.updateMany({
-                "_id": ObjectId(req.params.id)
-            }, // Filter
-            {
-                $set: {
-                    "number_of_ratings": selectedRoute.number_of_ratings += 1,
-                    "rating": newRating
-                }
-            } // Update
+
+    const selectedRoute = collection.findOne({"_id": ObjectId(req.params.id)}, function(err, result) {
+        if (err) throw err;
+        let recievedRating = JSON.parse(req.body.rating);
+        let changedRoute = result;
+        changedRoute.rating = ((result.rating * result.number_of_ratings) + recievedRating) / (result.number_of_ratings + 1);
+        changedRoute.number_of_ratings = result.number_of_ratings + 1;
+        collection.updateMany(
+            {"_id": ObjectId(req.params.id)}, // Filter
+            {$set:{"rating": changedRoute.rating, "number_of_ratings": changedRoute.number_of_ratings }} // Update
         )
-        .then((obj) => {
-            res.json({
-                message: 'thank you for the feedback!'
-            });
-        })
-        .catch((err) => {
-            console.log('Error: ' + err);
-        })
+        res.json(changedRoute);
+    })
 });
 
 
