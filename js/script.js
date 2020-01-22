@@ -82,6 +82,20 @@ $(function () {
     }
 });
 
+updateRating("5e25a95c6d52f30c42ef39f9", 1);
+function updateRating(routeId, rating){
+    $.ajax({
+        url: `http://localhost:3000/update_rating/${routeId}`,
+        method: 'POST',
+        data: {rating: rating}
+    }).done(function (data) {
+        
+    }).fail(function (err1, err2) {
+        console.log('Fail');
+        console.log(err1);
+        console.log(err2);
+    });
+}
 
 // getAllRoutesMongo();
 // // return all routes as array of object

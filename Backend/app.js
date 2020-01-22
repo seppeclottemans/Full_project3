@@ -498,17 +498,10 @@ app.post('/getRoute', (req, res) => (
 
 app.get('/getRouteMongo/:id', (req, res) => {
     const collection = db.collection('routes');
-    const selectedRoute = collection.find({"_id": ObjectId(req.params.id)});
-    
-    function iterateFunc(doc) {
-        res.json(JSON.stringify(doc, null, 4));
-     }
-     
-     function errorFunc(error) {
-        console.log(error);
-     }
-     
-     selectedRoute.forEach(iterateFunc, errorFunc);
+    const selectedRoute = collection.findOne({"_id": ObjectId(req.params.id)}, function(err, result) {
+        if (err) throw err;
+        res.json(result);
+      });
 });
 
 app.get('/getAllRoutesMongo', (req, res) => {
@@ -532,22 +525,21 @@ app.post('/create-route', (req, res) => {
     res.json(route);
 });
 
-app.put('/update_rating/:id', (req, res) => {
+app.post('/update_rating/:id', (req, res) => {
     const collection = db.collection('routes');
-    const selectedRoute = collection.find({
-        "_id": ObjectId(req.params.id)
-    });
-    let newRating = ((selectedRoute.rating * selectedRoute.number_of_ratings) + req.body.rating) / (selectedRoute.number_of_ratings + 1);
-    collection.updateMany(
-        {"_id": ObjectId(req.params.id)}, // Filter
-        {$set:{"number_of_ratings": selectedRoute.number_of_ratings += 1, "rating": newRating}} // Update
-    )
-    .then((obj) => {
-        res.json({ message: 'thank you for the feedback!' });
-    })
-    .catch((err) => {
-        console.log('Error: ' + err);
-    })
+
+    const selectedRoute = collection.findOne({"_id": ObjectId(req.params.id)}, function(err, result) {
+        if (err) throw err;
+        let recievedRating = JSON.parse(req.body.rating);
+        let changedRoute = result;
+        changedRoute.rating = ((result.rating * result.number_of_ratings) + recievedRating) / (result.number_of_ratings + 1);
+        changedRoute.number_of_ratings = result.number_of_ratings + 1;
+        collection.updateMany(
+            {"_id": ObjectId(req.params.id)}, // Filter
+            {$set:{"rating": changedRoute.rating, "number_of_ratings": changedRoute.number_of_ratings }} // Update
+        )
+        res.json(changedRoute);
+      });
 });
 
 
