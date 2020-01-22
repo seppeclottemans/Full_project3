@@ -101,8 +101,11 @@ $(function () {
     if ($('#route-inf').length || $('#route-instructions').length) {
         getSelectedRoute();
     }
-    
-    $('.generated-rating').starrr().on('starrr:change', function (e, value) {
-        updateRating("5e25a95c6d52f30c42ef39f9", value);
-    })
+
+    if ($('.starrr').length) {
+        $('.generated-rating').starrr().on('starrr:change', function (e, value) {
+            updateRating("5e25a95c6d52f30c42ef39f9", value);
+            window.location.href = "share.html";
+        })
+    }
 });
