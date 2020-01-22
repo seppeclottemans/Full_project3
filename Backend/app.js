@@ -587,8 +587,8 @@ app.post('/create-route', (req, res) => {
         rating: req.body.rating,
         number_of_ratings: req.body.number_of_ratings,
         images: req.body.images,
-        info: req.body.info,
-        paintingsIDs: req.body.paintingsIDs
+        paintingsIDs: req.body.paintingsIDs,
+        info: req.body.info
     }
     collection.insertOne(route, function (err, docsInserted) {
         res.json(docsInserted.insertedId);

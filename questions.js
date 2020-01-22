@@ -254,6 +254,7 @@ $(function () {
             <circle r="18" cx="20" cy="20"></circle>
         </svg>
     </div>`);
+
             // Update the count down every 1 second
             let maxTime = 30;
             $("#countdown-number p").text(maxTime);
@@ -266,7 +267,7 @@ $(function () {
               $("#countdown-number p").text(maxTime)
               if (maxTime == 0) {
                 clearInterval(x);
-                let possibilities = ["1001", "1002", "1003", "1004", "1005", "1006", "1007", "1008", "1009", "1010", "1012", "1013", "1014", "1015"];
+                let possibilities = ["1001", "1016", "1003", "1004", "1005", "1006", "1007", "1008", "1009", "1010", "1012", "1013", "1014", "1015"];
                 count += 1;
                 nextQuestion(possibilities[ Math.floor(Math.random() * possibilities.length)]);
                 colorBalk(count, questionCount)
