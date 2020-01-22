@@ -62,39 +62,77 @@ const artLocations = {
     ],
     id: [1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1012, 1013, 1014, 1015, 1016]
 };
+let routeOrdered = [];
 
 //MAKE THE ROUTE = ordered list of paintings
 
-function get_route(recomms, resolveAll) { //recomms = array 5 painting id's, unordered
+function get_route(recomms, resolveAll) { //recomms = array of painting id's, unordered
     //console.log(recomms);
     let route = [];
+    let orderedIDs = [];
     let promiseList = [];
+    let promiseList2 = [];
+    let paintingLocations = {
+        id: recomms,
+        locations: []
+    }
 
-    recomms.forEach(function(recom){
-        let promise = new Promise(function (resolve, reject){
-            get_image(recom, resolve, reject, new Painting());
+    recomms.forEach(function (recom) {
+        let promise = new Promise(function (resolve, reject) {
+            get_painting(recom, resolve, reject);
         });
 
         promiseList.push(promise);
     });
 
-    Promise.all(promiseList).then(function(result){
-        route.push(result);
-        resolveAll(route[0]);
+    Promise.all(promiseList).then(function (result) {
+        result.forEach(function (paint) {
+            //get the locations for each of the paintings
+            paintingLocations.locations.push(paint.coordinates);
+        });
+
+        //calculate the route
+        calculateClosest([0, 0], paintingLocations, orderedIDs);
+        routeOrdered.pop();
+
+        //get the images from each painting in the route
+        routeOrdered.forEach(function (recom) {
+            let promise = new Promise(function (resolve, reject) {
+                get_image(recom, resolve, reject, new Painting());
+            });
+
+            promiseList2.push(promise);
+        });
+
+        Promise.all(promiseList2).then(function (result) {
+            route.push(result);
+            resolveAll(route[0]);
+        });
+
+
     });
+
+
 
 };
 
-function get_next_location(id, locationList) { //=> returns the information of the next painting
-    new Promise(function (resolve, reject) {
-        get_painting(id, resolve, reject);
+function calculateClosest(currentPosition, unusedPositions, orderedList) {
+    //console.log(currentPosition);
+    if (currentPosition != unusedPositions.locations[0]) {
+        let closestPositionID = route.closestArt(currentPosition, unusedPositions);
+        orderedList.push(closestPositionID);
+        let index = unusedPositions.id.indexOf(closestPositionID);
+        unusedPositions.id.splice(index, 1);
+        let closestPosition = unusedPositions.locations.splice(index, 1);
+        // console.log(closestPosition);
+        // console.log(unusedPositions);
+        // console.log(orderedList);
+        calculateClosest(closestPosition[0], unusedPositions, orderedList);
+    } else {
+        routeOrdered = orderedList;
 
-    }).then(function (result) {
-        let currentPainting = painting;
-        return route.closestArt(currentPainting.coordinates, locationList);
-    });
-
-};
+    }
+}
 
 // get paintings by a search word
 // KMSKA for all paintings || room_A to get all paintings of the room
@@ -125,11 +163,11 @@ function setup(id) { //=> you just run the function once per added painting
 
 function get_all_paintings(search, resolveAll) {
     paintingsIDs = [];
- 
+
 
     let query = `user=${recourceSpaceUser}&function=do_search&param1=${search}`;
     let signedRequestString = sha256(recourceSpaceKey + query);
-    
+
     axios.get(`http://minikmska.trial.resourcespace.com/api/?${query}&sign=${signedRequestString}`).then(function (res) {
             res.data.forEach(responsePainting => {
                 paintingsIDs.push(responsePainting.ref);
@@ -157,7 +195,7 @@ function get_all_paintings(search, resolveAll) {
             console.log("Thinking of unicorns?")
             console.log(error);
         });
-       
+
 };
 
 // get all data of a specific painting
@@ -208,7 +246,7 @@ function get_image(resourceID, resolve, reject, currentPainting) {
 
 // request is being used because this is required to use for the imagga api
 function get_tags(imageUrl, resourceID) {
-  
+
     setTimeout(function () {
         request.get('https://api.imagga.com/v2/tags?image_url=' + encodeURIComponent(imageUrl), function (error, response, body) {
             //console.log(body);
@@ -293,7 +331,8 @@ function get_imageQuestion(resolve, answerID) {
         let images = [];
 
         client.send(new rqs.RecommendItemsToItem(answerID, null, 4, {
-            /*optional parameters */ })).then(function (response) {
+            /*optional parameters */
+        })).then(function (response) {
             for (let i = 0; i < 4; i++) {
                 let painting = paintingList.filter(element => element.id == response.recomms[i].id)[0];
                 images.push(painting);
@@ -349,7 +388,7 @@ function setup_productList() {
 }
 
 new Promise(function (resolve) {
- 
+
     get_all_paintings("KMSKA", resolve)
 }).then(function () {
     //you just fill in the index of the painting you want to add to the productlist
@@ -397,7 +436,7 @@ function send_purchases(group, resolveAll) {
     let promises = [];
 
     group.answers.images.forEach(function (image) {
-        console.log(image);
+        //console.log(image);
         let newPromise = new Promise(function (resolve, reject) {
             send_purchase(group.id, image, resolve);
         });
@@ -430,7 +469,7 @@ let recommAmount;
 
 function getRecommendations(group, resolve) {
 
-    console.log(group);
+    //console.log(group);
     if (group.answers.practical[0] == "30 minutes or less") {
         recommAmount = 3;
     } else if (group.answers.practical[0] == "30 minutes - 1 hour") {
@@ -522,11 +561,11 @@ app.get('/getAllRoutesMongo', (req, res) => {
 app.post('/create-route', (req, res) => {
     const collection = db.collection('routes');
     const route = {
-      name: req.body.name,
-      rating: req.body.rating,
-      number_of_ratings: req.body.number_of_ratings,
-      images: req.body.images,
-      info: req.body.info
+        name: req.body.name,
+        rating: req.body.rating,
+        number_of_ratings: req.body.number_of_ratings,
+        images: req.body.images,
+        info: req.body.info
     }
     collection.insertOne(route);
     res.json(route);
@@ -538,16 +577,24 @@ app.put('/update_rating/:id', (req, res) => {
         "_id": ObjectId(req.params.id)
     });
     let newRating = ((selectedRoute.rating * selectedRoute.number_of_ratings) + req.body.rating) / (selectedRoute.number_of_ratings + 1);
-    collection.updateMany(
-        {"_id": ObjectId(req.params.id)}, // Filter
-        {$set:{"number_of_ratings": selectedRoute.number_of_ratings += 1, "rating": newRating}} // Update
-    )
-    .then((obj) => {
-        res.json({ message: 'thank you for the feedback!' });
-    })
-    .catch((err) => {
-        console.log('Error: ' + err);
-    })
+    collection.updateMany({
+                "_id": ObjectId(req.params.id)
+            }, // Filter
+            {
+                $set: {
+                    "number_of_ratings": selectedRoute.number_of_ratings += 1,
+                    "rating": newRating
+                }
+            } // Update
+        )
+        .then((obj) => {
+            res.json({
+                message: 'thank you for the feedback!'
+            });
+        })
+        .catch((err) => {
+            console.log('Error: ' + err);
+        })
 });
 
 
