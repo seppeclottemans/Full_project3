@@ -573,13 +573,15 @@ ul li {
 }
 
 .starrr a {
-	font-size: 26px;
+	font-size: 16px;
 	padding: 0 1px;
 	cursor: pointer;
 	color: var(--redorange);
 	text-decoration: none;
 }
-
+#feedback .starrr a {
+	font-size: 26px;
+}
 .generator input:nth-child(even) {
 	margin-right: 10%;
 }
