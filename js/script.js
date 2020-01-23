@@ -1,4 +1,6 @@
 $(function () {
+    window.localStorage.setItem("individual", false);
+
     let count = 0;
     let currentRoute;
     $('#loading_screen').remove();
@@ -75,19 +77,7 @@ $(function () {
             console.log(err1);
             console.log(err2);
         });
-        // $.ajax({
-        //     url: `http://localhost:3000/update_rating/${routeId}`,
-        //     method: 'POST',
-        //     data: {
-        //         rating: rating
-        //     }
-        // }).done(function (data) {
 
-        // }).fail(function (err1, err2) {
-        //     console.log('Fail');
-        //     console.log(err1);
-        //     console.log(err2);
-        // });
     }
 
     let displayRouteInstructions = (route) => {
@@ -136,42 +126,6 @@ $(function () {
             console.log(err2);
         });
 
-        // $.ajax({
-        //     url: `http://localhost:3000/getOnePainting`,
-        //     method: 'POST',
-        //     data: {
-        //         id: route.paintingsIDs[count]
-        //     }
-        // }).done(function (data) {
-        //     //console.log(data);
-        //     $("#gotoinf h2").text(data.title);
-        //     $("#gotoinf h3").text(data.artist);
-        //     $("#gotoinf p").text(data.year);
-
-        //     let info = data.info.split(",");
-        //     //console.log(info);
-        //     let room;
-        //     let painting;
-        //     info.forEach(function(value){
-        //         if(value == "room_A"){
-        //             room = "A";
-        //         } else if(value == "room_B"){
-        //             room = "B";
-        //         } else if(value == "room_C"){
-        //             room = "C";
-        //         } else if (!isNaN(parseFloat(value)) && isFinite(value)){ //https://stackoverflow.com/questions/5778020/check-whether-an-input-string-contains-a-number-in-javascript
-        //             painting = value;
-        //         }
-        //     });
-
-        //     $("#roomnumber").text(room);
-        //     $("#artNumber").text(room + painting);
-
-        // }).fail(function (err1, err2) {
-        //     console.log('Fail');
-        //     console.log(err1);
-        //     console.log(err2);
-        // });
     }
 
     $("#goto").on("click", function(){
@@ -182,7 +136,13 @@ $(function () {
             count++;
         }
         displayRouteInstructions(currentRoute);
-    })
+    });
+
+    $("#individual").on("click", function(e){
+        e.preventDefault();
+        window.localStorage.setItem("individual", true);
+        window.location.replace("http://127.0.0.1:5500/generator.html");
+    });
 
     let getSelectedRoute = () => {
         //$('#loading_screen').show();

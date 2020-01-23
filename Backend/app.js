@@ -321,19 +321,22 @@ function get_Question(resolveFull, answer) {
     }
 }
 
+
+
 function get_imageQuestion(resolve, answerID, userID) {
 
-    var promise = new Promise(function (resolve) {
+    new Promise(function (resolve) {
         get_all_paintings("KMSKA", resolve)
     }).then(function () {
-        //console.log(paintings);
         //get an image question
         let images = [];
-
+        //console.log(paintingList);
         client.send(new rqs.RecommendItemsToItem(answerID, userID, 4, {
             /*optional parameters */
         })).then(function (response) {
             for (let i = 0; i < 4; i++) {
+                
+                //console.log(response.recomms[i].id);
                 let painting = paintingList.filter(element => element.id == response.recomms[i].id)[0];
                 images.push(painting);
             }
@@ -343,6 +346,7 @@ function get_imageQuestion(resolve, answerID, userID) {
                 "answers": images
             }
 
+            //console.log(question);
             resolve(question);
         });
     });
@@ -403,6 +407,8 @@ new Promise(function (resolve) {
     //console.log(paintingList[0]);
     // setup_painting(paintingList[0]);
 });
+
+
 
 function setup_painting(painting) {
     let paintingTitle = painting.title;

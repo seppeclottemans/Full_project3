@@ -316,11 +316,35 @@ $(function () {
             );
         }
 
-
     });
+    console.log(window.localStorage.getItem("individual"));
+
+    if(window.localStorage.getItem("individual") == "true"){
+        $.ajax({
+            "url": "http://localhost:3000/setupGroup",
+            "method": "GET"
+        }).done(function (data) {
+            group.id = data;
+            group.groupSize = 1;
+
+            window.sessionStorage.setItem("group", JSON.stringify(group));
+
+            $.ajax({
+                "url": "http://localhost:3000/resetQuiz",
+                "method": "GET"
+            }).done(function () {
+                currentGroup = JSON.parse(window.sessionStorage.getItem("group"));
+                unusedUsers = currentGroup.names;
+                //console.log(window.sessionStorage.getItem('group'));
+                loadProgressionbalk(group.groupSize);
+                nextQuestion("1001");
+            });
+
+        });
+    }
 
     $("body").on("click", "#next", function (e) {
-        //e.preventDefault();
+
         group.names = [];
 
         $(".name").each(function () {
@@ -332,7 +356,6 @@ $(function () {
         });
 
         group.groupSize = group.names.length;
-
 
         $.ajax({
             "url": "http://localhost:3000/setupGroup",
@@ -493,6 +516,8 @@ $(function () {
         });
 
     }
+
+    
 
     function displayQuestion(question) {
         //console.log(question);
