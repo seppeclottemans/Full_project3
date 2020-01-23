@@ -55,14 +55,18 @@
 
   @media screen and (min-width: 600px) {
     #countdown {
-        display: inline-block;
-        position: relative;
-        margin: auto;
-        height: 200px;
-        width: 200px;
-        text-align: center;
+    display: inline-block;
+    position: relative;
+    margin: auto;
+    position: absolute;
+    height: 200px;
+    top: 100px;
+    right: 150px;
+    text-align: center;
       }
-
+      #countdown-number p{
+          font-size: 3rem !important;
+      }
       #svgTimer{
         width: 200px;
         height: 200px;

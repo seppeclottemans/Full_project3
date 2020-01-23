@@ -251,7 +251,7 @@ $(function () {
         $(".generator").prepend(`<div id="countdown">
         <div id="countdown-number"><p></p></div>
         <svg id="svgTimer">
-            <circle r="18" cx="20" cy="20"></circle>
+            <circle r="50" cx="20" cy="20"></circle>
         </svg>
     </div>`);
 
