@@ -578,7 +578,6 @@ app.get('/get_route_mongo_by_route_number/:route_number', (req, res) => {
         "route_number": parseInt(req.params.route_number)
     }, function (err, result) {
         if (err) throw err;
-        console.log(result);
         res.json(result);
     });
 });
@@ -595,7 +594,6 @@ app.post('/create_route', (req, res) => {
     const collection = db.collection('routes');
     collection.find().limit(1).sort({route_number:-1}).toArray(function (err, result) {
         if (err) throw err;
-        console.log(result[0]);
         const route = {
             name: req.body.name,
             rating: req.body.rating,
