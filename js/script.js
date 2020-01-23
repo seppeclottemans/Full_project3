@@ -222,7 +222,7 @@ $(function () {
 
     if ($('.starrr').length) {
         $('.generated-rating').starrr().on('starrr:change', function (e, value) {
-            updateRating("5e25a95c6d52f30c42ef39f9", value);
+            updateRating(localStorage.getItem("selectedRoute"), value);
             window.location.href = "share.html";
         })
     }
