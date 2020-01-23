@@ -12,14 +12,12 @@
 	<style>
 		@import 'ui/css/evothings-app.css';
 	</style>
-
 	<script>
 		// Redirect console.log to Evothings Workbench.
 		if (window.hyper && window.hyper.log) {
 			console.log = hyper.log
 		}
 	</script>
-
 </head>
 
 <body ontouchstart="">
@@ -31,9 +29,9 @@
 		<a href="index.html"><img class="logotype" src="ui/images/logo-white.png" alt="logo kmska" /></a>
 		<a href="instructions.html"><img id="inf-icon" class="logotype" src="ui/images/inf-white.png" alt="info" /></a>
 	</header>
-	<main>
-		
-		<input type="text" id="code" placeholder="code">
+	<main class="entercode">
+		<h1><span>Enter your code</span></h1>
+		<input type="text" id="code" placeholder="0000">
 		<button class="btn" id="selectCode">Select route</button>
 	</main>
 	</div>

@@ -604,7 +604,22 @@ footer svg {
 }
 
 #code {
-	color: black;
+    width: 100%;
+    border-radius: 15px;
+    margin: 0% 0% 5% 0%;
+    padding: 20px;
+    background-color: transparent;
+    font-size: 2em !important;
+	border: 1px solid white;
+	color: white;
+	text-align: center;
+}
+.entercode h1 {
+	width: 100%;
+    text-align: center;
+    color: #000;
+	margin: 60% 0% 5% 0%;
+	font-size: 1em !important;
 }
 
 @media screen and (min-width: 600px) {
