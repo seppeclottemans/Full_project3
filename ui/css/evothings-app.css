@@ -36,8 +36,7 @@ body {
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
-	-ms-user-select: none
-	user-select: none;
+	-ms-user-select: none;
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
@@ -418,7 +417,7 @@ p {
 	padding-top: 5%;
 	font-size: 1.4em;
 	margin: 0;
-    width: 100%;
+	width: 100%;
 }
 
 button {
@@ -484,7 +483,7 @@ button {
 #route-gallery h2 {
 	width: 100%;
 	text-align: center;
-	color:#000;
+	color: #000;
 }
 
 #goto {
@@ -512,7 +511,7 @@ button {
 	---------------------------------------------------------- */
 
 #instructions {
-	margin-top: 35%;
+	margin-top: 30%;
 }
 
 #instructions li {
@@ -543,15 +542,20 @@ ul li {
 	object-fit: cover;
 	margin-top: 10%;
 }
-#group img + img, #individual img + img{
+
+#group img+img,
+#individual img+img {
 	display: none;
 }
+
 .tablettekst {
 	display: none;
 }
+
 .question {
 	width: 100%;
 }
+
 .question input {
 	width: 100%;
 	background-color: transparent;
@@ -561,6 +565,7 @@ ul li {
 	float: left;
 	margin-bottom: 5%;
 }
+
 .starrr {
 	display: inline-block;
 }
@@ -572,58 +577,121 @@ ul li {
 	color: var(--redorange);
 	text-decoration: none;
 }
+
 .generator input:nth-child(even) {
 	margin-right: 10%;
-  }
-  #currentName {
-	  color: var(--redorange);
-	  font-size: 0.5em;
-
-  }
-  footer svg {
-	width: 85%;
-    bottom: 5%;
-    position: fixed;
-  }
-  .imganswer, .answer {
-    height: 190px;
 }
-  @media screen and (min-width: 600px) {
+
+#currentName {
+	color: var(--redorange);
+	font-size: 0.5em;
+
+}
+
+footer svg {
+	width: 85%;
+	bottom: 5%;
+	position: fixed;
+}
+
+.imganswer,
+.answer {
+	height: 190px;
+}
+
+@media screen and (min-width: 600px) {
+	button.back p {
+		padding-left: 30px;
+		margin-top: 10px;
+	}
+
+	p {
+		font-size: 2rem !important;
+	}
+
+	#generate-route-opt div h2{
+		font-size: 5rem;
+	}
+
+	#generate-route-opt div p{
+		padding: 2% 5% 5% 5%;
+		margin-bottom: 5%;
+	}
+
+	#instructions {
+		margin-top: 0%;
+	}
 
 	#guided-tours {
 		display: none;
 	}
+
 	#generate-route-opt div {
 		width: 47.5%;
 		float: left;
 	}
-	#group img, #individual img {
+
+	#group img,
+	#individual img {
 		display: none;
 	}
+
 	div#individual {
 		margin-right: 5%;
 	}
-	#group img + img, #individual img + img{
+
+	#group img+img,
+	#individual img+img {
 		display: inline-block;
 	}
+
 	.tablettekst {
 		display: inline-block;
 		text-align: center;
+		width: 100%;
+	}
 
+	.tablettekst .light-upper {
+		font-size: 1.5em !important;
 	}
-	.tablettekst .light-upper{
-		font-size: 1em !important;
-	}
-	.tablettekst .bold-upper{
-		font-size: 1.2em !important;
+
+	.tablettekst .bold-upper {
+		font-size: 1.7em !important;
 	}
 	.question {
 		float: left;
 	}
+
 	.question input {
 		width: 45%;
 	}
+
 	.imganswer, .answer {
-		height: 500px;
+		height: 425px;
+	}
+
+	.btn {
+		width: 100%;
+		background-color: var(--redorange);
+		color: #fff;
+		text-transform: uppercase;
+		text-align: center;
+		border-radius: 100px;
+		padding: 20px;
+		font-weight: 800;
+		font-size: 1rem;
+		margin-left: 0%;
+	}
+
+	.question input{
+		margin-bottom: 2%;
+		font-size: 2rem;
+	}
+
+	.generator h2{
+		margin: 0% 0% 2% 0%;
+	}
+	#generate-route {
+		margin-top: 50%;
 	}
 }

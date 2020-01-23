@@ -247,39 +247,43 @@ $(function () {
 
     };
 
-    const timer = function(){
+    const timer = function () {
         $(".generator").prepend(`<div id="countdown">
         <div id="countdown-number"><p></p></div>
         <svg id="svgTimer">
             <circle r="18" cx="20" cy="20"></circle>
         </svg>
     </div>`);
-            // Update the count down every 1 second
-            let maxTime = 30;
-            $("#countdown-number p").text(maxTime);
-            let questionCount = Math.max(group.groupSize, 5)
-            $("body").on("click", ".answer", function () {
+
+        // Update the count down every 1 second
+        let maxTime = 30;
+        $("#countdown-number p").text(maxTime);
+        let questionCount = Math.max(group.groupSize, 5)
+        $("body").on("click", ".answer", function () {
+            clearInterval(x);
+        })
+        var x = setInterval(function () {
+            maxTime--;
+            $("#countdown-number p").text(maxTime)
+            if (maxTime == 0) {
                 clearInterval(x);
-              })
-            var x = setInterval(function() {
-                maxTime--;
-              $("#countdown-number p").text(maxTime)
-              if (maxTime == 0) {
-                clearInterval(x);
-                let possibilities = ["1001", "1002", "1003", "1004", "1005", "1006", "1007", "1008", "1009", "1010", "1012", "1013", "1014", "1015"];
+                let possibilities = ["1001", "1016", "1003", "1004", "1005", "1006", "1007", "1008", "1009", "1010", "1012", "1013", "1014", "1015"];
                 count += 1;
-                nextQuestion(possibilities[ Math.floor(Math.random() * possibilities.length)]);
+                nextQuestion(possibilities[Math.floor(Math.random() * possibilities.length)]);
                 colorBalk(count, questionCount)
-              }
-            }, 1000);
+            }
+        }, 1000);
     }
 
-    var group = {};
-    var answers = {
+    let group = {};
+    let answers = {
         "practical": [],
         "images": []
     };
-    var count = 0;
+    let count = 0;
+    let currentQuestionType;
+    let currentGroup;
+    let unusedUsers;
 
     $("#addPerson").click(function (e) {
         //e.preventDefault();
@@ -322,14 +326,16 @@ $(function () {
             "method": "GET"
         }).done(function (data) {
             group.id = data;
-            //console.log(group);
-            window.sessionStorage.setItem("group", JSON.stringify(group));
 
+            window.sessionStorage.setItem("group", JSON.stringify(group));
 
             $.ajax({
                 "url": "http://localhost:3000/resetQuiz",
                 "method": "GET"
             }).done(function () {
+                currentGroup = JSON.parse(window.sessionStorage.getItem("group"));
+                unusedUsers = currentGroup.names;
+                //console.log(window.sessionStorage.getItem('group'));
                 loadProgressionbalk(group.groupSize);
                 nextQuestion("1001");
             });
@@ -362,13 +368,13 @@ $(function () {
                 "data": group
             }).done(function (recomms) {
 
-                console.log(recomms);
+                //console.log(recomms);
                 let selectedPaintings = [];
                 recomms.forEach(function (recomm) {
                     selectedPaintings.push(recomm.id);
                 });
 
-                console.log(selectedPaintings);
+                //console.log(selectedPaintings);
 
                 $.ajax({
                     url: "http://localhost:3000/getRoute",
@@ -377,24 +383,11 @@ $(function () {
                         selectedPaintings: selectedPaintings
                     },
                 }).done(function (route) {
-                    console.log(route);
+                    //console.log(route);
+                    saveRoute(route);
                     $(`footer #end g path`).removeClass();
                     $(`footer #end g path`).addClass("st0");
                     $(".generator").empty();
-                    $(".generator").append(
-                        $("<div>", {
-                            "class": "recommended"
-                        })
-                    );
-
-                    route.forEach(function (rout) {
-                        $(".recommended").append(
-                            $("<img>", {
-                                "src": rout.image
-                            })
-                        )
-                    });
-                    saveRoute(route)
                 })
 
             })
@@ -404,9 +397,13 @@ $(function () {
 
     function saveRoute(route) {
         let images = [];
+        let ids = [];
         route.forEach(paintingInRoute => {
-            images.push(paintingInRoute.image)
+            //console.log(paintingInRoute);
+            images.push(paintingInRoute.image);
+            ids.push(paintingInRoute.id);
         });
+
         $.ajax({
             url: "http://localhost:3000/create_route",
             method: 'POST',
@@ -415,10 +412,12 @@ $(function () {
                 rating: 5,
                 number_of_ratings: 1,
                 images: images,
-                info: "This is a route generated by our AI based on the images you chose in the generator. Have fun!"
+                info: "This is a route generated by our AI based on the images you chose in the generator. Have fun!",
+                paintingsIDs: ids
             }
         }).done(function (data) {
             window.localStorage.setItem("selectedRoute", data);
+            console.log(data);
             window.location.replace("http://127.0.0.1:5500/routeinf.html");
         }).fail(function (err1, err2) {
             console.log('Fail');
@@ -427,9 +426,6 @@ $(function () {
         });
     }
 
-    var currentQuestionType;
-    let currentGroup = JSON.parse(window.sessionStorage.getItem("group"));
-    let unusedUsers = currentGroup.names;
 
     function nextQuestion(answerID) {
         $(".generator").empty();
@@ -452,9 +448,10 @@ $(function () {
                 if (currentQuestionType == "image") {
                     let i = Math.floor(Math.random() * unusedUsers.length);
                     let currentUser = unusedUsers.pop(i);
+                    let shoutText = currentUser + "'s turn";
 
                     if (currentUser == undefined) {
-                        currentUser = "group"
+                        shoutText = "Mutual decision";
                     }
 
                     $(".generator").append(
@@ -474,9 +471,9 @@ $(function () {
                     }, 2500);
                 }
             }
-            if (currentQuestionType == "image"){
+            if (currentQuestionType == "image") {
                 timer();
-            } 
+            }
             displayQuestion(question);
 
         });
@@ -492,8 +489,7 @@ $(function () {
             $("<div>", {
                 "id": "answers"
             })
-        );
-      ;
+        );;
 
         //console.log(question);
 
@@ -539,10 +535,10 @@ $(function () {
             $(`footer #midway g path`).removeClass();
             $(`footer #midway g path`).addClass("st0");
         }
-            // $(`footer #end g path`).removeClass();
-            // $(`footer #end g path`).addClass("st0");
+        // $(`footer #end g path`).removeClass();
+        // $(`footer #end g path`).addClass("st0");
 
     }
 
-  
+
 });

@@ -6,8 +6,9 @@
     width: 40px;
     text-align: center;
   }
+
   
-  #countdown-number {
+#countdown-number {
     color: black;
     display: inline-block;
     line-height: 40px;
@@ -51,3 +52,20 @@
       color: black;
       font-size: 0.8em;
   }
+
+  @media screen and (min-width: 600px) {
+    #countdown {
+        display: inline-block;
+        position: relative;
+        margin: auto;
+        height: 200px;
+        width: 200px;
+        text-align: center;
+      }
+
+      #svgTimer{
+        width: 200px;
+        height: 200px;
+}
+
+}
