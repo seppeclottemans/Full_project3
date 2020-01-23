@@ -542,7 +542,9 @@ ul li {
 	object-fit: cover;
 	margin-top: 10%;
 }
-
+#group {
+	    margin-bottom: 0% !important;
+}
 #group img+img,
 #individual img+img {
 	display: none;
@@ -571,7 +573,7 @@ ul li {
 }
 
 .starrr a {
-	font-size: 16px;
+	font-size: 26px;
 	padding: 0 1px;
 	cursor: pointer;
 	color: var(--redorange);

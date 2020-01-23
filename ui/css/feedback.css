@@ -10,6 +10,7 @@
         width: 100%;
         text-align: center;
         text-transform: none;
+        font-size: 1.5em;
     }
     
     #feedback :nth-child(2) {
@@ -73,5 +74,5 @@
     text-align: center;
 }
 #feedback p {
-    margin-top: 35%;
+    margin-top: 55%;
 }
