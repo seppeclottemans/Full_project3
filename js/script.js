@@ -226,4 +226,10 @@ $(function () {
             window.location.href = "share.html";
         })
     }
+
+    if($("#gr").css('display') == 'none'){
+        $("#codeBtn").attr('href', "route_number.html");
+    } else {
+        $("#codeBtn").attr('href', "generator.html");
+    }
 });

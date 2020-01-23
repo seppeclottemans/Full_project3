@@ -452,12 +452,13 @@ $(function () {
 
                     if (currentUser == undefined) {
                         shoutText = "Mutual decision";
+                        currentUser = "Group";
                     }
 
                     $(".generator").append(
                         $("<div>", {
                             "class": "nameShouter"
-                        }).text(currentUser + "'s turn")
+                        }).text(shoutText)
                     );
 
                     $(".generator").append(
