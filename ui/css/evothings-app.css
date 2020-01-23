@@ -621,7 +621,12 @@ footer svg {
 	margin: 60% 0% 5% 0%;
 	font-size: 1em !important;
 }
-
+#errorParagraph {
+	text-align: center;
+    margin-top: 10%;
+    font-family: gotham;
+    color: orangered;
+}
 @media screen and (min-width: 600px) {
 	#routeCodeInf, #routeCode {
 		display: block;
