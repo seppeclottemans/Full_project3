@@ -179,8 +179,10 @@ $(function () {
     let getSelectedRoute = () => {
         //$('#loading_screen').show();
         let routeId = localStorage.getItem('selectedRoute');
-        $.getJSON(`http://localhost:3000/getRouteMongo/${routeId}`, function(data){
-            currentRoute = data;
+        $.ajax({
+            url: `http://localhost:3000/get_route_mongo/${routeId}`,
+            method: 'GET'
+        }).done(function (data) {
             $('#loading_screen').hide();
             if ($('#route-inf').length) {
                 displaySelectedRoute(data);
@@ -196,7 +198,7 @@ $(function () {
     }
 
     if ($('.carousel').length) {
-        $.getJSON('http://localhost:3000/getAllRoutesMongo', function (d) {
+        $.getJSON('http://localhost:3000/get_all_routes_mongo', function (d) {
             $('#loading_screen').hide();
             appendRoutes(d);
         }).fail(function (e1, e2) {
