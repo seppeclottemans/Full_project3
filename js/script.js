@@ -46,6 +46,8 @@ $(function () {
                                     <p class="redorange">2:45h</p>
                                 </div>
                             </div>
+                            <h3 id="routeCodeInf">Fill in this code in the app:</h2>
+                            <p id="routeCode"></p>
                             <button class="btn"><a href="routeinstructions.html">Select route</a></button>
         `)
         route.images.forEach(function (routeImg) {
@@ -58,6 +60,10 @@ $(function () {
 
         if(route.name == "custom_route"){
             $(".route-inf-extra").hide();
+        }
+
+        if(route.route_number != undefined){
+            $("#routeCode").text(route.route_number);
         }
     }
 
