@@ -551,7 +551,7 @@ app.post('/getRoute', (req, res) => (
     })
 ));
 
-app.get('/getRouteMongo/:id', (req, res) => {
+app.get('/get_route_mongo/:id', (req, res) => {
     const collection = db.collection('routes');
     const selectedRoute = collection.findOne({
         "_id": ObjectId(req.params.id)
@@ -561,7 +561,17 @@ app.get('/getRouteMongo/:id', (req, res) => {
     });
 });
 
-app.get('/getAllRoutesMongo', (req, res) => {
+app.get('/get_route_mongo_by_route_number/:route_nuber', (req, res) => {
+    const collection = db.collection('routes');
+    const selectedRoute = collection.findOne({
+        "route_nuber": req.params.route_nuber
+    }, function (err, result) {
+        if (err) throw err;
+        res.json(result);
+    });
+});
+
+app.get('/get_all_routes_mongo', (req, res) => {
     const collection = db.collection('routes');
     collection.find({}).toArray(function (err, result) {
         if (err) throw err;
@@ -569,18 +579,23 @@ app.get('/getAllRoutesMongo', (req, res) => {
     });
 });
 
-app.post('/create-route', (req, res) => {
+app.post('/create_route', (req, res) => {
     const collection = db.collection('routes');
-    const route = {
-        name: req.body.name,
-        rating: req.body.rating,
-        number_of_ratings: req.body.number_of_ratings,
-        images: req.body.images,
-        paintingsIDs: req.body.paintingsIDs,
-        info: req.body.info
-    }
-    collection.insertOne(route, function (err, docsInserted) {
-        res.json(docsInserted.insertedId);
+    collection.find().limit(1).sort({route_number:-1}).toArray(function (err, result) {
+        if (err) throw err;
+        console.log(result[0]);
+        const route = {
+            name: req.body.name,
+            rating: req.body.rating,
+            number_of_ratings: req.body.number_of_ratings,
+            images: req.body.images,
+            paintingsIDs: req.body.paintingsIDs,
+            info: req.body.info,
+            route_number: result[0].route_number + 1
+        }
+        collection.insertOne(route, function (err, docsInserted) {
+            res.json(docsInserted.insertedId);
+        });
     });
 });
 

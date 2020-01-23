@@ -408,7 +408,7 @@ $(function () {
             images.push(paintingInRoute.image)
         });
         $.ajax({
-            url: "http://localhost:3000/create-route",
+            url: "http://localhost:3000/create_route",
             method: 'POST',
             data: {
                 name: "custom_route",
