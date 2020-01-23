@@ -23,6 +23,10 @@ $("#selectCode").on("click", function(){
     let routeNumber = parseInt($("#code").val());
     if(Number.isInteger(routeNumber)){
         get_route_by_route_number(routeNumber);
+    }else{
+        $("#errorParagraph").remove();
+        const errorParagraph = $('<p/>').text("Invalid number").attr('id', 'errorParagraph');
+        $(".entercode").append(errorParagraph);
     }
 });
 
