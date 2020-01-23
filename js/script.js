@@ -189,6 +189,7 @@ $(function () {
             url: `http://localhost:3000/get_route_mongo/${routeId}`,
             method: 'GET'
         }).done(function (data) {
+            currentRoute = data;
             $('#loading_screen').hide();
             if ($('#route-inf').length) {
                 displaySelectedRoute(data);
