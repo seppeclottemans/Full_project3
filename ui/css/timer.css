@@ -1,75 +1,116 @@
+/*small countdown timer*/
 #countdown {
-    display: inline-block;
-    position: relative;
-    margin: auto;
-    height: 40px;
-    width: 40px;
-    text-align: center;
-  }
+  display: inline-block;
+  position: relative;
+  margin: auto;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+}
 
-  
+
 #countdown-number {
-    color: black;
-    display: inline-block;
-    line-height: 40px;
-  }
-
-#svgTimer{
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 40px;
-        height: 40px;
-        transform: rotateY(-180deg) rotateZ(-90deg);
+  color: black;
+  display: inline-block;
+  line-height: 40px;
 }
 
-#svgTimer circle {
-    stroke-dasharray: 113px;
+.svgTimer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  transform: rotateY(-180deg) rotateZ(-90deg);
+}
+
+.svgTimer circle {
+  stroke-dasharray: 113px;
+  stroke-dashoffset: 0px;
+  stroke-linecap: round;
+  stroke-width: 2px;
+  stroke: black;
+  fill: none;
+  animation: countdown 30s linear infinite forwards;
+}
+
+@keyframes countdown {
+  from {
     stroke-dashoffset: 0px;
-    stroke-linecap: round;
-    stroke-width: 2px;
-    stroke: black;
-    fill: none;
-    animation: countdown 30s linear infinite forwards;
   }
 
-  @keyframes countdown {
-    from {
-      stroke-dashoffset: 0px;
-    }
-    to {
-      stroke-dashoffset: 113px;
-    }
+  to {
+    stroke-dashoffset: 113px;
   }
-
-  .generator h2{
-      display: inline-block;
-      margin-left: 5%;
-  }
-  #countdown-number p{
-      width: 100%;
-      height: 100%;
-      color: black;
-      font-size: 0.8em;
-  }
-
-  @media screen and (min-width: 600px) {
-    #countdown {
-    display: inline-block;
-    position: relative;
-    margin: auto;
-    position: absolute;
-    height: 200px;
-    top: 100px;
-    right: 150px;
-    text-align: center;
-      }
-      #countdown-number p{
-          font-size: 3rem !important;
-      }
-      #svgTimer{
-        width: 200px;
-        height: 200px;
 }
 
+.generator h2 {
+  display: inline-block;
+  margin-left: 5%;
+}
+
+#countdown-number p {
+  width: 100%;
+  height: 100%;
+  color: black;
+  font-size: 0.8em;
+}
+
+/*big countdown timer*/
+#countdownBig {
+  display: inline-block;
+  position: relative;
+  margin: auto;
+  height: 80px;
+  width: 80px;
+  text-align: center;
+}
+
+
+#countdown-numberBig {
+  color: black;
+  display: inline-block;
+  line-height: 80px;
+}
+
+.svgTimerBig {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  transform: rotateY(-180deg) rotateZ(-90deg);
+}
+
+.svgTimerBig circle {
+  stroke-dasharray: 226px;
+  stroke-dashoffset: 0px;
+  stroke-linecap: round;
+  stroke-width: 4px;
+  stroke: black;
+  fill: none;
+  animation: countdownBig 30s linear infinite forwards;
+}
+
+@keyframes countdownBig {
+  from {
+    stroke-dashoffset: 0px;
+  }
+
+  to {
+    stroke-dashoffset: 226px;
+  }
+}
+
+#countdown-numberBig p {
+  width: 100%;
+  height: 100%;
+  color: black;
+  font-size: 0.8em;
+}
+
+@media  screen and (min-width: 600px) {
+  .generator h2 {
+    margin-left: 10%;
+  }
 }
