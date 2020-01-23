@@ -251,14 +251,14 @@ $(function () {
         $(".generator").prepend(`<div id="countdown">
         <div id="countdown-number"><p></p></div>
         <svg id="svgTimer">
-            <circle r="18" cx="20" cy="20"></circle>
+            <circle r="50" cx="20" cy="20"></circle>
         </svg>
     </div>`);
 
             // Update the count down every 1 second
-            let maxTime = 30;
+            let maxTime = 999;
             $("#countdown-number p").text(maxTime);
-            let questionCount = Math.max(group.groupSize, 5)
+            let questionCount = Math.max(group.groupSize, 15)
             $("body").on("click", ".answer", function () {
                 clearInterval(x);
               })
