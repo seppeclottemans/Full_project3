@@ -64,6 +64,8 @@ $(function () {
 
         if(route.route_number != undefined){
             $("#routeCode").text(route.route_number);
+        } else {
+            $("#routeCodeInf").hide();
         }
     }
 

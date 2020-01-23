@@ -599,7 +599,23 @@ footer svg {
 	height: 190px;
 }
 
+#routeCodeInf, #routeCode {
+	display: none;
+}
+
+#code {
+	color: black;
+}
+
 @media screen and (min-width: 600px) {
+	#routeCodeInf, #routeCode {
+		display: block;
+	}
+
+	#route-inf .btn {
+		display: none;
+	}
+
 	button.back p {
 		padding-left: 30px;
 		margin-top: 10px;
