@@ -572,12 +572,13 @@ app.get('/get_route_mongo/:id', (req, res) => {
     });
 });
 
-app.get('/get_route_mongo_by_route_number/:route_nuber', (req, res) => {
+app.get('/get_route_mongo_by_route_number/:route_number', (req, res) => {
     const collection = db.collection('routes');
     const selectedRoute = collection.findOne({
-        "route_nuber": req.params.route_nuber
+        "route_number": parseInt(req.params.route_number)
     }, function (err, result) {
         if (err) throw err;
+        console.log(result);
         res.json(result);
     });
 });
